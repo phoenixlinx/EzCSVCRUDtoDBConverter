@@ -20,13 +20,20 @@
 #include "../include/PerformanceUtils.hpp"
 #include "../include/MenuUtils.hpp"
 
-
+void printVector(const vector<Node>& nodes) {
+    for (const Node& node : nodes) {
+        cout << "Bid ID: " << node.bid.bidId << endl;
+        cout << "Title: " << node.bid.title << endl;
+        cout << "Amount: " << node.bid.amount << endl;
+        cout << "Fund: " << node.bid.fund << endl;
+        cout << "-----------------------------" << endl;
+    }
+}
 
 int main(int argc, char* argv[]) {
     BinarySearchTree* binaryTreeObj = new BinarySearchTree;
     Bid bid;
     string csvPath;
-    string csvPathDeletedBids;
     optional<int> choice;
     string userInput;
     switch (argc) {
@@ -35,10 +42,10 @@ int main(int argc, char* argv[]) {
         break;
     default:
         csvPath = "data\\eOfferMonthlySalesNov.csv";
-        csvPathDeletedBids = "data\\eOfferDeletedBids.csv";
-
-
+    
     }
+    
+
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {
         displayInitialMenu();
         cout << "Enter choice: ";
@@ -54,7 +61,7 @@ int main(int argc, char* argv[]) {
                     if (handleFileSelection(csvPath, binaryTreeObj)) {
 
                         handleCRUD(csvPath, binaryTreeObj);
-
+                        choice = projectConstants::EXIT_APPLICATION;
                     }
                     break;
                 case 9:

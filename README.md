@@ -13,3 +13,4 @@ This project includes code from the following third-party libraries:
 
 ## References
 - OpenAI. (2024). *ChatGPT* (November 2024 version) [Large language model]. Retrieved from https://openai.com/chatgpt
+- Morris, J. M. (1979). Traversing binary trees simply and cheaply. Information Processing Letters, 9(5), 197–200. 10.1016/0020-0190(79)90068-1

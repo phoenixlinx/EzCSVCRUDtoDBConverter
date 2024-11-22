@@ -47,24 +47,23 @@ private:
 	Node* root;
 	unsigned int bstNodeCount; // Total nodes in BST
 	unsigned int treeHeight;// Height of BST
+	//Incline function to reduce overhead since one call to insert can result to many calls to this function
+	inline void updateTreeMetrics(unsigned int nodeInsertionHeight);
 public:
 	static constexpr  unsigned int NodeHeightIncrement = 1;
 	BinarySearchTree();
 
 	void remove(string bidId, string csvPath, string csvPathDeletedBids);
 	Node* getRoot();
-	void createTreeNode(Bid bid);
-	virtual ~BinarySearchTree();
-	void  printInOrderFromRoot();
-	void insert(Node* node, Bid bid, unsigned int nodeInsertionHeight);
+	virtual ~BinarySearchTree();;
+	void insert(Bid bid);
 	unsigned int getDeepestLevel() const;
+	void backUpDeletedNode(Node* soonToBeDeletedNode, const string& csvPathDeletedBids);
 	void reSetDeepestLevel();
 	unsigned int getBSTSize() const;
-	//	void recoverRemovedBid();
-	vector<Node> recoverDeletedBids(Node* node, string csvPathDeletedBids);
 	Bid search(Node* node, string bidId);
 	bool isEmpty() const;
-	void printInOrder(Node* node);
+	void printInOrder();
 	Bid getBid(string csvPath);
-	bool loadBids(string csvPath, BinarySearchTree* binarySearchTree);
+	bool loadBids(string csvPath);
 };

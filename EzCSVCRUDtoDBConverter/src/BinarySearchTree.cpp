@@ -56,78 +56,38 @@ void BinarySearchTree::reSetDeepestLevel() {
 	treeHeight = 0;
 }
 
-vector<Node> BinarySearchTree::recoverDeletedBids(Node* node, string csvPathDeletedBids)
-
-{
-
-	Bid bid;
-	cout << endl << endl;// The the bid will be sent to addBid and added to a
-	csv::Parser fileBackUp = csv::Parser(csvPathDeletedBids); 
-	unsigned int fileRowCount;
-	fileRowCount = fileBackUp.rowCount();
-	cout << fileRowCount;
-
-	vector<Node> deletedBids; 
-
-	std::vector<std::string> row;
-
-	string bidds;
-
-
-	bid.bidId = node->bid.bidId;
-	bid.title = node->bid.title;
-	bid.amount = node->bid.amount;
-	bid.fund = node->bid.fund;
-
-	string a;
-	string b;
-	double c;
-	string d;
-	a = node->bid.bidId;
-	b = node->bid.title;
-	c = node->bid.amount;
-
-	string s = to_string(c); // this will convert the c of type double into a string
-
-	d = node->bid.fund;
-
-	row.push_back(b);
-	row.push_back(a);
-	row.push_back("0");
-	row.push_back("0");
-	row.push_back(s);
-	row.push_back("0");
-	row.push_back("0");
-	row.push_back("0");
-	row.push_back(d);
-	fileBackUp.deleteRow(fileRowCount);
-	fileBackUp.sync();
-	fileBackUp.addRow(fileRowCount, row);
-	fileBackUp.sync();
-	cout << endl << endl;
-
-
-
-
-
-
-	cout << endl << endl;
-
-	//deletedBids.push_back(node); // This will add a deleted Bid to the end of the deltedBids vector.
-	for (unsigned i = 0; i < row.size(); ++i) {
-
-
-
-
-		bidds = row.at(i);
-		cout << bidds << endl;
-
+void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string& csvPathDeletedBids) {
+	if (soonToBeDeletedNode == nullptr) {
+		cerr << "Error: Null node passed to recoverDeletedBids." << endl;
+		return; // Exit if the node is null
 	}
 
-	return deletedBids;
+	try {
+		// Parse the CSV file for writing
+		csv::Parser fileBackUp(csvPathDeletedBids);
 
+		// Create a row for the given node's bid
+		vector<string> row = {
+			soonToBeDeletedNode->bid.title,
+			soonToBeDeletedNode->bid.bidId,
+			"0", "0", // Placeholder values
+			to_string(soonToBeDeletedNode->bid.amount),
+			"0", "0", "0", // Placeholder values
+			soonToBeDeletedNode->bid.fund
+		};
 
+		// Add the row to the CSV file
+		fileBackUp.addRow(fileBackUp.rowCount(), row);
 
+		// Synchronize the file
+		fileBackUp.sync();
+
+		cout << "Bid with ID " << soonToBeDeletedNode->bid.bidId << " successfully backed up to file." << endl;
+
+	}
+	catch (const std::exception& e) {
+		cerr << "Error processing CSV: " << e.what() << endl;
+	}
 }
 
 Bid BinarySearchTree::search(Node* node, string bidId) {
@@ -180,8 +140,7 @@ Bid BinarySearchTree::search(Node* node, string bidId) {
 
 
 void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDeletedBids) {                  // credit:http://www.cplusplus.com/forum/general/1551/
-	BinarySearchTree* mangoCat;
-	mangoCat = new BinarySearchTree();
+	
 	csv::Parser file = csv::Parser(csvPath);
 	int deleteRowPosition = 0;
 
@@ -226,7 +185,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 				deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
-				mangoCat->recoverDeletedBids(currNodePosition, csvPathDeletedBids);
+				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
 				file.deleteRow(deleteRowPosition);
 				file.sync();
 
@@ -242,7 +201,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 				deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
-				mangoCat->recoverDeletedBids(currNodePosition, csvPathDeletedBids);
+				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
 				file.deleteRow(deleteRowPosition);
 				file.sync();
 				delete currNodePosition;
@@ -258,7 +217,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 				deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
-				mangoCat->recoverDeletedBids(currNodePosition, csvPathDeletedBids);
+				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
 				file.deleteRow(deleteRowPosition);
 				file.sync();
 				delete currNodePosition;
@@ -271,7 +230,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 				deleteRowPosition = par->bid.rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
-				mangoCat->recoverDeletedBids(currNodePosition, csvPathDeletedBids);
+				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
 				file.deleteRow(deleteRowPosition);
 				file.sync();
 				delete currNodePosition;
@@ -292,7 +251,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 		deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
 		cout << "Row Position: " << deleteRowPosition << endl;
 		//of current node position to variable deleteRowPosition
-		mangoCat->recoverDeletedBids(currNodePosition, csvPathDeletedBids);
+		this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
 		file.deleteRow(deleteRowPosition);
 		file.sync();
 		delete currNodePosition;   // This will delete a leaf node
@@ -313,7 +272,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 			deleteRowPosition = tmp1->bid.rowPos; // This will assign the rowPos
 			//of current node position to variable deleteRowPosition
 			cout << "Row Position: " << deleteRowPosition << endl;
-			mangoCat->recoverDeletedBids(tmp1, csvPathDeletedBids);
+			this->backUpDeletedNode(tmp1, csvPathDeletedBids);
 			file.deleteRow(deleteRowPosition);
 			file.sync();
 			delete tmp1;
@@ -340,7 +299,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 				deleteRowPosition = tmp3->bid.rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
-				mangoCat->recoverDeletedBids(tmp3, csvPathDeletedBids);
+				this->backUpDeletedNode(tmp3, csvPathDeletedBids);
 				file.deleteRow(deleteRowPosition);
 				file.sync();
 				delete tmp3;
@@ -356,7 +315,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 
 				deleteRowPosition = tmp->bid.rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
-				mangoCat->recoverDeletedBids(tmp, csvPathDeletedBids);
+				this->backUpDeletedNode(tmp, csvPathDeletedBids);
 				//of current node position to variable deleteRowPosition
 				file.deleteRow(deleteRowPosition);
 				file.sync();
@@ -370,84 +329,122 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 
 }
 
+inline void BinarySearchTree::updateTreeMetrics(unsigned int nodeInsertionHeight) {
+	bstNodeCount++;
+	nodeInsertionHeight = nodeInsertionHeight + NodeHeightIncrement;
+	cout << "Inserted at level " << nodeInsertionHeight << endl;
+	if (nodeInsertionHeight  > treeHeight) {
+		treeHeight = nodeInsertionHeight;
+	}
+
+}
 
 
+void BinarySearchTree::insert(Bid bid) {
+	Node* currentNode = root;
+	unsigned int nodeInsertionHeight = 0;
 
-void BinarySearchTree::createTreeNode(Bid bid) {
-	if (root == nullptr) {
+	while (currentNode != nullptr) {
+
+		
+
+		if (bid.bidId < currentNode->bid.bidId) {
+			// Checking if child is not null first since most of the time, nodes are non-null.
+			if (currentNode->leftNodePtr != nullptr) {
+				//Set current node to its left child because a deeper traversal is needed to find a null node for insertion.
+				currentNode = currentNode->leftNodePtr;
+				nodeInsertionHeight++;
+				continue;// Restart loop to continue searching for insertion point.
+			}
+			else {
+				// Insert the node as the left child when an empty left child spot is found.
+				currentNode->leftNodePtr = new Node(bid);
+				updateTreeMetrics(nodeInsertionHeight);
+				return;
+
+			}
+			
+		}else {
+			if (currentNode->rightNodePtr != nullptr) {
+				currentNode = currentNode->rightNodePtr;
+				nodeInsertionHeight++;
+				continue;
+			}
+			else {
+				currentNode->rightNodePtr = new Node(bid);
+				updateTreeMetrics(nodeInsertionHeight);
+				return;
+				
+			}
+		}
+
+
+	}
+	// Special case: Create the root node if the tree is empty.
+	// This logic is placed last because root creation is suppose to happen only once per tree's lifetime. 
+	if(root == nullptr) {
 		root = new Node(bid);
 		cout << "Inserted at level 0 (root)" << endl;
+		updateTreeMetrics(nodeInsertionHeight);
+		return;
+	 }
+
+}
+ 
+void BinarySearchTree::printInOrder() {
+	Node* currentNode = root;
+	Node* previousNode = nullptr;
+	while (currentNode != nullptr) {
+		if (currentNode->leftNodePtr != nullptr) {
+
+
+
+			
+			previousNode = currentNode->leftNodePtr;
+			while (previousNode->rightNodePtr != nullptr && previousNode->rightNodePtr != currentNode) {
+				previousNode = previousNode->rightNodePtr;
+			}
+
+			
+			if (previousNode->rightNodePtr != nullptr) {
+
+
+
+				// Revert the  temporary link
+				previousNode->rightNodePtr = nullptr;
+				
+	
+				cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos<< " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
+
+				currentNode = currentNode->rightNodePtr;
+				
+			}
+			else {
+
+				previousNode->rightNodePtr = currentNode;
+				currentNode = currentNode->leftNodePtr;
+
+
+
+				
+			}
 		
-	}
-	else {
-		insert(root, bid, 0); // Start at level 0 for the root
-	}
-}
+		}else {
 
-void BinarySearchTree::insert(Node* node, Bid bid, unsigned int nodeInsertionHeight) {
-	if (bid.bidId < node->bid.bidId) {
-		if (node->leftNodePtr == nullptr) {
-			node->leftNodePtr = new Node(bid);
-			bstNodeCount++;
-			cout << "Inserted at level " << nodeInsertionHeight + NodeHeightIncrement << endl;
-			if (nodeInsertionHeight + NodeHeightIncrement > treeHeight) {
-				treeHeight = nodeInsertionHeight + NodeHeightIncrement;
-			}
-		}
-		else {
-			insert(node->leftNodePtr, bid, nodeInsertionHeight + NodeHeightIncrement);
-		}
-	}
-	else {
-		if (node->rightNodePtr == nullptr) {
-			node->rightNodePtr = new Node(bid);
-			bstNodeCount++;
-			cout << "Inserted at level " << nodeInsertionHeight + NodeHeightIncrement << endl;
-			if (nodeInsertionHeight + NodeHeightIncrement > treeHeight) {
-				treeHeight = nodeInsertionHeight + NodeHeightIncrement;
-			}
-		}
-		else {
-			insert(node->rightNodePtr, bid, nodeInsertionHeight + NodeHeightIncrement);
+	
+			cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos << " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
+			currentNode = currentNode->rightNodePtr;
+			
+
+
+
+
 		}
 	}
 }
 
 
 
-
-
-void BinarySearchTree::printInOrder(Node* node) {
-	// This method first prints the left branch of the tree.
-	// It reaches the bottom of the left branch, then starts printing all values of the left branches as it ascends toward the root.
-	// For the right branches of the root's left branch, this method immediately prints the values of nodes that belong to the right branches as it ascends toward the root after reaching the bottom of a left branch.
-	// Once finished with the left branch of the root, it repeats the process for the root's right branch.
-
-
-	if (node != 0)
-	{
-		if (node->leftNodePtr)
-
-			printInOrder(node->leftNodePtr);
-
-		cout << node->bid.bidId << " | ";
-		cout << " Amount: $" << node->bid.amount << " | ";
-		cout << " Row: " << node->bid.rowPos << " | ";
-		cout << node->bid.title << " | ";
-		cout << node->bid.fund << endl;
-
-		if (node->rightNodePtr)
-
-			printInOrder(node->rightNodePtr);
-	}
-	else return;
-
-}
-
-void BinarySearchTree::printInOrderFromRoot()
-{
-	printInOrder(root);
-}
 
 Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user input and return it as a bid
 
@@ -455,9 +452,7 @@ Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user in
 
 	Bid bid;
 
-	cout << endl << endl;// The the bid will be sent to addBid and added to a
-	BinarySearchTree* cat;
-	cat = new BinarySearchTree();
+	cout << endl << endl;
 	csv::Parser file = csv::Parser(csvPath);
 	unsigned int fileRowCount;
 	fileRowCount = file.rowCount();
@@ -491,7 +486,7 @@ Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user in
 		bid.title = b;
 		bid.fund = d;
 		bid.rowPos = fileRowCount;
-		cat->createTreeNode(bid);
+		this->insert(bid);
 
 
 		myrow.push_back(b);
@@ -524,9 +519,10 @@ Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user in
 }
 
 
-bool BinarySearchTree::loadBids(string csvPath, BinarySearchTree* binarySearchTree) {
+bool BinarySearchTree::loadBids(string csvPath) {
 	cout << "Loading CSV file " << csvPath << endl;
-	binarySearchTree->reSetDeepestLevel();
+	
+	this->reSetDeepestLevel();
 	
 	try {
 	
@@ -555,7 +551,7 @@ bool BinarySearchTree::loadBids(string csvPath, BinarySearchTree* binarySearchTr
 
 
 
-			binarySearchTree->createTreeNode(bid); // This will initiate a binary tree by adding a bid to the root if one does not already exist
+			this->insert(bid); // This will initiate a binary tree by adding a bid to the root if one does not already exist
 
 		}
 	}
@@ -575,7 +571,7 @@ bool BinarySearchTree::loadBids(string csvPath, BinarySearchTree* binarySearchTr
 		}
 		return false;
 	}
-	cout << "Bids read: " << binarySearchTree->getBSTSize() << endl;
-	cout << "Deepest level: " << binarySearchTree->getDeepestLevel() << endl;
+	cout << "Bids read: " << this->getBSTSize() << endl;
+	cout << "Deepest level: " << this->getDeepestLevel() << endl;
 	return true;
 }

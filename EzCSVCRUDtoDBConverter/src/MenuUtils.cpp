@@ -22,9 +22,9 @@ void displayPrimaryMenu() {
         " 5. Insert Bid\n"
         " 9. Exit\n";
 }
-bool handleCRUD( string& filePath, BinarySearchTree* binaryTreeObj) {
+bool handleCRUD( string& csvPath, BinarySearchTree* binaryTreeObj) {
     Bid bid;
-    string csvPath;
+    //string csvPath;
     optional<int> choice;
     string userInput;
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {
@@ -38,10 +38,10 @@ bool handleCRUD( string& filePath, BinarySearchTree* binaryTreeObj) {
 
                 switch (choice.value()) {
                 case 1:
-                    handleFileSelection(filePath, binaryTreeObj);
+                    handleFileSelection(csvPath, binaryTreeObj);
                     break;
                 case 2:
-                    measurePerformance("Displaying All Bids", [&]() {binaryTreeObj->printInOrderFromRoot(); });
+                    measurePerformance("Displaying All Bids", [&]() {binaryTreeObj->printInOrder(); });
                     break;
                 case 3:
                     cout << "Enter BidId: ";
@@ -55,7 +55,7 @@ bool handleCRUD( string& filePath, BinarySearchTree* binaryTreeObj) {
                     break;
                 case 5:
                     bid = binaryTreeObj->getBid(csvPath);
-                    measurePerformance("Inserting Bid", [&]() {binaryTreeObj->createTreeNode(bid); });
+                    measurePerformance("Inserting Bid", [&]() {binaryTreeObj->insert(bid); });
                     break;
                 case 9:
                     cout << "Goodbye." << endl;
@@ -95,20 +95,20 @@ bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
     if (choice = StringConverter::toInt(userInput); choice.has_value()) {
         switch (choice.value()) {
         case 1:
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath, binarySearchTree); });
+            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath); });
             break;
         case 2:
             filePath = "data\\eOfferMonthlySalesNov.csv";
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath, binarySearchTree); });
+            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath); });
             break;
         case 3:
             filePath = "data\\eOfferSales.csv";
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath, binarySearchTree); });
+            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath); });
             break;
         case 4:
             cout << "Enter the absolute CSV File Path: ";
             getline(cin, userInput);
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath, binarySearchTree); });
+            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath); });
             break;
         default:
             break;
