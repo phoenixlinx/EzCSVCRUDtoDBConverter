@@ -19,11 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BinarySearchTree.cpp" />
     <ClCompile Include="src\CSVparser.cpp" />
     <ClCompile Include="src\EzCSVCRUDtoDBConverter.cpp" />
+    <ClCompile Include="src\MenuUtils.cpp" />
+    <ClCompile Include="src\PerformanceUtils.cpp" />
+    <ClCompile Include="src\StringConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BinarySearchTree.hpp" />
     <ClInclude Include="include\CSVparser.hpp" />
+    <ClInclude Include="include\MenuUtils.hpp" />
+    <ClInclude Include="include\PerformanceUtils.hpp" />
+    <ClInclude Include="include\projectConstants.hpp" />
+    <ClInclude Include="include\StringConverter.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\PerformanceUtils.tpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -82,6 +97,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>.\bin\64bit\Debug</OutDir>
+    <SourcePath>C:\Users\amsna\IDEWorkspaces\MyGitRepos\EzCSVCRUDtoDBConverter\EzCSVCRUDtoDBConverter\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -114,7 +130,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
