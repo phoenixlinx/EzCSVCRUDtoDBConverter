@@ -393,45 +393,44 @@ void BinarySearchTree::insert(Bid bid) {
  
 void BinarySearchTree::printInOrder() {
 	Node* currentNode = root;
-	Node* previousNode = nullptr;
+	Node* previousNode = nullptr;//Used to find the rightmost node in the left subtree
 	while (currentNode != nullptr) {
+		// Check if not null because it is more likely
 		if (currentNode->leftNodePtr != nullptr) {
 
 
 
 			
 			previousNode = currentNode->leftNodePtr;
+			// Find the rightmost node in the left subtree
 			while (previousNode->rightNodePtr != nullptr && previousNode->rightNodePtr != currentNode) {
 				previousNode = previousNode->rightNodePtr;
 			}
 
-			
-			if (previousNode->rightNodePtr != nullptr) {
+			//This condition is prioritized because after second while loop previousNode->rightNodePtr is likely null.
+			if (previousNode->rightNodePtr == nullptr) {
 
 
 
-				// Revert the  temporary link
-				previousNode->rightNodePtr = nullptr;
-				
-	
-				cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos<< " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
-
-				currentNode = currentNode->rightNodePtr;
+				previousNode->rightNodePtr = currentNode;//If no temporary link exists, create one to revisit this node after processing the left subtree
+				currentNode = currentNode->leftNodePtr;
 				
 			}
 			else {
 
-				previousNode->rightNodePtr = currentNode;
-				currentNode = currentNode->leftNodePtr;
+			
 
-
+				// Left subtree has  been processed so remove link
+				previousNode->rightNodePtr = nullptr;
+				cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos << " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
+				currentNode = currentNode->rightNodePtr;
 
 				
 			}
 		
 		}else {
 
-	
+	        //Print the left node of the right most child
 			cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos << " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
 			currentNode = currentNode->rightNodePtr;
 			
@@ -441,6 +440,10 @@ void BinarySearchTree::printInOrder() {
 
 		}
 	}
+// This implementation is based on the Morris Traversal algorithm.
+// Reference: Morris, J. H. (1979). Traversing binary trees simply and cheaply.
+// Communications of the ACM, 22(8), 235–239. See README.md for details.
+
 }
 
 

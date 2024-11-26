@@ -85,7 +85,8 @@ bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
         " 2. Load Bids From eOfferMonthlySalesNov.CSV\n"
         " 3. Load Bids From eOfferSales.csv\n"
         " 4. Enter New CSV File Path\n"
-        " 5. Back to Main Menu\n"
+        " 5. Enter New CSV File Path(GUI)\n"
+        " 6. Back to Main Menu\n"
         "Enter choice: ";
 
 
@@ -107,9 +108,24 @@ bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
             break;
         case 4:
             cout << "Enter the absolute CSV File Path: ";
-            getline(cin, userInput);
+            getline(cin, filePath);
             return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath); });
             break;
+        case 5:
+            try {
+            auto filePath = csv::Parser::selectFile();
+            if (filePath) {
+                std::cout << "Selected file: " << filePath->string() << std::endl;
+                return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath->string()); });
+            }
+            else {
+                std::cout << "No file selected." << std::endl;
+            }
+        }
+        catch (const csv::Error& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+        break;
         default:
             break;
         }
