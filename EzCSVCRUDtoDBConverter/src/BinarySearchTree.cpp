@@ -11,11 +11,11 @@ Bid::Bid() : rowPos(0), amount(0.0) {
 }
 
 
-Node::Node() : leftNodePtr(nullptr), rightNodePtr(nullptr) {
+Node::Node() : leftNodePtr(nullptr), rightNodePtr(nullptr), longestChildPath(1)  {
 
 }
 
-Node::Node(Bid bid) : bid(bid),leftNodePtr(nullptr), rightNodePtr(nullptr) {
+Node::Node(Bid bid) : bid(bid),leftNodePtr(nullptr), rightNodePtr(nullptr),longestChildPath(1) {
 
 
 }
@@ -23,13 +23,12 @@ Node::Node(Bid bid) : bid(bid),leftNodePtr(nullptr), rightNodePtr(nullptr) {
 Node* BinarySearchTree::getRoot() {
 	return root;
 }
-BinarySearchTree::BinarySearchTree() {
+BinarySearchTree::BinarySearchTree() 
 
-	
+	: root(nullptr), treeHeight(0), bstNodeCount(0) {
+	insertionPath.reserve(32); // Reserve memory to avoid costly vector resizing during insertion
 
-	root = 0;
-	treeHeight = 0;
-	bstNodeCount = 0;
+
 }
 
 bool BinarySearchTree::isEmpty() const { 
@@ -142,7 +141,7 @@ Bid BinarySearchTree::search(Node* node, string bidId) {
 void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDeletedBids) {                  // credit:http://www.cplusplus.com/forum/general/1551/
 	
 	csv::Parser file = csv::Parser(csvPath);
-	int deleteRowPosition = 0;
+	unsigned int deleteRowPosition = 0;
 
 	Node* tmp3;
 	Node* tmp2;
@@ -330,7 +329,6 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 }
 
 inline void BinarySearchTree::updateTreeMetrics(unsigned int nodeInsertionHeight) {
-	bstNodeCount++;
 	nodeInsertionHeight = nodeInsertionHeight + NodeHeightIncrement;
 	cout << "Inserted at level " << nodeInsertionHeight << endl;
 	if (nodeInsertionHeight  > treeHeight) {
@@ -341,53 +339,51 @@ inline void BinarySearchTree::updateTreeMetrics(unsigned int nodeInsertionHeight
 
 
 void BinarySearchTree::insert(Bid bid) {
-	Node* currentNode = root;
+	Node** currentNode = &root;
 	unsigned int nodeInsertionHeight = 0;
-
-	while (currentNode != nullptr) {
-
-		
-
-		if (bid.bidId < currentNode->bid.bidId) {
-			// Checking if child is not null first since most of the time, nodes are non-null.
-			if (currentNode->leftNodePtr != nullptr) {
-				//Set current node to its left child because a deeper traversal is needed to find a null node for insertion.
-				currentNode = currentNode->leftNodePtr;
-				nodeInsertionHeight++;
-				continue;// Restart loop to continue searching for insertion point.
-			}
-			else {
-				// Insert the node as the left child when an empty left child spot is found.
-				currentNode->leftNodePtr = new Node(bid);
-				updateTreeMetrics(nodeInsertionHeight);
-				return;
-
-			}
+	unsigned int elementsRemaining = 0; // Tracks remaining nodes for re balancing
+	insertionPath.clear(); // Clears path for rebalancing
+	while (*currentNode != nullptr) {
+		insertionPath.push_back(currentNode);
+		if (bid.bidId > (*currentNode)->bid.bidId) {
+			    //Set current node to its left child because a deeper traversal is needed to find a null node for insertion.
+				currentNode = &((*currentNode)->rightNodePtr);
 			
+			
+			
+		}else if((bid.bidId < (*currentNode)->bid.bidId)) {
+
+
+			
+				//Set current node to its left child because a deeper traversal is needed to find a null node for insertion.
+				currentNode = &((*currentNode)->leftNodePtr);
+			
+
 		}else {
-			if (currentNode->rightNodePtr != nullptr) {
-				currentNode = currentNode->rightNodePtr;
-				nodeInsertionHeight++;
-				continue;
-			}
-			else {
-				currentNode->rightNodePtr = new Node(bid);
-				updateTreeMetrics(nodeInsertionHeight);
-				return;
-				
-			}
+			//Duplicate key so do not insert.
+			return;
 		}
 
 
+
+
 	}
-	// Special case: Create the root node if the tree is empty.
-	// This logic is placed last because root creation is suppose to happen only once per tree's lifetime. 
-	if(root == nullptr) {
-		root = new Node(bid);
-		cout << "Inserted at level 0 (root)" << endl;
-		updateTreeMetrics(nodeInsertionHeight);
-		return;
-	 }
+	*currentNode = new Node(bid);
+	bstNodeCount++;
+	nodeInsertionHeight = insertionPath.size();
+	elementsRemaining = nodeInsertionHeight;
+	updateTreeMetrics(nodeInsertionHeight);
+	while (elementsRemaining > 0) {
+	
+
+		currentNode = insertionPath.back();
+		fixLeftImbalance(*currentNode);
+		fixRightImbalance(*currentNode);
+		insertionPath.pop_back();
+		elementsRemaining--;    // Decrement remaining nodes to check for balancing
+	}
+
+
 
 }
  
@@ -554,7 +550,7 @@ bool BinarySearchTree::loadBids(string csvPath) {
 
 
 
-			this->insert(bid); // This will initiate a binary tree by adding a bid to the root if one does not already exist
+			this->insert(bid); 
 
 		}
 	}
@@ -577,4 +573,52 @@ bool BinarySearchTree::loadBids(string csvPath) {
 	cout << "Bids read: " << this->getBSTSize() << endl;
 	cout << "Deepest level: " << this->getDeepestLevel() << endl;
 	return true;
+}
+void BinarySearchTree::fixLeftImbalance(Node*& subTreeRootNode) {
+
+	Node* subTreeRootNodeLeftChild = nullptr;
+	if (subTreeRootNode == nullptr || subTreeRootNode->leftNodePtr == nullptr) {
+		return;
+	}
+	if (subTreeRootNode != nullptr && subTreeRootNode->leftNodePtr->longestChildPath == subTreeRootNode->longestChildPath) {
+
+		
+		subTreeRootNodeLeftChild = subTreeRootNode->leftNodePtr;
+		subTreeRootNode->leftNodePtr = subTreeRootNodeLeftChild->rightNodePtr;
+		subTreeRootNodeLeftChild->rightNodePtr = subTreeRootNode;
+		subTreeRootNode = subTreeRootNodeLeftChild;
+	}
+	return;
+}
+void BinarySearchTree::fixRightImbalance(Node*& subTreeRootNode) {
+	
+	Node* subTreeRootNodeRightChild = nullptr; 
+
+	//Exit early if there is no imbalance to fix. 
+	if (subTreeRootNode == nullptr || subTreeRootNode->rightNodePtr == nullptr || subTreeRootNode->rightNodePtr->rightNodePtr == nullptr) {
+		return;  
+	}
+
+	// Check if the current node's longest child path equals the level of its right-right grandchild.
+	if (subTreeRootNode->longestChildPath == subTreeRootNode->rightNodePtr->rightNodePtr->longestChildPath) {
+		
+
+	
+		 subTreeRootNodeRightChild = subTreeRootNode->rightNodePtr;
+
+		// Update the current node's right pointer to point to the left child of the saved node.
+		 subTreeRootNode->rightNodePtr = subTreeRootNodeRightChild->leftNodePtr;
+
+		// Update the saved node's left pointer to point to the current node.
+		 subTreeRootNodeRightChild->leftNodePtr = subTreeRootNode;
+
+		
+		subTreeRootNodeRightChild->longestChildPath++; 
+		subTreeRootNode = subTreeRootNodeRightChild;
+		
+	
+	}
+
+	// Return the node unchanged if no balancing needed.
+	return;
 }
