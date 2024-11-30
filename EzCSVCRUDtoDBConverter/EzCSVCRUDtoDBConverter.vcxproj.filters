@@ -36,6 +36,12 @@
     <ClCompile Include="src\SystemMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\CSVAnalyzer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CSVMetadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CSVparser.hpp">
@@ -59,9 +65,18 @@
     <ClInclude Include="include\SystemMetadata.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\CSVAnalyzer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CSVMetadata.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\PerformanceUtils.tpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="src\StringConverter.tpp">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

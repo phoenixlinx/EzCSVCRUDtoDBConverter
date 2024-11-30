@@ -589,6 +589,9 @@ void BinarySearchTree::fixLeftImbalance(Node*& subTreeRootNode) {
 		subTreeRootNode = subTreeRootNodeLeftChild;
 	}
 	return;
+
+	// This implementation is based on AA Trees by Anderson Arne 1993.See README.md for details.
+
 }
 void BinarySearchTree::fixRightImbalance(Node*& subTreeRootNode) {
 	

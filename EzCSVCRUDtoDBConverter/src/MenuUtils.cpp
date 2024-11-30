@@ -80,7 +80,8 @@ bool handleCRUD( string& csvPath, BinarySearchTree* binaryTreeObj) {
 }
 
 bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
-        
+
+
         cout << string(" 1. Load Previous File: ") + filePath + "\n"
         " 2. Load Bids From eOfferMonthlySalesNov.CSV\n"
         " 3. Load Bids From eOfferSales.csv\n"

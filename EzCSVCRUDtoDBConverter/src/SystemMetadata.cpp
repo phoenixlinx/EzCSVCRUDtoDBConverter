@@ -1,7 +1,6 @@
-#include "SystemMetadata.hpp"
-#include <stdexcept>
-
-#include "SystemMetadata.hpp"
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
+#include "../include/SystemMetadata.hpp"
 
 SystemMetadata::Platform SystemMetadata::getPlatform() {
 #ifdef _WIN32
@@ -33,8 +32,7 @@ std::optional<std::filesystem::path> SystemMetadata::selectFile() {
         throw std::runtime_error("GUI environment is not available.");
     }
 
-    const char* filterDescription = "CSV Files";
-    const char* filterPattern = "*.csv";
+
 
 #ifdef _WIN32
     wchar_t fileName[MAX_PATH] = { 0 };

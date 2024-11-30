@@ -6,7 +6,7 @@
 //============================================================================
 // Name        : EzCSVCRUDtoDBConverter.cpp
 // Author      : Alfredo A. Martinez
-// Version     : 1.7
+// Version     : 1.9
 //============================================================================
 // EzCSVCRUDtoDBConverter.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
@@ -19,16 +19,7 @@
 #include "../include/StringConverter.hpp"
 #include "../include/PerformanceUtils.hpp"
 #include "../include/MenuUtils.hpp"
-
-void printVector(const vector<Node>& nodes) {
-    for (const Node& node : nodes) {
-        cout << "Bid ID: " << node.bid.bidId << endl;
-        cout << "Title: " << node.bid.title << endl;
-        cout << "Amount: " << node.bid.amount << endl;
-        cout << "Fund: " << node.bid.fund << endl;
-        cout << "-----------------------------" << endl;
-    }
-}
+#include "../include/CSVMetadata.hpp"
 
 int main(int argc, char* argv[]) {
     BinarySearchTree* binaryTreeObj = new BinarySearchTree;
@@ -81,5 +72,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
+  
     return 0;
 }

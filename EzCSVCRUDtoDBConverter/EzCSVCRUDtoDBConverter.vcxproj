@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BinarySearchTree.cpp" />
+    <ClCompile Include="src\CSVAnalyzer.cpp" />
+    <ClCompile Include="src\CSVMetadata.cpp" />
     <ClCompile Include="src\CSVparser.cpp" />
     <ClCompile Include="src\EzCSVCRUDtoDBConverter.cpp" />
     <ClCompile Include="src\MenuUtils.cpp" />
@@ -29,6 +31,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BinarySearchTree.hpp" />
+    <ClInclude Include="include\CSVAnalyzer.hpp" />
+    <ClInclude Include="include\CSVMetadata.hpp" />
     <ClInclude Include="include\CSVparser.hpp" />
     <ClInclude Include="include\MenuUtils.hpp" />
     <ClInclude Include="include\PerformanceUtils.hpp" />
@@ -38,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\PerformanceUtils.tpp" />
+    <Text Include="src\StringConverter.tpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

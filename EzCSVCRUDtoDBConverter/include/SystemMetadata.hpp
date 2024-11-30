@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 #ifndef SYSTEM_METADATA_HPP
 #define SYSTEM_METADATA_HPP
 
@@ -5,19 +7,20 @@
 #include <optional>
 #include <filesystem>
 #include <stdexcept>
-#include <cstdio> // For popen, pclose, FILE on Linux/macOS
-#include <array>  // For buffer usage
+#include <cstdio> 
+#include <array>  
 
-// Platform-specific includes
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>   // Core Windows API
-#include <commdlg.h>   // For file dialogs (OPENFILENAMEW, GetOpenFileNameW)
+#include <windows.h>   
+#include <commdlg.h> 
 #endif
 
 class SystemMetadata {
 public:
-    // Represents the platform type
+    static constexpr const char* filterDescription = "CSV Files";
+    static constexpr const char* filterPattern = "*.csv";
+    //Represents the platform type
     enum class Platform {
         Windows,
         Linux,
@@ -25,17 +28,16 @@ public:
         Unknown
     };
 
-    // Returns the platform (Windows, Linux, macOS, or Unknown)
+    //Returns the platform (Windows, Linux, macOS, or Unknown)
     static Platform getPlatform();
 
-    // Checks if a GUI environment is available
+    //Checks if a GUI environment is available.
     static bool isGuiAvailable();
 
-    // Optional helper: File dialog for selecting a file (Windows-specific)
     static std::optional<std::filesystem::path> selectFile();
 
 private:
-    SystemMetadata() = delete; // Prevent instantiation
+    SystemMetadata() = delete; 
 };
 
-#endif // SYSTEM_METADATA_HPP
+#endif
