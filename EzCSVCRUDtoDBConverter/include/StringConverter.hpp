@@ -11,6 +11,7 @@
 #include <limits>
 #include <type_traits>
 #include <cmath>
+#include <stdexcept>
 #include "projectConstants.hpp"
 using namespace std;
 // This class was developed with assistance from ChatGPT 4o. See README.md.

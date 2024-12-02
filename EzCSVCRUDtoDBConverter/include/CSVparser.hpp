@@ -3,7 +3,7 @@
 
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 #ifndef     _CSVPARSER_HPP_
-# define    _CSVPARSER_HPP_
+#define    _CSVPARSER_HPP_
 
 #include <stdexcept>
 #include <string>
@@ -107,4 +107,4 @@ namespace csv
     
 }
 
-#endif /*!_CSVPARSER_HPP_*/
+#endif 

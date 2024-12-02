@@ -7,7 +7,9 @@
 #include "PerformanceUtils.hpp"
 #include "StringConverter.hpp"
 #include "BinarySearchTree.hpp"
+#include "CSVMetadata.hpp"
 #include "CSVAnalyzer.hpp"
+#include "CSVRow.hpp"
 void displayInitialMenu();
 void displayPrimaryMenu();
 bool handleFileSelection(string& filePath, BinarySearchTree* tree);

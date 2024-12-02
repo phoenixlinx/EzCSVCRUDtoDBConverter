@@ -23,6 +23,8 @@
     <ClCompile Include="src\CSVAnalyzer.cpp" />
     <ClCompile Include="src\CSVMetadata.cpp" />
     <ClCompile Include="src\CSVparser.cpp" />
+    <ClCompile Include="src\CSVrow.cpp" />
+    <ClCompile Include="src\DynamicTypedValue.cpp" />
     <ClCompile Include="src\EzCSVCRUDtoDBConverter.cpp" />
     <ClCompile Include="src\MenuUtils.cpp" />
     <ClCompile Include="src\PerformanceUtils.cpp" />
@@ -34,6 +36,8 @@
     <ClInclude Include="include\CSVAnalyzer.hpp" />
     <ClInclude Include="include\CSVMetadata.hpp" />
     <ClInclude Include="include\CSVparser.hpp" />
+    <ClInclude Include="include\CSVrow.hpp" />
+    <ClInclude Include="include\DynamicTypedValue.hpp" />
     <ClInclude Include="include\MenuUtils.hpp" />
     <ClInclude Include="include\PerformanceUtils.hpp" />
     <ClInclude Include="include\projectConstants.hpp" />
@@ -41,6 +45,8 @@
     <ClInclude Include="include\SystemMetadata.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="src\CSVrow.tpp" />
+    <Text Include="src\DynamicTypedValue.tpp" />
     <Text Include="src\PerformanceUtils.tpp" />
     <Text Include="src\StringConverter.tpp" />
   </ItemGroup>
@@ -113,6 +119,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\amsna\IDEWorkspaces\MyGitRepos\EzCSVCRUDtoDBConverter\EzCSVCRUDtoDBConverter\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,7 +159,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>

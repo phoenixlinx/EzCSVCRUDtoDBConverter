@@ -46,12 +46,12 @@ bool handleCRUD( string& csvPath, BinarySearchTree* binaryTreeObj) {
                 case 3:
                     cout << "Enter BidId: ";
                     getline(cin, userInput);
-                    measurePerformance("Finding Bid", [&]() {binaryTreeObj->search(binaryTreeObj->getRoot(), userInput); });
+                    measurePerformance("Finding Bid", [&]() {binaryTreeObj->search(StringConverter::toInt(userInput).value()); });
                     break;
                 case 4:
                     cout << "Enter BidId: ";
                     getline(cin, userInput);
-                    measurePerformance("Removing Bid", [&]() {binaryTreeObj->remove(userInput, csvPath, "data\\eOfferDeletedBids.csv"); });
+                    measurePerformance("Removing Bid", [&]() {binaryTreeObj->remove(StringConverter::toInt(userInput).value(), csvPath, "data\\eOfferDeletedBids.csv"); });
                     break;
                 case 5:
                     bid = binaryTreeObj->getBid(csvPath);
@@ -81,13 +81,35 @@ bool handleCRUD( string& csvPath, BinarySearchTree* binaryTreeObj) {
 
 bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
 
+   // CSVAnalyzer analyzer(filePath, 14);
+
+    // Analyze the CSV structure and print the inferred metadata
+ //   const CSVMetadata& metaData = analyzer.analyzeStructure();
+//    analyzer.printMetadata();
+
+   // CSVrow row(metaData);
+    
+    // Set row data with raw values
+  //  row.setRowData(123, "Alice", 75000.50);
+
+    // Access and print individual values
+  //  std::cout << "ID: " << row.getValue("ID") << "\n";
+  //  std::cout << "Name: " << row.getValue("Name") << "\n";
+  //  std::cout << "Salary: " << row.getValue("Salary") << "\n";
+
+    // Print the entire row
+ //   std::cout << "\nComplete Row:\n";
+ //   row.printRow();
+
+
 
         cout << string(" 1. Load Previous File: ") + filePath + "\n"
         " 2. Load Bids From eOfferMonthlySalesNov.CSV\n"
         " 3. Load Bids From eOfferSales.csv\n"
         " 4. Enter New CSV File Path\n"
         " 5. Enter New CSV File Path(GUI)\n"
-        " 6. Back to Main Menu\n"
+        " 6. Load CSCrows From eOfferMonthlySalesNov.CSV\n"
+        " 7. Back to Main Menu\n"
         "Enter choice: ";
 
 
@@ -114,10 +136,10 @@ bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
             break;
         case 5:
             try {
-            auto filePath = csv::Parser::selectFile();
-            if (filePath) {
-                std::cout << "Selected file: " << filePath->string() << std::endl;
-                return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(filePath->string()); });
+            auto csvPath = csv::Parser::selectFile();
+            if (csvPath) {
+                std::cout << "Selected file: " << csvPath->string() << std::endl;
+                return measurePerformance<bool>("Loading Bids", [&]() -> bool {return binarySearchTree->loadBids(csvPath->string()); });
             }
             else {
                 std::cout << "No file selected." << std::endl;
@@ -127,6 +149,10 @@ bool handleFileSelection(string& filePath, BinarySearchTree* binarySearchTree) {
             std::cerr << "Error: " << e.what() << std::endl;
         }
         break;
+        case 6:
+            filePath = "data\\eOfferMonthlySalesNov.csv";
+            return measurePerformance<bool>("Loading CSVrows", [&]() -> bool {return binarySearchTree->loadCSVrows(filePath); });
+            break;
         default:
             break;
         }

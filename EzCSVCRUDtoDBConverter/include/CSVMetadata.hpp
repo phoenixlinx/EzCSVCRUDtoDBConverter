@@ -3,37 +3,44 @@
 #ifndef CSVMETADATA_HPP
 #define CSVMETADATA_HPP
 
-#include <map>
+#include <unordered_map>
 #include <set>
 #include <string>
 #include <typeindex>
 #include <variant>
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
-using ColumnTypes = std::variant<int, double, std::string>;
 // This class was developed with assistance from ChatGPT 4o. See README.md.
 // Reference: OpenAI (2024)
 class CSVMetadata {
 private:
-    std::map<std::string, std::type_index> schema; // Stores column names and column types
-
+    std::unordered_map<std::string, const std::type_info*> schema;  // Stores column names and column types
+    const std::set<const std::type_info*> allowedTypes;
     // Dynamically generate the allowed types from ColumnTypes
-    static std::set<std::type_index> generateAllowedTypes();
+    static std::set<const std::type_info*> generateAllowedTypes();
+    std::vector<std::string> columnNames;
+    size_t columnCount;
 
-    const std::set<std::type_index> allowedTypes;
+   
+
+
 
 public:
      CSVMetadata();
-
+     CSVMetadata(const CSVMetadata&) = delete;            // Prevent copying
+     CSVMetadata& operator=(const CSVMetadata&) = delete; // Prevent copy assignment
+     CSVMetadata(CSVMetadata&&) = default;                 // Allow moving
+     CSVMetadata& operator=(CSVMetadata&&) = default;      // Allow move assignment
     // Add a column and its type to the schema
-    void addColumn(const std::string& columnName, const std::type_index& columnType);
-
+     void addColumn(const std::string& columnName, const std::type_info& columnType);
     // Get the type of a column
-    std::type_index getColumnType(const std::string& columnName) const;
-
+    const std::type_info& getColumnType(const std::string& columnName) const;
+    size_t getColumnCount() const;
+    const std::vector<std::string>& getColumnNames() const;
     //Validate that a column exists and matches the expected type
-    void validateColumn(const std::string& columnName, const std::type_index& columnType) const;
+    void validateColumn(const std::string& columnName, const std::type_info& columnType) const;
     void printMetadata() const;
 };
 

@@ -8,25 +8,18 @@
 #include "../include/CSVAnalyzer.hpp"
 #undef max
 #undef min
-csv::Parser CSVAnalyzer::parseCSV() const {
-    csv::Parser file(csvPath);
-    if (file.rowCount() == 0) {
-        throw std::runtime_error("CSV file is empty.");
-    }
-    return file;
-}
 
-// Infer the type of a single cell value
-std::type_index CSVAnalyzer::inferType(const std::string& cellValue) const {
+
+// Infer the type of a row column
+const std::type_info* CSVAnalyzer::inferType(const std::string& cellValue) const {
     if (StringConverter::isValidInt(cellValue)) {
-        return typeid(int);
+        return &typeid(int);
     }
     if (StringConverter::isValidDouble(cellValue)) {
-        return typeid(double);
+        return &typeid(double);
     }
-    return typeid(std::string);
+    return &typeid(std::string);
 }
-
 
 
 
@@ -44,95 +37,92 @@ std::unordered_set<unsigned int> CSVAnalyzer::generateRandomRowIndices(unsigned 
     return indices;
 }
 
-void CSVAnalyzer::validateColumn(
-    const std::string& columnName,
-    size_t colIndex,
-    const std::unordered_set<unsigned int>& indices,
-    csv::Parser& file
-) {
+
+
+void CSVAnalyzer::validateColumn(const std::string& columnName,size_t colIndex,const std::unordered_set<unsigned int>& indices,csv::Parser& file) {
     // Infer initial type from the first value
     auto firstIndex = *indices.begin();
     const std::string& firstValue = file[firstIndex][colIndex];
-    std::type_index columnType = inferType(firstValue);
-
+    const std::type_info* columnType = inferType(firstValue);
     // Begin validation based on the inferred type
-    if (columnType == typeid(int)) {
+    if (*columnType == typeid(int)) {
         columnType = validateAsInt(colIndex, indices, file);
     }
-    else if (columnType == typeid(double)) {
+    else if (*columnType == typeid(double)) {
         columnType = validateAsDouble(colIndex, indices, file);
     }
-
-    // Add the finalized type to metadata (ONE CALL ONLY)
-    metadata.addColumn(columnName, columnType);
+    // Add the finalized type to metadata
+    metadata->addColumn(columnName, *columnType);
 }
 
-std::type_index CSVAnalyzer::validateAsInt(
-    size_t colIndex,
-    const std::unordered_set<unsigned int>& indices,
-    csv::Parser& file
-) {
-    std::type_index columnType = typeid(int);
-
+const std::type_info* CSVAnalyzer::validateAsInt(size_t colIndex,const std::unordered_set<unsigned int>& indices,csv::Parser& file) {
     for (auto it = ++indices.begin(); it != indices.end(); ++it) {
         const std::string& cellValue = file[*it][colIndex];
 
         if (!StringConverter::isValidInt(cellValue)) {
             if (StringConverter::isValidDouble(cellValue)) {
-                columnType = typeid(double); // Promote to double
-                return validateAsDouble(colIndex, indices, file); // Continue as double
+                return validateAsDouble(colIndex, indices, file); //Promote to double and continue checking for double validation
             }
             else {
-                return typeid(std::string); // Promote to string and stop
+                return &typeid(std::string); // Demotes to string and stop checking more rows
             }
         }
     }
-    return columnType; 
+    return &typeid(int); // Remains int if no promotion
 }
 
-std::type_index CSVAnalyzer::validateAsDouble(
-    size_t colIndex,
-    const std::unordered_set<unsigned int>& indices,
-    csv::Parser& file
-) {
+
+const std::type_info* CSVAnalyzer::validateAsDouble(size_t colIndex,const std::unordered_set<unsigned int>& indices,csv::Parser& file) {
     for (auto it = ++indices.begin(); it != indices.end(); ++it) {
         const std::string& cellValue = file[*it][colIndex];
 
         if (!StringConverter::isValidDouble(cellValue)) {
-            return typeid(std::string); // Promote to string and stop
+            return &typeid(std::string); 
         }
     }
-    return typeid(double); // Remains double if no promotion
+    return &typeid(double); // Remains double if no promotion
 }
 
 
 
-// Constructor
-CSVAnalyzer::CSVAnalyzer(const std::string& csvPath, double percent)
-    : csvPath(csvPath), percentToAnalyze(percent) {
+
+
+CSVAnalyzer::CSVAnalyzer(const std::string& csvPath, unsigned int rowPercentageToAnalyze)
+    : percentToAnalyze(rowPercentageToAnalyze),
+    parser(std::make_shared<csv::Parser>(csvPath)),
+    metadata(std::make_shared<CSVMetadata>())
+{
 }
 
-// Main method to analyze the CSV structure
-CSVMetadata CSVAnalyzer::analyzeStructure() {
-    csv::Parser file = parseCSV();                    // Parse CSV
-    std::vector<std::string> header = file.getHeader(); // Read header
-    unsigned int totalRows = file.rowCount();
+
+
+
+std::shared_ptr<CSVMetadata> CSVAnalyzer::analyzeStructure() {
+
+    if (!parser) {
+        throw std::runtime_error("Parser is not initialized.");
+    }
+    if (parser->rowCount() == 0) {
+        throw std::runtime_error("CSV file is empty.");
+    }
+
+    std::vector<std::string> header = parser->getHeader(); 
+    unsigned int totalRows = parser->rowCount();
     unsigned int rowsToAnalyze = determineRowsToAnalyze(totalRows);
-
     // Generate random indices for row sampling
     std::unordered_set<unsigned int> indices = generateRandomRowIndices(totalRows, rowsToAnalyze);
 
     // Validate each column independently
     for (size_t colIndex = 0; colIndex < header.size(); colIndex++) {
-        validateColumn(header[colIndex], colIndex, indices, file);
+        validateColumn(header[colIndex], colIndex, indices, *parser);
     }
 
-    return metadata; // Return the final metadata
+    return metadata;
 }
 
-// Print the inferred metadata
+
 void CSVAnalyzer::printMetadata() const {
-    metadata.printMetadata();
+    metadata->printMetadata();
 }
 
 unsigned int CSVAnalyzer::determineRowsToAnalyze(unsigned int totalRows) const {
@@ -165,4 +155,7 @@ unsigned int CSVAnalyzer::determineRowsToAnalyze(unsigned int totalRows) const {
     unsigned int rowsToAnalyze = std::min(static_cast<unsigned int>(calculatedRows), totalRows);
 
     return rowsToAnalyze;
+}
+std::shared_ptr<csv::Parser> CSVAnalyzer::getParcedCSV(){
+    return parser; 
 }

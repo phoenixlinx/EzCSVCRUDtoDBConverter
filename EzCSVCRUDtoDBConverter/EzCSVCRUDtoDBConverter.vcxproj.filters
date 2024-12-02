@@ -42,6 +42,12 @@
     <ClCompile Include="src\CSVMetadata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\CSVrow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DynamicTypedValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CSVparser.hpp">
@@ -71,12 +77,24 @@
     <ClInclude Include="include\CSVMetadata.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\CSVrow.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DynamicTypedValue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\PerformanceUtils.tpp">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="src\StringConverter.tpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="src\DynamicTypedValue.tpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="src\CSVrow.tpp">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

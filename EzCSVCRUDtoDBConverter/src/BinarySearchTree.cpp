@@ -6,16 +6,16 @@
 
 
  // Initializing only non-default members
-Bid::Bid() : rowPos(0), amount(0.0) {
+Bid::Bid() : bidId(0), rowPos(0), amount(0.0) {
    
 }
 
 
-Node::Node() : leftNodePtr(nullptr), rightNodePtr(nullptr), longestChildPath(1)  {
+Node::Node() :longestChildPath(1), leftNodePtr(nullptr), rightNodePtr(nullptr){
 
 }
 
-Node::Node(Bid bid) : bid(bid),leftNodePtr(nullptr), rightNodePtr(nullptr),longestChildPath(1) {
+Node::Node(Bid bid) : longestChildPath(1),leftNodePtr(nullptr), rightNodePtr(nullptr), bid(bid){
 
 
 }
@@ -25,7 +25,7 @@ Node* BinarySearchTree::getRoot() {
 }
 BinarySearchTree::BinarySearchTree() 
 
-	: root(nullptr), treeHeight(0), bstNodeCount(0) {
+	: root(nullptr), bstNodeCount(0),treeHeight(0) {
 	insertionPath.reserve(32); // Reserve memory to avoid costly vector resizing during insertion
 
 
@@ -68,7 +68,7 @@ void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string
 		// Create a row for the given node's bid
 		vector<string> row = {
 			soonToBeDeletedNode->bid.title,
-			soonToBeDeletedNode->bid.bidId,
+			to_string(soonToBeDeletedNode->bid.bidId),
 			"0", "0", // Placeholder values
 			to_string(soonToBeDeletedNode->bid.amount),
 			"0", "0", "0", // Placeholder values
@@ -79,6 +79,13 @@ void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string
 		fileBackUp.addRow(fileBackUp.rowCount(), row);
 
 		// Synchronize the file
+
+
+
+
+
+
+
 		fileBackUp.sync();
 
 		cout << "Bid with ID " << soonToBeDeletedNode->bid.bidId << " successfully backed up to file." << endl;
@@ -89,7 +96,7 @@ void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string
 	}
 }
 
-Bid BinarySearchTree::search(Node* node, string bidId) {
+Bid BinarySearchTree::search(int bidId) {
 	Bid bid;
 	Node* currNodePosition = root;
 	while (currNodePosition != 0) {
@@ -138,7 +145,7 @@ Bid BinarySearchTree::search(Node* node, string bidId) {
 
 
 
-void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDeletedBids) {                  // credit:http://www.cplusplus.com/forum/general/1551/
+void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBids) {                  // credit:http://www.cplusplus.com/forum/general/1551/
 	
 	csv::Parser file = csv::Parser(csvPath);
 	unsigned int deleteRowPosition = 0;
@@ -328,7 +335,7 @@ void BinarySearchTree::remove(string bidId, string csvPath, string csvPathDelete
 
 }
 
-inline void BinarySearchTree::updateTreeMetrics(unsigned int nodeInsertionHeight) {
+inline void BinarySearchTree::updateTreeMetrics(size_t nodeInsertionHeight) {
 	nodeInsertionHeight = nodeInsertionHeight + NodeHeightIncrement;
 	cout << "Inserted at level " << nodeInsertionHeight << endl;
 	if (nodeInsertionHeight  > treeHeight) {
@@ -340,9 +347,9 @@ inline void BinarySearchTree::updateTreeMetrics(unsigned int nodeInsertionHeight
 
 void BinarySearchTree::insert(Bid bid) {
 	Node** currentNode = &root;
-	unsigned int nodeInsertionHeight = 0;
-	unsigned int elementsRemaining = 0; // Tracks remaining nodes for re balancing
-	insertionPath.clear(); // Clears path for rebalancing
+	size_t nodeInsertionHeight = 0;
+	size_t elementsRemaining = 0; // Tracks remaining nodes for re balancing
+	insertionPath.clear(); // Clears path for re-balancing
 	while (*currentNode != nullptr) {
 		insertionPath.push_back(currentNode);
 		if (bid.bidId > (*currentNode)->bid.bidId) {
@@ -481,7 +488,7 @@ Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user in
 		}
 		cout << "Enter Fund: ";
 		getline(cin, d);
-		bid.bidId = a;
+		bid.bidId = StringConverter::toInt(a).value();
 		bid.title = b;
 		bid.fund = d;
 		bid.rowPos = fileRowCount;
@@ -540,7 +547,7 @@ bool BinarySearchTree::loadBids(string csvPath) {
 		for (unsigned int i = 0; i < file.rowCount(); i++) {
 			// Create a data structure and add to the collection of bids
 			Bid bid;
-			bid.bidId = file[i][1];
+			bid.bidId = StringConverter::toInt(file[i][1]).value();
 			bid.title = file[i][0];
 			bid.fund = file[i][8];
 			bid.rowPos = i;
@@ -574,6 +581,33 @@ bool BinarySearchTree::loadBids(string csvPath) {
 	cout << "Deepest level: " << this->getDeepestLevel() << endl;
 	return true;
 }
+
+
+bool BinarySearchTree::loadCSVrows(const std::string& csvPath) {
+	std::cout << "Loading CSV file " << csvPath << std::endl;
+
+	this->reSetDeepestLevel();
+
+	try {
+	
+		CSVrow row(csvPath,20);
+		row.printAllElements();
+	
+		
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Error: " << e.what() << std::endl;
+		return false;
+	}
+
+	std::cout << "CSV rows successfully loaded into the BinarySearchTree." << std::endl;
+	std::cout << "Deepest level: " << this->getDeepestLevel() << std::endl;
+	return true;
+}
+
+
+
+
 void BinarySearchTree::fixLeftImbalance(Node*& subTreeRootNode) {
 
 	Node* subTreeRootNodeLeftChild = nullptr;

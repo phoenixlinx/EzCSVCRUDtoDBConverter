@@ -24,20 +24,20 @@ private:
     static constexpr unsigned int Zero_Percent = 0;
     static constexpr unsigned int Rounding_Adjustment = 99;
     std::string csvPath;                   
-    double percentToAnalyze;               // Percentage of rows to analyze
-    CSVMetadata metadata;                  // Metadata for inferred column types
-    csv::Parser parseCSV() const;        
-    std::type_index inferType(const std::string& cellValue) const; // Infer the type of a cell value
+    double percentToAnalyze; // Percentage of rows to analyze
+    std::shared_ptr<CSVMetadata> metadata; // Metadata for inferred column types 
+    std::shared_ptr<csv::Parser> parser;
+    const std::type_info* inferType(const std::string& columnValue) const;
     unsigned int determineRowsToAnalyze(unsigned int totalRows) const; // Determine the number of rows to analyze
     std::unordered_set<unsigned int> generateRandomRowIndices(unsigned int totalRows, unsigned int rowsToAnalyze); // Generate random row indices
     void validateColumn(const std::string& columnName, size_t colIndex, const std::unordered_set<unsigned int>& indices, csv::Parser& file); // Validate a single column
-    std::type_index validateAsInt(size_t colIndex, const std::unordered_set<unsigned int>& indices, csv::Parser& file); 
-    std::type_index validateAsDouble(size_t colIndex, const std::unordered_set<unsigned int>& indices, csv::Parser& file); 
+    const std::type_info* validateAsInt(size_t colIndex, const std::unordered_set<unsigned int>& indices, csv::Parser& file);
+    const std::type_info* validateAsDouble(size_t colIndex, const std::unordered_set<unsigned int>& indices, csv::Parser& file);
 
 public:
-    CSVAnalyzer(const std::string& csvPath, double percent);
-    CSVMetadata analyzeStructure();
+    CSVAnalyzer(const std::string& csvPath, unsigned int rowPercentageToAnalyze);
+    std::shared_ptr<csv::Parser> getParcedCSV();
+    std::shared_ptr<CSVMetadata> analyzeStructure();
     void printMetadata() const;
 };
-
 #endif 
