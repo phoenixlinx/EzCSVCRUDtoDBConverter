@@ -23,8 +23,7 @@ void displayPrimaryMenu() {
         " 9. Exit\n";
 }
 bool handleCRUD( string& csvPath, BinarySearchTree* binaryTreeObj) {
-    Bid bid;
-    //string csvPath;
+    shared_ptr<Bid> bid;
     optional<int> choice;
     string userInput;
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {

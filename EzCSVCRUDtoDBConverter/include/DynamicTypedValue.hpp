@@ -15,14 +15,14 @@ private:
         virtual ~ValueBase() = default;
         virtual std::string getTypeName() const = 0;
         virtual void printValue(std::ostream& os) const = 0;
-        virtual std::unique_ptr<ValueBase> clone() const = 0;
+        virtual std::shared_ptr<ValueBase> clone() const = 0;
     };
 
     // Concrete implementation for specific types
     template <typename T>
     struct ValueModel;
 
-    std::unique_ptr<ValueBase> storedValuePtr; // Pointer to the polymorphic base
+    std::shared_ptr<ValueBase> storedValuePtr; // Pointer to the polymorphic base
 
 public:
     // Default constructor

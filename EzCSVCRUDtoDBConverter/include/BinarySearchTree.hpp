@@ -1,8 +1,6 @@
 
 // This is a personal academic project. Dear PVS-Studio, please check it.
-
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,21 +25,6 @@ struct Bid {
 	Bid();
 };
 
-struct Node {
-
-private:
-	unsigned int longestChildPath;
-protected:
-	Node* leftNodePtr;
-	Node* rightNodePtr;
-public:
-	Bid bid;
-	Node();
-	Node(Bid bid);
-	//This allows BinarySerachTree to access private Node attributes.
-	friend class BinarySearchTree;
-
-};
 
 
 
@@ -51,6 +34,20 @@ class BinarySearchTree {
 
 
 private:
+	struct Node {
+
+	
+		unsigned int longestChildPath;
+	
+		Node* leftNodePtr;
+		Node* rightNodePtr;
+	
+		shared_ptr<Bid> bid;
+		Node();
+		Node(shared_ptr<Bid> bid);
+	
+		
+	};
 
 	Node* root;
 	unsigned int bstNodeCount; // Total nodes in BST
@@ -65,17 +62,16 @@ public:
 	BinarySearchTree();
 
 	void remove(int bidId, string csvPath, string csvPathDeletedBids);
-	Node* getRoot();
 	virtual ~BinarySearchTree();
-	void insert(Bid bid);
+	void insert(shared_ptr<Bid> bid);
 	unsigned int getDeepestLevel() const;
 	void backUpDeletedNode(Node* soonToBeDeletedNode, const string& csvPathDeletedBids);
 	void reSetDeepestLevel();
 	unsigned int getBSTSize() const;
-	Bid search(int bidId);
+	shared_ptr<Bid> search(int bidId);
 	bool isEmpty() const;
 	void printInOrder();
-	Bid getBid(string csvPath);
+	shared_ptr<Bid> getBid(string csvPath);
 	bool loadBids(string csvPath);
 	bool loadCSVrows(const std::string& csvPath);
 };

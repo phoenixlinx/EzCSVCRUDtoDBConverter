@@ -10,19 +10,18 @@ Bid::Bid() : bidId(0), rowPos(0), amount(0.0) {
    
 }
 
-
-Node::Node() :longestChildPath(1), leftNodePtr(nullptr), rightNodePtr(nullptr){
-
+BinarySearchTree::Node::Node() :longestChildPath(1), leftNodePtr(nullptr), rightNodePtr(nullptr) {
 }
 
-Node::Node(Bid bid) : longestChildPath(1),leftNodePtr(nullptr), rightNodePtr(nullptr), bid(bid){
-
-
+BinarySearchTree::Node::Node(std::shared_ptr<Bid> bid) : longestChildPath(1), leftNodePtr(nullptr), rightNodePtr(nullptr), bid(bid){
 }
 
-Node* BinarySearchTree::getRoot() {
-	return root;
-}
+
+
+
+
+
+
 BinarySearchTree::BinarySearchTree() 
 
 	: root(nullptr), bstNodeCount(0),treeHeight(0) {
@@ -67,12 +66,12 @@ void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string
 
 		// Create a row for the given node's bid
 		vector<string> row = {
-			soonToBeDeletedNode->bid.title,
-			to_string(soonToBeDeletedNode->bid.bidId),
+			soonToBeDeletedNode->bid->title,
+			to_string(soonToBeDeletedNode->bid->bidId),
 			"0", "0", // Placeholder values
-			to_string(soonToBeDeletedNode->bid.amount),
+			to_string(soonToBeDeletedNode->bid->amount),
 			"0", "0", "0", // Placeholder values
-			soonToBeDeletedNode->bid.fund
+			soonToBeDeletedNode->bid->fund
 		};
 
 		// Add the row to the CSV file
@@ -88,7 +87,7 @@ void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string
 
 		fileBackUp.sync();
 
-		cout << "Bid with ID " << soonToBeDeletedNode->bid.bidId << " successfully backed up to file." << endl;
+		cout << "Bid with ID " << soonToBeDeletedNode->bid->bidId << " successfully backed up to file." << endl;
 
 	}
 	catch (const std::exception& e) {
@@ -96,25 +95,25 @@ void BinarySearchTree::backUpDeletedNode(Node* soonToBeDeletedNode, const string
 	}
 }
 
-Bid BinarySearchTree::search(int bidId) {
-	Bid bid;
+shared_ptr<Bid> BinarySearchTree::search(int bidId) {
+	shared_ptr<Bid> bid;
 	Node* currNodePosition = root;
 	while (currNodePosition != 0) {
 
-		if (bidId == currNodePosition->bid.bidId) {
-			cout << currNodePosition->bid.bidId << " | ";
-			cout << " Amount: $" << currNodePosition->bid.amount << " | ";
-			cout << currNodePosition->bid.title << " | ";
-			cout << " Row: " << currNodePosition->bid.rowPos << " | ";
+		if (bidId == currNodePosition->bid->bidId) {
+			cout << currNodePosition->bid->bidId << " | ";
+			cout << " Amount: $" << currNodePosition->bid->amount << " | ";
+			cout << currNodePosition->bid->title << " | ";
+			cout << " Row: " << currNodePosition->bid->rowPos << " | ";
 
-			cout << currNodePosition->bid.fund << endl;
+			cout << currNodePosition->bid->fund << endl;
 
 			//
-			if ((currNodePosition->rightNodePtr != 0 && currNodePosition->rightNodePtr->bid.bidId == bidId)) { // This will check if the right child has also a value of bidId
+			if ((currNodePosition->rightNodePtr != 0 && currNodePosition->rightNodePtr->bid->bidId == bidId)) { // This will check if the right child has also a value of bidId
 				currNodePosition = currNodePosition->rightNodePtr;   // This will change currNodePosition to its right child
 			}
 			else if (currNodePosition->rightNodePtr != 0 && (currNodePosition->rightNodePtr)->leftNodePtr != 0) { // this will first check if the curr node has a right child if it does then it will check if that right node has a child
-				currNodePosition = (currNodePosition->rightNodePtr)->leftNodePtr; // This will set curr node as the left child of its curent right child. This will serch for duplicate values
+				currNodePosition = (currNodePosition->rightNodePtr)->leftNodePtr; // This will set curr node as the left child of its current right child. This will serch for duplicate values
 			}
 			else {
 				return currNodePosition->bid; // This will end the search function if currNodePosition does not have a right child or if the right child does not have a value of bidId
@@ -122,14 +121,14 @@ Bid BinarySearchTree::search(int bidId) {
 			}
 
 		}
-		if (bidId > currNodePosition->bid.bidId) {                           // this will search the right branch of a node if string bidId is more than the curr position bidId
+		if (bidId > currNodePosition->bid->bidId) {                           // this will search the right branch of a node if string bidId is more than the curr position bidId
 
 			currNodePosition = currNodePosition->rightNodePtr;
 
 
 		}
 
-		else if (bidId < currNodePosition->bid.bidId)
+		else if (bidId < currNodePosition->bid->bidId)
 			currNodePosition = currNodePosition->leftNodePtr;
 
 	}
@@ -159,7 +158,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 	bool nodeBidIdExists = false;
 	while (currNodePosition != 0)
 	{
-		if (currNodePosition->bid.bidId == bidId)
+		if (currNodePosition->bid->bidId == bidId)
 		{
 			nodeBidIdExists = true;
 			break;
@@ -167,7 +166,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 		else
 		{
 			par = currNodePosition;
-			if (bidId > currNodePosition->bid.bidId)
+			if (bidId > currNodePosition->bid->bidId)
 				currNodePosition = currNodePosition->rightNodePtr;
 			else currNodePosition = currNodePosition->leftNodePtr;
 		}
@@ -188,7 +187,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 			{
 				par->leftNodePtr = currNodePosition->rightNodePtr;
 
-				deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
+				deleteRowPosition = currNodePosition->bid->rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
 				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
@@ -204,7 +203,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 
 				par->rightNodePtr = currNodePosition->rightNodePtr;
 
-				deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
+				deleteRowPosition = currNodePosition->bid->rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
 				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
@@ -220,7 +219,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 			{
 				par->leftNodePtr = currNodePosition->leftNodePtr;
 
-				deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
+				deleteRowPosition = currNodePosition->bid->rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
 				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
@@ -233,7 +232,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 			{
 				par->rightNodePtr = currNodePosition->leftNodePtr;
 
-				deleteRowPosition = par->bid.rowPos; // This will assign the rowPos
+				deleteRowPosition = par->bid->rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
 				this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
@@ -254,7 +253,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 			par->leftNodePtr = 0;               // this will delete par's copy of currNodePositions pointers.
 		else par->rightNodePtr = 0;
 
-		deleteRowPosition = currNodePosition->bid.rowPos; // This will assign the rowPos
+		deleteRowPosition = currNodePosition->bid->rowPos; // This will assign the rowPos
 		cout << "Row Position: " << deleteRowPosition << endl;
 		//of current node position to variable deleteRowPosition
 		this->backUpDeletedNode(currNodePosition, csvPathDeletedBids);
@@ -275,7 +274,7 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 		{
 			currNodePosition = tmp1;
 
-			deleteRowPosition = tmp1->bid.rowPos; // This will assign the rowPos
+			deleteRowPosition = tmp1->bid->rowPos; // This will assign the rowPos
 			//of current node position to variable deleteRowPosition
 			cout << "Row Position: " << deleteRowPosition << endl;
 			this->backUpDeletedNode(tmp1, csvPathDeletedBids);
@@ -300,9 +299,9 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 					tmp2 = tmp3;
 					tmp3 = tmp3->leftNodePtr;
 				}
-				currNodePosition->bid.bidId = tmp3->bid.bidId;
+				currNodePosition->bid->bidId = tmp3->bid->bidId;
 
-				deleteRowPosition = tmp3->bid.rowPos; // This will assign the rowPos
+				deleteRowPosition = tmp3->bid->rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				//of current node position to variable deleteRowPosition
 				this->backUpDeletedNode(tmp3, csvPathDeletedBids);
@@ -316,10 +315,10 @@ void BinarySearchTree::remove(int bidId, string csvPath, string csvPathDeletedBi
 			{
 				Node* tmp;
 				tmp = currNodePosition->rightNodePtr;
-				currNodePosition->bid.bidId = tmp->bid.bidId;
+				currNodePosition->bid->bidId = tmp->bid->bidId;
 				currNodePosition->rightNodePtr = tmp->rightNodePtr;
 
-				deleteRowPosition = tmp->bid.rowPos; // This will assign the rowPos
+				deleteRowPosition = tmp->bid->rowPos; // This will assign the rowPos
 				cout << "Row Position: " << deleteRowPosition << endl;
 				this->backUpDeletedNode(tmp, csvPathDeletedBids);
 				//of current node position to variable deleteRowPosition
@@ -345,20 +344,20 @@ inline void BinarySearchTree::updateTreeMetrics(size_t nodeInsertionHeight) {
 }
 
 
-void BinarySearchTree::insert(Bid bid) {
+void BinarySearchTree::insert(shared_ptr<Bid> bid) {
 	Node** currentNode = &root;
 	size_t nodeInsertionHeight = 0;
 	size_t elementsRemaining = 0; // Tracks remaining nodes for re balancing
 	insertionPath.clear(); // Clears path for re-balancing
 	while (*currentNode != nullptr) {
 		insertionPath.push_back(currentNode);
-		if (bid.bidId > (*currentNode)->bid.bidId) {
+		if (bid->bidId > (*currentNode)->bid->bidId) {
 			    //Set current node to its left child because a deeper traversal is needed to find a null node for insertion.
 				currentNode = &((*currentNode)->rightNodePtr);
 			
 			
 			
-		}else if((bid.bidId < (*currentNode)->bid.bidId)) {
+		}else if((bid->bidId < (*currentNode)->bid->bidId)) {
 
 
 			
@@ -425,7 +424,7 @@ void BinarySearchTree::printInOrder() {
 
 				// Left subtree has  been processed so remove link
 				previousNode->rightNodePtr = nullptr;
-				cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos << " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
+				cout << currentNode->bid->bidId << " | " << currentNode->bid->amount << " | " << currentNode->bid->rowPos << " | " << currentNode->bid->title << " | " << currentNode->bid->fund << '\n';
 				currentNode = currentNode->rightNodePtr;
 
 				
@@ -434,7 +433,7 @@ void BinarySearchTree::printInOrder() {
 		}else {
 
 	        //Print the left node of the right most child
-			cout << currentNode->bid.bidId << " | " << currentNode->bid.amount << " | " << currentNode->bid.rowPos << " | " << currentNode->bid.title << " | " << currentNode->bid.fund << '\n';
+			cout << currentNode->bid->bidId << " | " << currentNode->bid->amount << " | " << currentNode->bid->rowPos << " | " << currentNode->bid->title << " | " << currentNode->bid->fund << '\n';
 			currentNode = currentNode->rightNodePtr;
 			
 
@@ -452,11 +451,10 @@ void BinarySearchTree::printInOrder() {
 
 
 
-Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user input and return it as a bid
+shared_ptr<Bid> BinarySearchTree::getBid(string csvPath) {// This method will obtain user input and return it as a bid
 
 
-
-	Bid bid;
+	shared_ptr<Bid> bid = make_shared<Bid>();
 
 	cout << endl << endl;
 	csv::Parser file = csv::Parser(csvPath);
@@ -484,14 +482,14 @@ Bid BinarySearchTree::getBid(string csvPath) {// This method will obtain user in
 		cout << "Enter amount: ";
 		getline(cin, strAmount);
 		if (amount = StringConverter::toDouble(strAmount); amount.has_value()) {
-			bid.amount = amount.value();
+			bid->amount = amount.value();
 		}
 		cout << "Enter Fund: ";
 		getline(cin, d);
-		bid.bidId = StringConverter::toInt(a).value();
-		bid.title = b;
-		bid.fund = d;
-		bid.rowPos = fileRowCount;
+		bid->bidId = StringConverter::toInt(a).value();
+		bid->title = b;
+		bid->fund = d;
+		bid->rowPos = fileRowCount;
 		this->insert(bid);
 
 
@@ -546,12 +544,12 @@ bool BinarySearchTree::loadBids(string csvPath) {
 		// loop to read rows of a CSV file
 		for (unsigned int i = 0; i < file.rowCount(); i++) {
 			// Create a data structure and add to the collection of bids
-			Bid bid;
-			bid.bidId = StringConverter::toInt(file[i][1]).value();
-			bid.title = file[i][0];
-			bid.fund = file[i][8];
-			bid.rowPos = i;
-			if (bid.amount = StringConverter::toDouble(file[i][4]).value(); amount.has_value()) {
+			shared_ptr<Bid> bid = make_shared<Bid>();
+			bid->bidId = StringConverter::toInt(file[i][1]).value();
+			bid->title = file[i][0];
+			bid->fund = file[i][8];
+			bid->rowPos = i;
+			if (bid->amount = StringConverter::toDouble(file[i][4]).value(); amount.has_value()) {
 
 			}
 

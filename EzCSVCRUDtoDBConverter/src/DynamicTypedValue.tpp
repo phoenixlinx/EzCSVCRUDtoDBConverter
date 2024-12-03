@@ -22,8 +22,8 @@ struct DynamicTypedValue::ValueModel : ValueBase {
         os << storedValue;
     }
 
-    std::unique_ptr<ValueBase> clone() const override {
-        return std::make_unique<ValueModel<T>>(*this);
+    std::shared_ptr<ValueBase> clone() const override {
+        return std::make_shared<ValueModel<T>>(*this);
     }
 
     T getValue() const {
@@ -34,7 +34,7 @@ struct DynamicTypedValue::ValueModel : ValueBase {
 // Template constructor for any type
 template <typename T>
 DynamicTypedValue::DynamicTypedValue(T value)
-    : storedValuePtr(std::make_unique<ValueModel<T>>(std::move(value))) {}
+    : storedValuePtr(std::make_shared<ValueModel<T>>(std::move(value))) {}
 
 // Template method to access the underlying value
 template <typename T>

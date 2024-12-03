@@ -5,7 +5,7 @@
 // Default constructor initializes the DynamicTypedValue with an empty string
 // This ensures every object has a valid state, even when no type is explicitly specified.
 DynamicTypedValue::DynamicTypedValue()
-    : storedValuePtr(std::make_unique<ValueModel<std::string>>("")) {}
+    : storedValuePtr(std::make_shared<ValueModel<std::string>>("")) {}
 
 // Copy constructor clones the underlying ValueBase
 // This ensures deep copying of the polymorphic object stored in storedValuePtr.
