@@ -21,9 +21,6 @@
     <ClCompile Include="src\CSVparser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BinarySearchTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\StringConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -46,6 +43,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\DynamicTypedValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,6 +83,12 @@
     <ClInclude Include="include\DynamicTypedValue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Bid.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BidManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\PerformanceUtils.tpp">
@@ -95,6 +101,15 @@
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="src\CSVrow.tpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="src\BinarySearchTree.tpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="src\MenuUtils.tpp">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="src\BidManager.tpp">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

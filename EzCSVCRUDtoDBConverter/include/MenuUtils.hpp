@@ -9,9 +9,15 @@
 #include "BinarySearchTree.hpp"
 #include "CSVMetadata.hpp"
 #include "CSVAnalyzer.hpp"
-#include "CSVRow.hpp"
+#include <CSVRow.hpp>
+#include <BidManager.hpp>
 void displayInitialMenu();
 void displayPrimaryMenu();
-bool handleFileSelection(string& filePath, BinarySearchTree* tree);
-bool handleCRUD(string& filePath, BinarySearchTree* tree);
+void displayFileSelectionMenu();
+string handleFileSelection();
+template <typename BinarySearchTree>
+bool handleFileSelection2(string& filePath, BinarySearchTree& binarySearchTree);
+template <typename BinarySearchTree>
+bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow);
+#include "../src/MenuUtils.tpp" 
 #endif

@@ -1,6 +1,9 @@
 
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
+#ifndef BINARY_SEARCH_TREE_HPP
+#define BINARY_SEARCH_TREE_HPP
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,26 +15,11 @@
 using namespace std;
 
 
-struct Bid {
-	// BidId is the unique identifier for bid,
-	// and is used as the key in the Binary Search Tree.
-	int bidId; // Unique identifier for the bid
-	string title;
-	string fund;
-	// RowPos is the Index of the bid's row in the CSV file.
-	unsigned int rowPos; // Row index of the bid in the CSV file
-	double amount;
-	
-	Bid();
-};
 
-
-
-
-
+template <typename T, typename KeyExtractor>
 class BinarySearchTree {
 
-
+	using Key = decltype(std::declval<KeyExtractor>()(std::declval<T&>()));
 
 private:
 	struct Node {
@@ -41,10 +29,9 @@ private:
 	
 		Node* leftNodePtr;
 		Node* rightNodePtr;
-	
-		shared_ptr<Bid> bid;
+		shared_ptr<T> containedValueObject; // The object/value held within this tree node.
 		Node();
-		Node(shared_ptr<Bid> bid);
+		Node(shared_ptr<T> containedValueObject);
 	
 		
 	};
@@ -52,26 +39,31 @@ private:
 	Node* root;
 	unsigned int bstNodeCount; // Total nodes in BST
 	unsigned int treeHeight;// Height of BST
+	KeyExtractor keyExtractor;  // Function to extract BST key value from containedValueObject
 	vector<Node**> insertionPath;//InsertionPath is a reusable member variable to avoid executive memory management during the insertion of many rows.
 	//Incline function to reduce overhead since one call to insert can result to many calls to this function
 	inline void updateTreeMetrics(size_t nodeInsertionHeight);
+	void debugKeyType() const;
 	inline void fixLeftImbalance(Node*& subTreeRootNode);
 	inline void fixRightImbalance(Node*& subTreeRootNode);
 public:
 	static constexpr  unsigned int NodeHeightIncrement = 1;
 	BinarySearchTree();
-
-	void remove(int bidId, string csvPath, string csvPathDeletedBids);
+	BinarySearchTree(KeyExtractor extractor);
 	virtual ~BinarySearchTree();
-	void insert(shared_ptr<Bid> bid);
+	template <typename InputKey>
+	void remove(const InputKey& searchKey,const string& csvPathDeletedNodes);
+	void insert(shared_ptr<T> containedValueObject);
+	template <typename InputKey>
+	shared_ptr<T> search(const InputKey& searchKey);
 	unsigned int getDeepestLevel() const;
-	void backUpDeletedNode(Node* soonToBeDeletedNode, const string& csvPathDeletedBids);
 	void reSetDeepestLevel();
 	unsigned int getBSTSize() const;
-	shared_ptr<Bid> search(int bidId);
 	bool isEmpty() const;
 	void printInOrder();
-	shared_ptr<Bid> getBid(string csvPath);
-	bool loadBids(string csvPath);
-	bool loadCSVrows(const std::string& csvPath);
+	
 };
+#include "../src/BinarySearchTree.tpp"
+
+#endif 
+

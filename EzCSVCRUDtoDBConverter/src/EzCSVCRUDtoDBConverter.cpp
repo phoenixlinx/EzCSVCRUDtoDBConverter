@@ -6,7 +6,7 @@
 //============================================================================
 // Name        : EzCSVCRUDtoDBConverter.cpp
 // Author      : Alfredo A. Martinez
-// Version     : 1.9
+// Version     : 2.0
 //============================================================================
 // EzCSVCRUDtoDBConverter.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
@@ -20,22 +20,29 @@
 #include "../include/PerformanceUtils.hpp"
 #include "../include/MenuUtils.hpp"
 #include "../include/CSVMetadata.hpp"
-
+#include <Bid.hpp>
 int main(int argc, char* argv[]) {
-    BinarySearchTree* binaryTreeObj = new BinarySearchTree;
+  
+
     Bid bid;
+
+
+
     string csvPath;
+    string csvRowIDColumn;
     optional<int> choice;
     string userInput;
+    size_t idColumnIndex;
     switch (argc) {
     case 2:
         csvPath = argv[projectConstants::CSV_FILE_PATH];
+        csvRowIDColumn = argv[projectConstants::CSV_ROW_ID_COLUMN];
         break;
     default:
-        csvPath = "data\\eOfferMonthlySalesNov.csv";
-    
+       
+        csvRowIDColumn = "ArticleID";
     }
-    
+
 
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {
         displayInitialMenu();
@@ -49,9 +56,32 @@ int main(int argc, char* argv[]) {
 
                 switch (choice.value()) {
                 case 1:
-                    if (handleFileSelection(csvPath, binaryTreeObj)) {
+                    if (csvPath.empty()) {
+                        
+                        csvPath = handleFileSelection();
+                        CSVrow csvRow(csvPath, 20);
+                        idColumnIndex = csvRow.getColumnIndex(csvRowIDColumn);
+                        // Define a key extractor for CSVrow
+                        auto keyExtractor = [idColumnIndex](const std::vector<DynamicTypedValue>& row) {
+                            return row[idColumnIndex]; // No explicit type; auto-deduces via `operator T()`
+                            };
 
-                        handleCRUD(csvPath, binaryTreeObj);
+
+
+                        // Create the Binary Search Tree for rows
+                        BinarySearchTree<std::vector<DynamicTypedValue>, decltype(keyExtractor)> dynamicTypedValueTree(keyExtractor);
+                        auto& allRows = csvRow.getRowData();
+                        for (auto& [key, rowPtr] : allRows) {
+                            if (rowPtr) {
+                                dynamicTypedValueTree.insert(rowPtr); // Modify via the tree
+                            }
+                            else {
+                                rowPtr = std::make_shared<std::vector<DynamicTypedValue>>(); // Add new row
+                            }
+                        }
+
+
+                        handleCRUD(csvPath, dynamicTypedValueTree,csvRow);
                         choice = projectConstants::EXIT_APPLICATION;
                     }
                     break;

@@ -36,6 +36,18 @@ template <typename T>
 DynamicTypedValue::DynamicTypedValue(T value)
     : storedValuePtr(std::make_shared<ValueModel<T>>(std::move(value))) {}
 
+
+
+
+
+template<typename T>
+inline DynamicTypedValue::operator T() const{
+    if (!std::holds_alternative<T>(data)) {
+        throw std::runtime_error("Type mismatch");
+    }
+    return std::get<T>(data);
+}
+
 // Template method to access the underlying value
 template <typename T>
 T DynamicTypedValue::getValue() const {

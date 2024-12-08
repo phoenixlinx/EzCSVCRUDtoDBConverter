@@ -9,7 +9,8 @@ namespace projectConstants {
 
  inline constexpr int EXIT_APPLICATION = 9;
  
- inline constexpr unsigned int CSV_FILE_PATH = 0;
+ inline constexpr unsigned int CSV_FILE_PATH = 1;
+ inline constexpr unsigned int CSV_ROW_ID_COLUMN = 2;
                     
 } 
 

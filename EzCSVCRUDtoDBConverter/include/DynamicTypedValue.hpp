@@ -7,9 +7,11 @@
 #include <memory>
 #include <string>
 #include <typeinfo>
-
+#include <variant>
 class DynamicTypedValue {
 private:
+
+    using ValueType = std::variant<int, double, std::string>;
     // Abstract base class for type erasure
     struct ValueBase {
         virtual ~ValueBase() = default;
@@ -27,17 +29,28 @@ private:
 public:
     // Default constructor
     DynamicTypedValue();
+    
+  
+
+
 
     template <typename T>
     explicit DynamicTypedValue(T value);
 
     DynamicTypedValue(const DynamicTypedValue& other);
 
- 
+    std::string getTypeAsString() const;
+
     DynamicTypedValue& operator=(const DynamicTypedValue& other);
 
     // Overloaded stream operator for printing
     friend std::ostream& operator<<(std::ostream& os, const DynamicTypedValue& value);
+   
+ 
+
+    template <typename T>
+    inline operator T() const;
+
 
 
     template <typename T>
@@ -45,6 +58,11 @@ public:
 
 
     std::string getStoredTypeName() const;
+    bool operator==(const DynamicTypedValue& other) const;
+    bool operator<(const DynamicTypedValue& other) const;
+    bool operator>(const DynamicTypedValue& other) const;
+    ValueType data;
+
 };
 
 #include "../src/DynamicTypedValue.tpp"

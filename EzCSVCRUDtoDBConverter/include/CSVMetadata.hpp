@@ -29,8 +29,8 @@ private:
 
 public:
      CSVMetadata();
-     CSVMetadata(const CSVMetadata&) = delete;            // Prevent copying
-     CSVMetadata& operator=(const CSVMetadata&) = delete; // Prevent copy assignment
+   //  CSVMetadata(const CSVMetadata&) = delete;            // Prevent copying
+   //  CSVMetadata& operator=(const CSVMetadata&) = delete; // Prevent copy assignment
      CSVMetadata(CSVMetadata&&) = default;                 // Allow moving
      CSVMetadata& operator=(CSVMetadata&&) = default;      // Allow move assignment
     // Add a column and its type to the schema

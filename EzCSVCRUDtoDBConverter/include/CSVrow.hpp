@@ -28,24 +28,32 @@ private:
     unsigned int id;
     std::shared_ptr<csv::Parser> parser;
     void reserveRowData(size_t rowCount);
+
     void initializeHandlers();
     void setRows(csv::Parser& parsedFile);
 public:
     explicit CSVrow(const string& csvPath,unsigned int rowPercentageToAnalyze);
-    void setRow(const csv::Row& parsedRow);
+    size_t setRow(const csv::Row& parsedRow);
     // Set row data using initializer list
     void setDefaultId(unsigned int id);
     // Set row data using variadic arguments (template declaration)
     template <typename... Args>
-    void setRowData(Args&&... args);
+    size_t setRowData(Args&&... args);
+    template<typename InputIterator>
+    size_t setRowData(InputIterator begin, InputIterator end);
     unsigned int getDefaultId();
     // Get value by column name
     const DynamicTypedValue& getValue(const std::vector<DynamicTypedValue>& row, const std::string& columnName) const;
-    vector<DynamicTypedValue>& getRow(size_t rowIndex);
+    std::shared_ptr<std::vector<DynamicTypedValue>> getRow(size_t rowIndex);
     void printAllElements() const;
     // Print row data
     void printRow(const std::vector<DynamicTypedValue>& row);
+    size_t getColumnIndex(const std::string& columnName);
+    std::shared_ptr<CSVMetadata> getMetadata();
+    std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& getRowData();
 
+ 
+   
 };
 
 

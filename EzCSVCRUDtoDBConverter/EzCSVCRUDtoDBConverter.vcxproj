@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BinarySearchTree.cpp" />
+    <ClCompile Include="src\Bid.cpp" />
     <ClCompile Include="src\CSVAnalyzer.cpp" />
     <ClCompile Include="src\CSVMetadata.cpp" />
     <ClCompile Include="src\CSVparser.cpp" />
@@ -32,6 +32,8 @@
     <ClCompile Include="src\SystemMetadata.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Bid.hpp" />
+    <ClInclude Include="include\BidManager.hpp" />
     <ClInclude Include="include\BinarySearchTree.hpp" />
     <ClInclude Include="include\CSVAnalyzer.hpp" />
     <ClInclude Include="include\CSVMetadata.hpp" />
@@ -45,8 +47,11 @@
     <ClInclude Include="include\SystemMetadata.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="src\BidManager.tpp" />
+    <Text Include="src\BinarySearchTree.tpp" />
     <Text Include="src\CSVrow.tpp" />
     <Text Include="src\DynamicTypedValue.tpp" />
+    <Text Include="src\MenuUtils.tpp" />
     <Text Include="src\PerformanceUtils.tpp" />
     <Text Include="src\StringConverter.tpp" />
   </ItemGroup>

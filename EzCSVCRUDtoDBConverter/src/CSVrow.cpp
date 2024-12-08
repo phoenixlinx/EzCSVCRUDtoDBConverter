@@ -15,7 +15,7 @@ CSVrow::CSVrow(const std::string& csvPath, unsigned int rowPercentageToAnalyze)
     CSVAnalyzer analyzer(csvPath, rowPercentageToAnalyze);
     metadata = analyzer.analyzeStructure();// Save a reference to the metadata for column names and types
     parser = analyzer.getParcedCSV(); // Initialize parser
-
+    metadata->printMetadata();
     // Initialize column count and handlers
     columnCount = metadata->getColumnCount();
     initializeHandlers();
@@ -36,11 +36,11 @@ void CSVrow::setRows(csv::Parser& parsedFile)
     // Reserve capacity for rowData to handle 160% of total rows
     reserveRowData(totalRows);
 
-   
+
     for (size_t rowIndex = 0; rowIndex < totalRows; ++rowIndex) {
-        
-            rowData[rowIndex] = std::make_shared<std::vector<DynamicTypedValue>>(columnCount);
-        
+
+        rowData[rowIndex] = std::make_shared<std::vector<DynamicTypedValue>>(columnCount);
+
     }
 
 
@@ -56,7 +56,7 @@ void CSVrow::setRows(csv::Parser& parsedFile)
         // Process each row for this column
         for (size_t rowIndex = 0; rowIndex < totalRows; ++rowIndex) {
             const auto& row = parsedFile.getRow(rowIndex);
-            
+
 
 
             handlerIt->second(row[columnName], (*rowData[rowIndex])[columnIndex]);
@@ -67,7 +67,7 @@ void CSVrow::setRows(csv::Parser& parsedFile)
 
 
 
-void CSVrow::setRow(const csv::Row& parsedRow) {
+size_t CSVrow::setRow(const csv::Row& parsedRow) {
     const auto& columnNames = metadata->getColumnNames();
     size_t columnIndex = 0;
     size_t mapKey = 0; // Use size_t for the map key
@@ -91,6 +91,8 @@ void CSVrow::setRow(const csv::Row& parsedRow) {
         // Apply the handler to populate the appropriate column in the row
         handlerIt->second(parsedRow[columnName], (*rowData[mapKey])[columnIndex]);
     }
+
+    return mapKey;
 }
 
 
@@ -161,14 +163,16 @@ const DynamicTypedValue& CSVrow::getValue(const std::vector<DynamicTypedValue>& 
     return row[colIt->second];
 }
 
-std::vector<DynamicTypedValue>& CSVrow::getRow(size_t rowIndex) {
+
+
+std::shared_ptr<std::vector<DynamicTypedValue>> CSVrow::getRow(size_t rowIndex) {
     auto rowDataElementPtr = rowData.find(rowIndex);
     if (rowDataElementPtr == rowData.end()) {
         throw std::out_of_range("Row index not found in rowData.");
     }
-    return *(rowDataElementPtr->second); // Dereferencing the shared_ptr to return the actual vector
+   
+    return rowDataElementPtr->second;
 }
-
 
 
 void CSVrow::printAllElements() const {
@@ -196,14 +200,34 @@ void CSVrow::printAllElements() const {
     }
 }
 
-void CSVrow::printRow(const std::vector<DynamicTypedValue>& row)  {
+void CSVrow::printRow(const std::vector<DynamicTypedValue>& row) {
     const auto& columnNames = metadata->getColumnNames();
     for (const auto& columnName : columnNames) {
-        std::cout << columnName << ": " << getValue(row,columnName) << "\n";
+        std::cout << columnName << ": " << getValue(row, columnName) << "\n";
     }
 }
+
+size_t CSVrow::getColumnIndex(const std::string& columnName) {
+    auto it = columnIndex.find(columnName);
+    if (it == columnIndex.end()) {
+        throw std::out_of_range("Column not found: " + columnName);
+    }
+    return it->second;
+}
+
 
 void CSVrow::reserveRowData(size_t rowCount) {
     size_t newCapacity = rowCount * 1.6;
     rowData.reserve(newCapacity);
 }
+
+std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& CSVrow::getRowData() {
+    return rowData;
+}
+
+std::shared_ptr<CSVMetadata> CSVrow::getMetadata()
+{
+    return metadata;
+}
+
+
