@@ -177,7 +177,9 @@ bool SQLiteHandler::createTable(const std::string& tableName,const std::vector<s
 
     // Add remaining columns
     for (const auto& column : table.metadata) {
-        if (column.originalName == actualPrimaryKey) continue; // Skip primary key
+        if (column.originalName == actualPrimaryKey) {
+            continue; // Skip primary key
+        }
         createStmt << column.quotedName << " "
             << mapCppTypeToSQLiteType(column.type) << ", ";
     }
