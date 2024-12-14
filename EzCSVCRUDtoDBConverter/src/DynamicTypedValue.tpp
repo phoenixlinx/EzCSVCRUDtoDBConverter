@@ -57,5 +57,34 @@ T DynamicTypedValue::getValue() const {
     }
     return model->getValue();
 }
+template <typename Op>
+bool DynamicTypedValue::dispatchComparison(const DynamicTypedValue& other, Op operation) const {
+    if (getStoredTypeName() != other.getStoredTypeName()) {
+        throw std::runtime_error("Cannot compare DynamicTypedValues with different types.");
+    }
+
+    // Lambda for safely casting and comparing
+    auto compareValues = [&](auto* left, auto* right) -> bool {
+        if (!left || !right) {
+            throw std::runtime_error("Nullptr detected during comparison in DynamicTypedValue.");
+        }
+        return operation(left->getValue(), right->getValue());
+        };
+
+    // Dispatch table for supported types
+    if (auto* leftString = dynamic_cast<ValueModel<std::string>*>(storedValuePtr.get())) {
+        return compareValues(leftString, dynamic_cast<ValueModel<std::string>*>(other.storedValuePtr.get()));
+    }
+    else if (auto* leftInt = dynamic_cast<ValueModel<int>*>(storedValuePtr.get())) {
+        return compareValues(leftInt, dynamic_cast<ValueModel<int>*>(other.storedValuePtr.get()));
+    }
+    else if (auto* leftDouble = dynamic_cast<ValueModel<double>*>(storedValuePtr.get())) {
+        return compareValues(leftDouble, dynamic_cast<ValueModel<double>*>(other.storedValuePtr.get()));
+    }else{
+        throw std::runtime_error("Unsupported type for comparison in DynamicTypedValue.");
+    }
+
+   
+}
 
 #endif 

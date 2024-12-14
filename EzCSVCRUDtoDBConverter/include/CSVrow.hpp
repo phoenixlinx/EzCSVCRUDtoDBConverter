@@ -16,6 +16,7 @@
 #include <CSVparser.hpp>
 #include<StringConverter.hpp>
 #include<CSVAnalyzer.hpp>
+#include <map>
 // This class was developed with assistance from ChatGPT 4o. See README.md.
 // Reference: OpenAI (2024)
 class CSVrow {
@@ -26,6 +27,7 @@ private:
     std::unordered_map<std::string, size_t> columnIndex; // Map column names to indices
     std::unordered_map<std::string, std::function<void(const std::string&, DynamicTypedValue&)>> columnHandlers;
     unsigned int id;
+    std::vector<std::string> orderedColumnNames;
     std::shared_ptr<csv::Parser> parser;
     void reserveRowData(size_t rowCount);
 
@@ -51,9 +53,9 @@ public:
     size_t getColumnIndex(const std::string& columnName);
     std::shared_ptr<CSVMetadata> getMetadata();
     std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& getRowData();
-
- 
-   
+    const std::unordered_map<std::string, size_t>& getColumnIndexMap() const;
+    const std::unordered_map<std::string, const std::type_info*>& getCSVSchema() const;
+    const vector<string>& getOrderedColumnNames() const;
 };
 
 

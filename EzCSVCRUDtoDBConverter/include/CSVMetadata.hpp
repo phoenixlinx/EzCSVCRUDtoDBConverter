@@ -42,6 +42,7 @@ public:
     //Validate that a column exists and matches the expected type
     void validateColumn(const std::string& columnName, const std::type_info& columnType) const;
     void printMetadata() const;
+    const std::unordered_map<std::string, const std::type_info*>& getCSVSchema() const;
 };
 
 #endif

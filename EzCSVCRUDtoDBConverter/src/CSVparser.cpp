@@ -7,7 +7,7 @@
 #include "../include/CSVparser.hpp"
 
 namespace csv {
-
+    //TODO: Ensure that Parser can handle column names with spaces.
     Parser::Parser(const std::string& data, const DataType& type, char sep)
         : _type(type), _sep(sep)
     {

@@ -48,6 +48,12 @@
     <ClCompile Include="src\Bid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SQLiteHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CSVparser.hpp">
@@ -89,6 +95,15 @@
     <ClInclude Include="include\BidManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\SQLiteHandler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SqliteValidator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\PerformanceUtils.tpp">
@@ -115,5 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="src\SqliteValidator.tpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="data\example.db">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

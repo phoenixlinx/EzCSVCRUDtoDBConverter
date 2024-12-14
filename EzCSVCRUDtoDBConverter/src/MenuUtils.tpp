@@ -9,6 +9,7 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
     std::shared_ptr<std::vector<DynamicTypedValue>> row;
     optional<int> choice;
     string userInput;
+    SQLiteHandler dbHandler;
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {
         displayPrimaryMenu();
         cout << "Enter choice: ";
@@ -36,6 +37,36 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
                     row = bidManager.getBid(binarySearchTree,csvRow);
                     measurePerformance("Inserting Bid", [&]() {binarySearchTree.insert(row); });
                     break;
+                case 5:
+                
+                 
+
+                    if (!dbHandler.openDatabase("example.db")) {
+                        std::cerr << "Failed to open database." << std::endl;
+                        return 1;
+                    }
+
+                    // Create the table with a primary key
+                    try {
+                        dbHandler.createTable("Bads", csvRow.getOrderedColumnNames(), csvRow.getCSVSchema(),"Initial_Cost_KW");
+                    }
+                    catch (const std::exception& e) {
+                        std::cerr << "Error creating table: " << e.what() << std::endl;
+                        return 1;
+                    }
+
+               
+                    try {
+                        dbHandler.insertRows("Bads", csvRow.getRowData());
+                        std::cout << "Rows inserted successfully." << std::endl;
+                    }
+                    catch (const std::exception& e) {
+                        std::cerr << "Error inserting rows: " << e.what() << std::endl;
+                    }
+
+                    // Close the database
+                    dbHandler.closeDatabase();
+                    break;
                 case 9:
                     cout << "Goodbye." << endl;
                     break;
@@ -54,60 +85,9 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
         }
     }
 
-  //  delete binarySearchTree;
-    return true;
-}
 
-template <typename BinarySearchTree>
-bool handleFileSelection2(string& filePath, BinarySearchTree& binarySearchTree){
-   
-       
-
-    BidManager<BinarySearchTree> bidManager(binarySearchTree);
-    string userInput;
-    getline(cin, userInput);
-    optional<int> choice;
-    if (choice = StringConverter::toInt(userInput); choice.has_value()) {
-        switch (choice.value()) {
-        case 1:
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return bidManager.loadBids(filePath); });
-            break;
-        case 2:
-            filePath = "data\\eOfferMonthlySalesNov.csv";
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return bidManager.loadBids(filePath); });
-            break;
-        case 3:
-            filePath = "data\\eOfferSales.csv";
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return bidManager.loadBids(filePath); });
-            break;
-        case 4:
-            cout << "Enter the absolute CSV File Path: ";
-            getline(cin, filePath);
-            return measurePerformance<bool>("Loading Bids", [&]() -> bool {return bidManager.loadBids(filePath); });
-            break;
-        case 5:
-            try {
-            auto csvPath = csv::Parser::selectFile();
-            if (csvPath) {
-                std::cout << "Selected file: " << csvPath->string() << std::endl;
-                return measurePerformance<bool>("Loading Bids", [&]() -> bool {  return bidManager.loadBids(csvPath->string()); });
-            }
-            else {
-                std::cout << "No file selected." << std::endl;
-            }
-        }
-        catch (const csv::Error& e) {
-            std::cerr << "Error: " << e.what() << std::endl;
-        }
-        break;
-        case 6:
-            filePath = "data\\eOfferMonthlySalesNov.csv";
-            return measurePerformance<bool>("Loading CSVrows", [&]() -> bool {return bidManager.loadCSVrows(filePath); });
-            break;
-        default:
-            break;
-        }
-    }
     return true;
 }// This function was developed with assistance from ChatGPT 4o. See README.md.
 // Reference: OpenAI (2024)
+
+

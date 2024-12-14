@@ -80,5 +80,10 @@ void CSVMetadata::printMetadata() const {
     }
 }
 
+const std::unordered_map<std::string, const std::type_info*>& CSVMetadata::getCSVSchema() const
+{
+    return schema;
+}
+
 
 

@@ -4,19 +4,18 @@
 #define MENUUTILS_H
 
 #include <string>
-#include "PerformanceUtils.hpp"
-#include "StringConverter.hpp"
-#include "BinarySearchTree.hpp"
-#include "CSVMetadata.hpp"
-#include "CSVAnalyzer.hpp"
+#include <PerformanceUtils.hpp>
+#include <StringConverter.hpp>
+#include <BinarySearchTree.hpp>
+#include <CSVMetadata.hpp>
+#include <CSVAnalyzer.hpp>
 #include <CSVRow.hpp>
 #include <BidManager.hpp>
+#include <SQLiteHandler.hpp>
 void displayInitialMenu();
 void displayPrimaryMenu();
 void displayFileSelectionMenu();
 string handleFileSelection();
-template <typename BinarySearchTree>
-bool handleFileSelection2(string& filePath, BinarySearchTree& binarySearchTree);
 template <typename BinarySearchTree>
 bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow);
 #include "../src/MenuUtils.tpp" 

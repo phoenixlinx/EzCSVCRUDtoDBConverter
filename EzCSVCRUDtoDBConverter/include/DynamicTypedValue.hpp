@@ -27,19 +27,14 @@ private:
     std::shared_ptr<ValueBase> storedValuePtr; // Pointer to the polymorphic base
 
 public:
-    // Default constructor
+
     DynamicTypedValue();
     
-  
-
-
 
     template <typename T>
     explicit DynamicTypedValue(T value);
 
     DynamicTypedValue(const DynamicTypedValue& other);
-
-    std::string getTypeAsString() const;
 
     DynamicTypedValue& operator=(const DynamicTypedValue& other);
 
@@ -56,11 +51,16 @@ public:
     template <typename T>
     T getValue() const;
 
+    template<typename Op>
+    bool dispatchComparison(const DynamicTypedValue& other, Op operation) const;
+
 
     std::string getStoredTypeName() const;
     bool operator==(const DynamicTypedValue& other) const;
     bool operator<(const DynamicTypedValue& other) const;
     bool operator>(const DynamicTypedValue& other) const;
+    bool operator<=(const DynamicTypedValue& other) const;
+    bool operator>=(const DynamicTypedValue& other) const;
     ValueType data;
 
 };

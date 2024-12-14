@@ -22,10 +22,10 @@ public:
     template <typename NumericType>
     static bool validateStream(const std::string& inputString, const std::locale& locale = std::locale::classic());
 
-    static bool isValidInt(const std::string& intString, const std::locale& locale = std::locale::classic());
-    static bool isValidFloat(const std::string& floatString, const std::locale& locale = std::locale::classic());
-    static bool isValidDouble(const std::string& doubleString, const std::locale& locale = std::locale::classic());
-    static bool isValidBool(const std::string& boolString);
+    static inline bool isValidInt(const std::string& intString, const std::locale& locale = std::locale::classic());
+    static inline bool isValidFloat(const std::string& floatString, const std::locale& locale = std::locale::classic());
+    static inline bool isValidDouble(const std::string& doubleString, const std::locale& locale = std::locale::classic());
+    static inline bool isValidBool(const std::string& boolString);
 
     static std::optional<int> toInt(const std::string& intString, const std::locale& locale = std::locale::classic());
     static std::optional<float> toFloat(const std::string& floatString, const std::locale& locale = std::locale::classic());

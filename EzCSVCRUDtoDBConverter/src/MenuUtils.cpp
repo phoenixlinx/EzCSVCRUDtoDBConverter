@@ -19,6 +19,7 @@ void displayPrimaryMenu() {
         " 2. Find Row\n"
         " 3. Remove Row\n"
         " 4. Insert Row\n"
+        " 5. Create Table\n"
         " 9. Exit\n";
 }
 
@@ -70,3 +71,5 @@ string handleFileSelection() {
     }
     return filePath;
 }
+
+

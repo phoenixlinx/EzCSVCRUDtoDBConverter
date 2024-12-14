@@ -35,7 +35,7 @@ private:
     const std::type_info* validateAsDouble(size_t colIndex, const std::unordered_set<unsigned int>& indices, csv::Parser& file);
 
 public:
-    CSVAnalyzer(const std::string& csvPath, unsigned int rowPercentageToAnalyze);
+    CSVAnalyzer(const std::string& csvPath, unsigned int rowPercentageToAnalyz);
     std::shared_ptr<csv::Parser> getParcedCSV();
     std::shared_ptr<CSVMetadata> analyzeStructure();
     void printMetadata() const;
