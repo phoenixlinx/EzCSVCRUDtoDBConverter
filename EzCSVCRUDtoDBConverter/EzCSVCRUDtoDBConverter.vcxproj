@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Bid.cpp" />
+    <ClCompile Include="src\CsvColumnMetadata.cpp" />
     <ClCompile Include="src\CSVAnalyzer.cpp" />
     <ClCompile Include="src\CSVMetadata.cpp" />
     <ClCompile Include="src\CSVparser.cpp" />
@@ -28,7 +29,9 @@
     <ClCompile Include="src\EzCSVCRUDtoDBConverter.cpp" />
     <ClCompile Include="src\MenuUtils.cpp" />
     <ClCompile Include="src\PerformanceUtils.cpp" />
-    <ClCompile Include="src\sqlite3.c" />
+    <ClCompile Include="src\sqlite3.c">
+      <ExcludedFromBuild Condition="'$(IntelliSenseMode)'=='true'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\SQLiteHandler.cpp" />
     <ClCompile Include="src\StringConverter.cpp" />
     <ClCompile Include="src\SystemMetadata.cpp" />
@@ -37,6 +40,7 @@
     <ClInclude Include="include\Bid.hpp" />
     <ClInclude Include="include\BidManager.hpp" />
     <ClInclude Include="include\BinarySearchTree.hpp" />
+    <ClInclude Include="include\CsvColumnMetadata.hpp" />
     <ClInclude Include="include\CSVAnalyzer.hpp" />
     <ClInclude Include="include\CSVMetadata.hpp" />
     <ClInclude Include="include\CSVparser.hpp" />
@@ -50,20 +54,18 @@
     <ClInclude Include="include\SqliteValidator.hpp" />
     <ClInclude Include="include\StringConverter.hpp" />
     <ClInclude Include="include\SystemMetadata.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="src\BidManager.tpp" />
-    <Text Include="src\BinarySearchTree.tpp" />
-    <Text Include="src\CSVrow.tpp" />
-    <Text Include="src\DynamicTypedValue.tpp" />
-    <Text Include="src\MenuUtils.tpp" />
-    <Text Include="src\PerformanceUtils.tpp" />
-    <Text Include="src\StringConverter.tpp" />
+    <!-- Adding .tpp files as ClInclude for IntelliSense -->
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="data\example.db" />
+    <None Include="src\BidManager.tpp" />
+    <None Include="src\BinarySearchTree.tpp" />
+    <None Include="src\CSVrow.tpp" />
+    <None Include="src\DynamicTypedValue.tpp" />
+    <None Include="src\MenuUtils.tpp" />
+    <None Include="src\PerformanceUtils.tpp" />
     <None Include="src\SqliteValidator.tpp" />
+    <None Include="src\StringConverter.tpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -123,6 +125,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>.\bin\64bit\Debug</OutDir>
     <SourcePath>C:\Users\amsna\IDEWorkspaces\MyGitRepos\EzCSVCRUDtoDBConverter\EzCSVCRUDtoDBConverter\src;$(SourcePath)</SourcePath>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -165,7 +171,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,7 +189,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -1,6 +1,7 @@
 
 
 #include "../include/BinarySearchTree.hpp"
+#include "BinarySearchTree.hpp"
 
 // Node Constructor Definitions
 template <typename T, typename KeyExtractor>
@@ -51,7 +52,6 @@ void BinarySearchTree<T, KeyExtractor>::reSetDeepestLevel() {
 
 template <typename T, typename KeyExtractor>
 inline void BinarySearchTree<T, KeyExtractor>::updateTreeMetrics(size_t nodeInsertionHeight) {
-    nodeInsertionHeight += NodeHeightIncrement;
     if (nodeInsertionHeight > treeHeight) {
         treeHeight = nodeInsertionHeight;
     }
@@ -123,11 +123,11 @@ void BinarySearchTree<T, KeyExtractor>::insert(std::shared_ptr<T> containedValue
     }
 }
 
-
 template <typename T, typename KeyExtractor>
 template <typename InputKey>
-shared_ptr<T> BinarySearchTree<T, KeyExtractor>::search(const InputKey& searchKey) {
-    shared_ptr<T> result; // Result object to return
+ vector<shared_ptr<T>> BinarySearchTree<T, KeyExtractor>::search(const InputKey& searchKey) {
+   
+    vector <shared_ptr<T>> sameKeyObjects; // Result object to return
     Node* currNodePosition = root;
     //TODO implement validation before casting. 
     Key convertedKey = static_cast<Key>(searchKey);
@@ -135,16 +135,21 @@ shared_ptr<T> BinarySearchTree<T, KeyExtractor>::search(const InputKey& searchKe
 
         // Compare the search key with the key of the current node
         if (convertedKey == keyExtractor(*currNodePosition->containedValueObject)) {
-            result = currNodePosition->containedValueObject;
 
+            sameKeyObjects.push_back(currNodePosition->containedValueObject);
             //
-            if ((currNodePosition->rightNodePtr != nullptr &&
-                keyExtractor(*currNodePosition->rightNodePtr->containedValueObject) == convertedKey)) {
+            if ((currNodePosition->rightNodePtr != nullptr && keyExtractor(*currNodePosition->rightNodePtr->containedValueObject) == convertedKey)) {
                 // This will check if the right child also has a value matching the search key
-                currNodePosition = currNodePosition->rightNodePtr; // This will change currNodePosition to its right child
+             //   sameKeyObjects.push_back(currNodePosition->rightNodePtr->containedValueObject);
+                currNodePosition = currNodePosition->rightNodePtr;
+               
             }
-            else if (currNodePosition->rightNodePtr != nullptr &&
-                (currNodePosition->rightNodePtr)->leftNodePtr != nullptr) {
+            // This will check if the right child also has a value matching the search key
+            else if ((currNodePosition->leftNodePtr != nullptr && keyExtractor(*currNodePosition->leftNodePtr->containedValueObject) == convertedKey)) {
+             //   sameKeyObjects.push_back(currNodePosition->leftNodePtr->containedValueObject);
+                currNodePosition = currNodePosition->leftNodePtr;
+             
+            }else if (currNodePosition->rightNodePtr != nullptr &&    (currNodePosition->rightNodePtr)->leftNodePtr != nullptr) {
                 // This will first check if the current node has a right child, 
                 // and if it does, then it will check if that right node has a left child
                 currNodePosition = (currNodePosition->rightNodePtr)->leftNodePtr;
@@ -152,7 +157,7 @@ shared_ptr<T> BinarySearchTree<T, KeyExtractor>::search(const InputKey& searchKe
                 // This will search for duplicate values
             }
             else {
-                return result;
+                return sameKeyObjects;
                 // This will end the search function if currNodePosition does not have a right child 
                 // or if the right child does not have a value matching the search key
             }
@@ -168,9 +173,18 @@ shared_ptr<T> BinarySearchTree<T, KeyExtractor>::search(const InputKey& searchKe
         }
     }
 
-    return result; // Return nullptr if no match is found
-}
+    return sameKeyObjects; // Return empty vector if no match is found.
 
+
+
+
+
+
+
+
+
+}
+ //TODO: Allow deletion of all objects with the same key.
 template <typename T, typename KeyExtractor>
 template <typename InputKey>
 void BinarySearchTree<T, KeyExtractor>::remove(const InputKey& searchKey, const string& csvPathDeletedNodes) {

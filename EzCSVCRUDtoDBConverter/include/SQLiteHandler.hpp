@@ -16,7 +16,7 @@
 #include <typeindex>
 #include <DynamicTypedValue.hpp>
 #include <SqliteValidator.hpp>
-
+#include <CsvColumnMetadata.hpp>
 
 class SQLiteHandler {
 private:
@@ -47,7 +47,6 @@ private:
 
     void executeQuery(const std::string& query);
     void bindValues(sqlite3_stmt* stmt, const std::vector<DynamicTypedValue>& row, const Table& table);
- 
     void beginTransaction();
     void commitTransaction();
     void rollbackTransaction();
@@ -59,9 +58,11 @@ public:
     void closeDatabase();
   
     // Overloaded createTable functions
-   
-    bool createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames, const std::unordered_map<std::string, const std::type_info*>& schema, const std::string& primaryKey);
-    bool createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames, const std::unordered_map<std::string, const std::type_info*>& schema);
+
+    bool createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames, const std::unordered_map<std::string, CsvColumnMetadata>& schema, const std::string& primaryKey);
+
+    bool createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames, const std::unordered_map<std::string, CsvColumnMetadata>& schema);
+
   
     bool insertRows(const std::string& tableName, const std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& rowData);
   

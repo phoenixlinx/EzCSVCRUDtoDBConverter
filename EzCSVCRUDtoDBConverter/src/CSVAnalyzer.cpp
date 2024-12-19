@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <limits>
-#include "../include/CSVAnalyzer.hpp"
+#include <CSVAnalyzer.hpp>
 #undef max
 #undef min
 

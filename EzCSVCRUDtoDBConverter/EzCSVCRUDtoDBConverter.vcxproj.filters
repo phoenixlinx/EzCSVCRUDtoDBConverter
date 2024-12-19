@@ -18,9 +18,6 @@
     <ClCompile Include="src\EzCSVCRUDtoDBConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CSVparser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\StringConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,14 +51,14 @@
     <ClCompile Include="src\sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\CsvColumnMetadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CSVparser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CSVparser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BinarySearchTree.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\StringConverter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -104,37 +101,41 @@
     <ClInclude Include="include\SqliteValidator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="src\PerformanceUtils.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="src\StringConverter.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="src\DynamicTypedValue.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="src\CSVrow.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="src\BinarySearchTree.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="src\MenuUtils.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="src\BidManager.tpp">
-      <Filter>Source Files</Filter>
-    </Text>
+    <ClInclude Include="include\CsvColumnMetadata.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BinarySearchTree.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CSVparser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="src\BinarySearchTree.tpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\BidManager.tpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\StringConverter.tpp">
+      <Filter>Source Files</Filter>
+    </None>
     <None Include="src\SqliteValidator.tpp">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="data\example.db">
-      <Filter>Resource Files</Filter>
+    <None Include="src\CSVrow.tpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\DynamicTypedValue.tpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\MenuUtils.tpp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\PerformanceUtils.tpp">
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
 </Project>

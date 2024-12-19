@@ -13,9 +13,9 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
-#include "CSVMetadata.hpp"
-#include "CSVparser.hpp"
-#include "StringConverter.hpp"
+#include <CSVMetadata.hpp>
+#include <CSVparser.hpp>
+#include <StringConverter.hpp>
 // This class was developed with assistance from ChatGPT 4o. See README.md.
 // Reference: OpenAI (2024)
 class CSVAnalyzer {

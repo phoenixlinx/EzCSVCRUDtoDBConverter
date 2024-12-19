@@ -16,10 +16,10 @@
 # include <string>
 # include <vector>
 
-#include "../include/StringConverter.hpp"
-#include "../include/PerformanceUtils.hpp"
-#include "../include/MenuUtils.hpp"
-#include "../include/CSVMetadata.hpp"
+#include <StringConverter.hpp>
+#include <PerformanceUtils.hpp>
+#include <MenuUtils.hpp>
+#include <CSVMetadata.hpp>
 #include <Bid.hpp>
 int main(int argc, char* argv[]) {
   
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         break;
     default:
        
-        csvRowIDColumn = "Initial_Cost_KW";
+        csvRowIDColumn = "Annual_Revenue_KW";
     }
 
 

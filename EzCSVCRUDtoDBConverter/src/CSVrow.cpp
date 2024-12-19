@@ -1,7 +1,7 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
-#include "../include/CSVrow.hpp"
-#include "CSVrow.hpp"
+
+#include <CSVrow.hpp>
 
 
 
@@ -109,7 +109,7 @@ void CSVrow::initializeHandlers()
     // This eliminates repetitive conditional checks elsewhere in the codebase.
     for (const auto& columnName : columnNames) {
         // Get the type of the column (e.g., int, double, or std::string) from the metadata.
-        const auto& columnType = metadata->getColumnType(columnName);
+        const auto& columnType = metadata->getColumnType2(columnName);
 
         // Create a processing function for each column type. The function is stored in the hash table.
         if (columnType == typeid(int)) {
@@ -218,6 +218,20 @@ size_t CSVrow::getColumnIndex(const std::string& columnName) {
 }
 
 
+
+
+const std::unordered_map<std::string, CsvColumnMetadata>& CSVrow::getCSVSchema() const {
+    return metadata->getCSVSchema();
+}
+
+
+
+
+std::shared_ptr<CSVMetadata> CSVrow::getMetadata()
+{
+    return metadata;
+}
+
 void CSVrow::reserveRowData(size_t rowCount) {
     size_t newCapacity = rowCount * 1.6;
     rowData.reserve(newCapacity);
@@ -232,17 +246,8 @@ const std::unordered_map<std::string, size_t>& CSVrow::getColumnIndexMap() const
     return columnIndex;
 }
 
-const std::unordered_map<std::string, const std::type_info*>& CSVrow::getCSVSchema() const
-{
-    return  metadata->getCSVSchema();
-}
 
 
-
-std::shared_ptr<CSVMetadata> CSVrow::getMetadata()
-{
-    return metadata;
-}
 
 const vector<string>& CSVrow::getOrderedColumnNames() const
 {

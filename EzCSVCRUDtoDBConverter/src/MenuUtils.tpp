@@ -3,12 +3,17 @@
 #include "../include/MenuUtils.hpp"
 
 template <typename BinarySearchTree>
-bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow){
+bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow) {
 
     BidManager<BinarySearchTree> bidManager(binarySearchTree);
     std::shared_ptr<std::vector<DynamicTypedValue>> row;
+    vector<shared_ptr<vector<DynamicTypedValue>>> v;
+    shared_ptr<vector<DynamicTypedValue>> a;
+    DynamicTypedValue b;
+    DynamicTypedValue c;
     optional<int> choice;
     string userInput;
+   // csvRow.getOrderedColumnNames;
     SQLiteHandler dbHandler;
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {
         displayPrimaryMenu();
@@ -21,41 +26,48 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
 
                 switch (choice.value()) {
                 case 1:
-                    measurePerformance("Displaying All Bids", [&]() {binarySearchTree.printInOrder(); });
+                    measurePerformance("Displaying All Rows", [&]() {binarySearchTree.printInOrder(); });
                     break;
                 case 2:
-                    cout << "Enter BidId: ";
+                    cout << "Enter Row Key: ";
                     getline(cin, userInput);
-                    measurePerformance("Finding Bid", [&]() {binarySearchTree.search(StringConverter::toInt(userInput).value()); });
+                 //   measurePerformance("Finding Rows", [&]() {binarySearchTree.search(StringConverter::toInt(userInput).value()); });
+                  //  v = measurePerformance<vector<shared_ptr<vector<DynamicTypedValue>>>>("Finding Rows", [&]() {binarySearchTree.search(StringConverter::toInt(userInput).value()); });
+                    v = binarySearchTree.search(StringConverter::toInt(userInput).value());
+                  
+                 //    a = v.at(0);
+                   //  b = a->at(0);
+                  //   c = a->at(1);
+                    
                     break;
                 case 3:
-                    cout << "Enter BidId: ";
+                    cout << "Enter Row Key: ";
                     getline(cin, userInput);
-                    measurePerformance("Removing Bid", [&]() {binarySearchTree.remove(StringConverter::toInt(userInput).value(), "data\\eOfferDeletedBids.csv"); });
+                    measurePerformance("Removing Row", [&]() {binarySearchTree.remove(StringConverter::toInt(userInput).value(), "data\\eOfferDeletedBids.csv"); });
                     break;
                 case 4:
-                    row = bidManager.getBid(binarySearchTree,csvRow);
-                    measurePerformance("Inserting Bid", [&]() {binarySearchTree.insert(row); });
+                    row = bidManager.getBid(binarySearchTree, csvRow);
+                    measurePerformance("Inserting Row", [&]() {binarySearchTree.insert(row); });
                     break;
                 case 5:
-                
-                 
 
-                    if (!dbHandler.openDatabase("example.db")) {
+
+
+                    if (!dbHandler.openDatabase("NVT.db")) {
                         std::cerr << "Failed to open database." << std::endl;
                         return 1;
                     }
 
                     // Create the table with a primary key
                     try {
-                        dbHandler.createTable("Bads", csvRow.getOrderedColumnNames(), csvRow.getCSVSchema(),"Initial_Cost_KW");
+                        dbHandler.createTable("Bads", csvRow.getOrderedColumnNames(), csvRow.getCSVSchema(), "Initial_Cost_KW");
                     }
                     catch (const std::exception& e) {
                         std::cerr << "Error creating table: " << e.what() << std::endl;
                         return 1;
                     }
 
-               
+
                     try {
                         dbHandler.insertRows("Bads", csvRow.getRowData());
                         std::cout << "Rows inserted successfully." << std::endl;

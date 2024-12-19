@@ -54,8 +54,10 @@ public:
 	template <typename InputKey>
 	void remove(const InputKey& searchKey,const string& csvPathDeletedNodes);
 	void insert(shared_ptr<T> containedValueObject);
-	template <typename InputKey>
-	shared_ptr<T> search(const InputKey& searchKey);
+
+	template<typename InputKey>
+	vector<shared_ptr<T>> search(const InputKey& searchKey);
+
 	unsigned int getDeepestLevel() const;
 	void reSetDeepestLevel();
 	unsigned int getBSTSize() const;

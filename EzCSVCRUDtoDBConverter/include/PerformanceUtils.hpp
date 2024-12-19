@@ -1,7 +1,7 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
-#ifndef PERFORMANCEUTILS_H
-#define PERFORMANCEUTILS_H
+#ifndef PERFORMANCEUTILS_HPP
+#define PERFORMANCEUTILS_HPP
 
 #include <iostream>
 #include <functional>
@@ -18,3 +18,5 @@ void measurePerformance(const std::string& operationName, const std::function<vo
 #include "../src/PerformanceUtils.tpp"
 
 #endif
+
+

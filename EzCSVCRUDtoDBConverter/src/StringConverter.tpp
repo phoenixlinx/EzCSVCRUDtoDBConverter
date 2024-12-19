@@ -1,6 +1,7 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 
+#include <StringConverter.hpp>
 #ifndef STRINGCONVERTER_TPP
 #define STRINGCONVERTER_TPP
 

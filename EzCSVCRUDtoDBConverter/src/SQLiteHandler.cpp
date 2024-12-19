@@ -105,8 +105,9 @@ void SQLiteHandler::bindValues(sqlite3_stmt* stmt, const std::vector<DynamicType
     }
 }
 
-bool SQLiteHandler::createTable(const std::string& tableName,const std::vector<std::string>& orderedColumnNames,const std::unordered_map<std::string, const std::type_info*>& schema,const std::string& primaryKey){
-    std::string quotedTableName = SqliteValidator::quoteColumnName(tableName);//Sanitize table name.
+
+bool SQLiteHandler::createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames, const std::unordered_map<std::string, CsvColumnMetadata>& schema, const std::string& primaryKey) {
+    std::string quotedTableName = SqliteValidator::quoteColumnName(tableName); // Sanitize table name.
     if (tableRegistry.find(quotedTableName) != tableRegistry.end()) {
         throw std::runtime_error("Table already exists: " + quotedTableName);
     }
@@ -117,22 +118,24 @@ bool SQLiteHandler::createTable(const std::string& tableName,const std::vector<s
     table.initialTableColumnCount = table.tableColumnCount;
     bool primaryKeyAdded = false;
     size_t metadataElementCount = 0;
-    // Handle primary key
     std::string actualPrimaryKey = primaryKey;
 
     // Validate column names and quote them
-    if (!SqliteValidator::isPrintableUtf8(orderedColumnNames)||!SqliteValidator::isPrintableUtf8(tableName)) {
+    if (!SqliteValidator::isPrintableUtf8(orderedColumnNames) || !SqliteValidator::isPrintableUtf8(tableName)) {
         throw std::runtime_error("Invalid column, table, or database name: not UTF-8 printable.");
     }
     auto quotedColumnMap = SqliteValidator::quoteColumnName(orderedColumnNames);
     table.tableName = quotedTableName;
+
     // Process columns in order
     for (size_t index = 0; index < table.tableColumnCount; ++index) {
         const std::string& originalName = orderedColumnNames[index];
+        const CsvColumnMetadata& csvColumnMetadata = schema.at(originalName);
+
         ColumnMetadata metadata = {
             .originalName = originalName,
-            .quotedName = quotedColumnMap[originalName],
-            .type = schema.at(originalName)
+            .quotedName = quotedColumnMap.at(originalName),
+            .type = csvColumnMetadata.getType()
         };
 
         table.metadata.push_back(metadata);
@@ -150,15 +153,15 @@ bool SQLiteHandler::createTable(const std::string& tableName,const std::vector<s
             throw std::runtime_error("Primary key '" + primaryKey + "' does not exist in schema.");
         }
 
-        const auto* pkType = schema.at(primaryKey);
-        if (*pkType != typeid(int) && *pkType != typeid(std::string)) {
+        const auto& pkMetadata = schema.at(primaryKey);
+        if (*pkMetadata.getType() != typeid(int) && *pkMetadata.getType() != typeid(std::string)) {
             throw std::runtime_error("Primary key must be INTEGER or TEXT.");
         }
 
         for (const auto& column : table.metadata) {
             if (column.originalName == primaryKey) {
                 createStmt << column.quotedName << " "
-                    << ((*pkType == typeid(int)) ? "INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    << ((*pkMetadata.getType() == typeid(int)) ? "INTEGER PRIMARY KEY AUTOINCREMENT, "
                         : "TEXT PRIMARY KEY NOT NULL, ");
                 primaryKeyAdded = true;
                 break;
@@ -205,13 +208,10 @@ bool SQLiteHandler::createTable(const std::string& tableName,const std::vector<s
 }
 
 
-
-
-
-
-bool SQLiteHandler::createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames,const std::unordered_map<std::string, const std::type_info*>& schema){
+bool SQLiteHandler::createTable(const std::string& tableName, const std::vector<std::string>& orderedColumnNames, const std::unordered_map<std::string, CsvColumnMetadata>& schema) {
     return createTable(tableName, orderedColumnNames, schema, std::string());
 }
+
 
 //TODO: Handle the situation where primary key column contains duplicate values.
 bool SQLiteHandler::insertRows(const std::string& tableName,const std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& rowData){

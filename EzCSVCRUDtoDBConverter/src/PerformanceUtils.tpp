@@ -1,6 +1,9 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
-
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
+#ifndef PERFORMANCEUTILS_TPP
+#define PERFORMANCEUTILS_TPP
+#include <PerformanceUtils.hpp>
+
 template <typename T>
 T measurePerformance(const std::string& callableName, const std::function<T()>& callable) {
     using Clock = std::chrono::high_resolution_clock;
@@ -14,3 +17,4 @@ T measurePerformance(const std::string& callableName, const std::function<T()>& 
 
     return result;
 }
+#endif

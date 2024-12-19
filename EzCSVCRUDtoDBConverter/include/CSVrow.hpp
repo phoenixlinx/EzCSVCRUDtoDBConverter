@@ -11,8 +11,9 @@
 #include <stdexcept>
 #include <utility>
 #include <functional>
-#include "DynamicTypedValue.hpp"
-#include "CSVMetadata.hpp"
+#include <DynamicTypedValue.hpp>
+#include <CSVMetadata.hpp>
+#include <CsvColumnMetadata.hpp>
 #include <CSVparser.hpp>
 #include<StringConverter.hpp>
 #include<CSVAnalyzer.hpp>
@@ -52,9 +53,10 @@ public:
     void printRow(const std::vector<DynamicTypedValue>& row);
     size_t getColumnIndex(const std::string& columnName);
     std::shared_ptr<CSVMetadata> getMetadata();
+    const std::unordered_map < std::string, ::CsvColumnMetadata > & getCSVSchema() const;
     std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& getRowData();
     const std::unordered_map<std::string, size_t>& getColumnIndexMap() const;
-    const std::unordered_map<std::string, const std::type_info*>& getCSVSchema() const;
+ 
     const vector<string>& getOrderedColumnNames() const;
 };
 
