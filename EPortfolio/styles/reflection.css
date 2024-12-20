@@ -1,0 +1,49 @@
+/* Reflection Page Specific Styles */
+.reflection {
+    padding: 2rem 1.5rem; 
+    margin: 0 auto;
+    max-width: 900px; 
+    line-height: 1.6; 
+}
+
+/* Reflection Section Headings */
+.reflection h1 {
+    font-size: 3rem; 
+    color: #3b82f6; 
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.reflection h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    color: #58a6ff; 
+    border-bottom: 2px solid #3b82f6; 
+    padding-bottom: 0.5rem;
+}
+
+/* Text Content */
+.reflection p {
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff; 
+}
+
+/* Unordered List Styles */
+.reflection ul {
+    margin-top: 1rem;
+    padding-left: 1.5rem; 
+    list-style: disc;
+}
+
+.reflection ul li {
+    font-size: 1.15rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Footer Adjustment */
+footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.9rem;
+}

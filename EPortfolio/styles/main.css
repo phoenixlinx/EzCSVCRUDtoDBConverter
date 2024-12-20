@@ -1,0 +1,166 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff; /* White text */
+    background-color: #000000; /* Jet black */
+}
+
+/* Header */
+header {
+    text-align: left;
+    padding: 1rem 2rem;
+    background-color: #181818; /* Slightly darker background */
+    border-bottom: 1px solid #333; /* Add a separator for structure */
+}
+
+.top-link {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 1.1rem; /* Slightly larger for prominence */
+    font-weight: bold;
+    padding: 0.5rem 1rem; /* Add padding to make it feel like a button */
+    border: 1px solid transparent; /* Invisible border for alignment */
+    border-radius: 5px; /* Slight rounding */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.top-link:hover {
+    background-color: #3b82f6; /* Highlight hover effect */
+    color: #ffffff; /* Ensure contrast */
+}
+
+/* Main Layout */
+main.layout {
+    min-height: 80vh; /* Ensures content takes up most of the screen */
+    display: flex;
+    flex-wrap: wrap; /* Makes layout responsive */
+    gap: 2rem; /* Space between sections */
+    align-items: center; /* Vertically centers content */
+    justify-content: space-between; /* Ensures proper spacing between sections */
+}
+
+/* Welcome Section */
+.welcome {
+    flex: 1 1 600px; /* Dynamic flexbox sizing */
+    max-width: 800px; /* Allow wider content on large screens */
+    position: relative;
+    padding-left: 2rem; /* Offset text for vertical accent */
+}
+
+.welcome h1 {
+    font-size: 3rem; /* Adjust heading for balance */
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Accent line for Welcome section */
+.welcome::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 4px;
+    background-color: #3b82f6; /* Accent color */
+}
+
+.accented-text {
+    padding-left: 1.5rem;
+}
+
+.accented-text p {
+    font-size: 1.15rem; /* Increase paragraph readability */
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.highlight-link {
+    color: #58a6ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.highlight-link:hover {
+    text-decoration: underline;
+}
+
+/* Skills Section */
+.skills {
+    text-align: left; /* Align content for consistency */
+    margin: 0 auto; /* Center the section */
+    max-width: 400px;
+    padding-left: 0; /* Remove padding for accents */
+}
+
+.skills h2 {
+    text-align: left; /* Align heading with list */
+    font-size: 2.5rem; /* Larger heading for clarity */
+    margin-bottom: 1rem;
+    color: #3b82f6;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.skills ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Change grid to flex for better alignment */
+    flex-direction: column; /* Stack items vertically */
+    gap: 0.5rem; /* Tighten spacing */
+    align-items: flex-start; /* Align items to the left */
+}
+
+/* Skill Link Styles */
+.skill-link {
+    font-size: 1.2rem; /* Slightly smaller text */
+    color: #58a6ff;
+    text-decoration: none;
+    padding: 0.75rem 1rem; /* Adjust padding for better proportions */
+    text-align: left; /* Align text to the left */
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    border: none; /* Remove blue rectangle around links */
+    border-radius: 0; /* Remove any rounding */
+    max-width: 250px; /* Ensure consistent width */
+}
+
+.skill-link:hover {
+    background-color: #3b82f6; /* Make hover state prominent */
+    color: #ffffff; /* Ensure text remains legible */
+    transform: translateX(5px); /* Subtle shift for interactivity */
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    margin-top: auto; /* Push the footer to the bottom */
+    padding: 1.5rem 0; /* Larger padding for spacing */
+    background-color: #181818; /* Subtle footer color */
+    border-top: 1px solid #333; /* Separator line */
+    color: white;
+    font-size: 0.9rem;
+}
+
+/* Center Content Wrapper */
+.container {
+    max-width: 1200px; /* Limits the width of content */
+    margin: 0 auto; /* Centers content horizontally */
+    padding: 0 1rem; /* Prevents content from touching edges */
+}
+
+/* Responsive Layouts */
+@media (max-width: 768px) {
+    main.layout {
+        flex-direction: column; /* Stack sections vertically */
+        align-items: center; /* Center-align stacked sections */
+    }
+
+    .skills ul {
+        grid-template-columns: 1fr; /* Single-column layout for smaller screens */
+    }
+
+    .welcome, .skills {
+        max-width: 90%; /* Reduce width on smaller screens */
+    }
+}

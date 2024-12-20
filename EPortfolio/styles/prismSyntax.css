@@ -1,0 +1,170 @@
+/* General Styling for Code Blocks */
+pre {
+    background-color: #2d2d2d; /* Dark gray background for contrast */
+    color: #f8f8f2; /* Light text color for readability */
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: auto;
+    line-height: 1.5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    margin-bottom: 1.5rem; /* Space between code blocks */
+    border: 1px solid #444; /* Slight border for definition */
+}
+
+/* Highlighted Lines */
+pre[data-line] {
+    position: relative;
+    padding-left: 3rem; /* Leave space for line highlights */
+}
+
+.line-highlight {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay for highlighted lines */
+    border-left: 4px solid #3b82f6; /* Accent line color */
+    margin-left: -3rem;
+    padding-left: 3rem;
+    position: absolute;
+    z-index: 0;
+}
+
+/* Styling for Code Tokens */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6272a4; /* Subtle blue-gray for comments */
+}
+
+.token.punctuation {
+    color: #f8f8f2; /* Light color for punctuation */
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #ff79c6; /* Pink for properties and tags */
+}
+
+.token.boolean,
+.token.number {
+    color: #bd93f9; /* Purple for booleans and numbers */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #50fa7b; /* Green for strings and attributes */
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable {
+    color: #f1fa8c; /* Yellow for operators and variables */
+}
+
+.token.keyword {
+    color: #ffb86c; /* Orange for keywords */
+}
+
+.token.function {
+    color: #8be9fd; /* Cyan for function names */
+}
+
+.token.regex,
+.token.important {
+    color: #ff5555; /* Red for regex and important tokens */
+}
+
+/* GitHub Link Styling */
+.github-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #3b82f6; /* Blue background */
+    color: #ffffff; /* White text */
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.github-link:hover {
+    background-color: #2563eb; /* Darker blue on hover */
+}
+
+/* Header and Footer Styling (Optional Enhancements) */
+header a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+    color: #ccc; /* Muted footer text */
+}
+
+footer a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #2563eb; /* Darker blue on hover */
+}
+
+/* Title and Text Styling */
+.page-title {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #3b82f6;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 0.5rem;
+}
+
+.component-title {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.subsection-title {
+    font-size: 1.2rem;
+    color: #3b82f6;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.content-text {
+    font-size: 1rem;
+    color: #f8f8f2;
+    margin-bottom: 1rem;
+}
+
+.content-list {
+    margin-left: 1.5rem;
+    font-size: 1rem;
+    color: #f8f8f2;
+}
+
+.content-list li {
+    margin-bottom: 0.5rem;
+}

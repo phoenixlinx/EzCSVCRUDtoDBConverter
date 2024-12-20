@@ -1,0 +1,241 @@
+/* General Styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff; /* White text */
+    background-color: #000000; /* Black background */
+}
+
+/* Header */
+header {
+    text-align: left;
+    padding: 1rem 2rem;
+    background-color: #181818; /* Slightly darker background */
+    border-bottom: 1px solid #333; /* Separator for structure */
+}
+
+header a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 1.1rem; /* Slightly larger text */
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header a:hover {
+    background-color: #3b82f6; /* Blue highlight on hover */
+    color: #ffffff;
+}
+
+/* Main Layout */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+}
+
+/* Titles and Headings */
+h1, h2, h3, h4 {
+    color: #3b82f6; /* Blue color for headings */
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+    margin-top: 2rem;
+}
+
+h4 {
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+}
+
+/* Content Styling */
+p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #f8f8f2; /* Light text for readability */
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 1.5rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Code Block Styling */
+pre {
+    background-color: #1e1e2f; /* Dark gray background */
+    color: #f8f8f2; /* Light text */
+    padding: 1rem 1.5rem; /* Increased padding for readability */
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: auto; /* Horizontal scrolling */
+    max-width: 100%;
+    line-height: 1.5;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem; /* Larger bottom margin */
+    border: 1px solid #444;
+}
+
+pre[data-line] {
+    position: relative;
+    padding-left: 3rem; /* Space for line highlights */
+}
+
+.line-highlight {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay */
+    border-left: 4px solid #3b82f6; /* Blue accent line */
+    margin-left: -3rem;
+    padding-left: 3rem;
+    position: absolute;
+    z-index: 0;
+}
+
+/* Syntax Highlighting for Code Tokens */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #6272a4; /* Blue-gray for comments */
+}
+
+.token.punctuation {
+    color: #f8f8f2; /* Light text */
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #ff79c6; /* Pink for properties and tags */
+}
+
+.token.boolean,
+.token.number {
+    color: #bd93f9; /* Purple for booleans and numbers */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #50fa7b; /* Green for strings and attributes */
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable {
+    color: #f1fa8c; /* Yellow for operators and variables */
+}
+
+.token.keyword {
+    color: #ffb86c; /* Orange for keywords */
+}
+
+.token.function {
+    color: #8be9fd; /* Cyan for function names */
+}
+
+.token.regex,
+.token.important {
+    color: #ff5555; /* Red for regex and important tokens */
+}
+
+/* Subsection Styling */
+section.subsection {
+    background-color: #181818; /* Slightly darker background for contrast */
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin-bottom: 2rem;
+}
+
+/* GitHub Link Styling */
+.github-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #3b82f6; /* Blue background */
+    color: #ffffff; /* White text */
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.github-link:hover {
+    background-color: #2563eb; /* Darker blue on hover */
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: #ccc; /* Muted footer text */
+    padding: 1.5rem 0;
+    background-color: #181818; /* Slightly darker background */
+    border-top: 1px solid #333;
+}
+
+/* Reflection Section Styling */
+#reflection {
+    margin-top: 3rem;
+    padding: 2rem;
+    border-top: 2px solid #3b82f6;
+    background-color: #121212; /* Subtle contrast */
+    border-radius: 5px;
+}
+
+/* Section Styling */
+section {
+    margin-bottom: 3rem; /* More space between sections */
+}
+
+section > h2, section > h3 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #3b82f6; /* Subtle bottom border for separation */
+}
+
+/* Responsive Layouts */
+@media (max-width: 768px) {
+    body {
+        font-size: 0.9rem; /* Smaller font for small screens */
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    pre {
+        font-size: 0.9rem; /* Smaller code font */
+        padding: 0.8rem;
+    }
+}

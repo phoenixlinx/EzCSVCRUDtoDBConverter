@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering and Design (SED) Enhancements</title>
+
+    <!-- Stylesheets -->
+
+    <link rel="stylesheet" href="../../styles/customStyles.css">
+
+    <!-- Prism.js Core and Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.js" defer></script>
+    
+    <script src="../../scripts/prismSyntax.js" defer></script> <!-- Custom Prism Functionality -->
+</head>
+<body>
+    <header>
+        <a href="softwareEngineeringIndex.html" class="top-link">Back to Overview</a>
+    </header>
+    <main class="layout container">
+        <!-- Page Title -->
+        <section id="page-title">
+            <h1>Software Engineering and Design (SED) Enhancements</h1>
+        </section>
+
+   
+
+<!-- Component 1: Modularizing EzCSV Functionality -->
+<section id="component-modular-ezcsv">
+    <h3>SED Component: Modularizing EzCSV Functionality</h3>
+
+
+    <section>
+        <h4>Why Did You Enhance This Component?</h4>
+        <ul>
+            <li>EzCSVCRUDtoDBConverter.cpp fits the definition of the Blob anti-pattern. It handles most of the application’s many responsibilities. The system consists of just two files: EzCSVCRUDtoDBConverter.cpp and CSVparser.cpp. This design made it very challenging and impractical to make changes to the old system. Even a small change to one part of the system often profoundly affected many other parts. Additionally, reusing individual EzCSV functions in other projects required much effort because its functions were highly dependent on other EzCSV functions and variables. As a result, the complexity of EzCSV not only made maintenance difficult but also made the system prone to vulnerabilities, as its complexity obscured its flaws.</li>
+     
+        </ul>
+        </section>
+    <section>
+        <h4>How Was the Component Enhanced?</h4>
+        <ul>
+            <li>Enhanced maintainability, reusability, and security by breaking down complex files, classes, and functions into smaller, manageable units that follow the Single Responsibility Principle.</li>
+
+            <pre data-line="5-7"><code class="language-js">
+                if (choice = StringConverter::toInt(userInput); choice.has_value()) {
+                    cout << endl;
+    
+                    switch (choice.value()) {
+                    case 1:
+                        if (csvPath.empty()) {
+                            
+                            csvPath = handleFileSelection();
+                            CSVrow csvRow(csvPath, 20);
+                            idColumnIndex = csvRow.getColumnIndex(csvRowIDColumn);
+                            // Define a key extractor for CSVrow
+                            auto keyExtractor = [idColumnIndex](const std::vector<DynamicTypedValue>& row) {
+                                return row[idColumnIndex]; // No explicit type; auto-deduces via `operator T()`
+                                };
+    
+    
+    
+                            // Create the Binary Search Tree for rows
+                            BinarySearchTree<std::vector<DynamicTypedValue>, decltype(keyExtractor)> dynamicTypedValueTree(keyExtractor);
+                            auto& allRows = csvRow.getRowData();
+                            for (auto& [key, rowPtr] : allRows) {
+                                if (rowPtr) {
+                                    dynamicTypedValueTree.insert(rowPtr); // Modify via the tree
+                                }
+                                else {
+                                    rowPtr = std::make_shared<std::vector<DynamicTypedValue>>(); // Add new row
+                                }
+                            }
+                         
+    
+    
+                            cout << "CSV rows successfully loaded into the BinarySearchTree." << endl;
+                            cout << "Size of tree: " << dynamicTypedValueTree.getBSTSize() << endl;
+                            cout << "Deepest level: " << dynamicTypedValueTree.getDeepestLevel() << endl;
+    
+                            handleCRUD(csvPath, dynamicTypedValueTree,csvRow);
+                            choice = projectConstants::EXIT_APPLICATION;
+                        }
+                        break;
+                    case 9:
+                        cout << "Goodbye." << endl;
+                        </code></pre>
+                       
+                        <a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L54-L94" class="github-link" target="_blank">View Enhanced Code on GitHub</a>
+                    </ul>
+
+      
+    </section>
+
+
+
+
+
+
+    <section>
+        <h4>Skills Demonstrated by Component Enhancements</h4>
+        <ul>
+            <li> Decomposing complex code into clear, self-contained modules exemplifies code refactoring, modular design, and the ability to identify and mitigate security vulnerabilities .</li>
+        </ul>
+    </section>
+
+  
+
+    <section>
+        <h4>Skills Demonstrated by Component Enhancements</h4>
+        <ul>
+            <li> Code refactoring demonstrates the ability to use well-founded and innovative techniques, skills, and tools in computing practices for the purpose of implementing computer solutions that deliver value and accomplish industry-specific goals because it solves the issues that stem from the blob anti-pattern by employing effective CS techniques.
+            </li>
+            <li> Modular design is evidence of the ability to design and evaluate computing solutions that solve a given problem using algorithmic principles and computer science practices and standards appropriate to its solution while managing the trade-offs involved in design choices because it employs core CS standards to optimize flexibility and maintainability while addressing its trade-offs, such as the need for careful planning and potential performance reductions due to additional function calls.
+            </li>
+            <li> Detecting and mitigating security vulnerabilities illustrates  a security mindset that anticipates adversarial exploits in software architecture and designs to expose potential vulnerabilities, mitigate design flaws, and ensure privacy and enhanced security of data and resources since the simplicity of modular code  makes it easy to identify its flaws.
+            </li>
+        </ul>
+    </section>
+    
+
+
+   
+        <section id="reflection" class="skills">
+            <h2>Next Steps</h2>
+            <ul>
+            <p>For a detailed reflection on the challenges faced, skills developed, and lessons learned, visit the reflection page.</p>
+            <li><a  href="softwareEngineeringReflection.html" class="highlight-link">Read Reflection Page</a></li>
+        </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Alfredo Martinez</p>
+    </footer>
+</body>
+</html>

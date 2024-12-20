@@ -1,0 +1,76 @@
+/* Artifact-Specific Styles */
+
+/* Main Layout Adjustments */
+main.layout {
+    display: block; /* Ensure vertical flow for smoother scrolling */
+    padding: 2rem 1.5rem; /* Extra padding for readability */
+}
+
+/* Section Spacing */
+section {
+    margin-bottom: 3rem; /* Add space between sections */
+}
+
+/* Heading Styles */
+.welcome h1, .welcome h2 {
+    font-size: 2.5rem; /* Prominent titles */
+    color: #3b82f6; /* Accent color */
+    margin-bottom: 1rem;
+}
+
+.skills h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    color: #58a6ff; /* Secondary accent color */
+}
+
+/* Text Content */
+.accented-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #ffffff; /* White text for contrast */
+}
+
+/* Video Styling */
+video {
+    display: block;
+    margin: 2rem auto; /* Center the video horizontally */
+    max-width: 100%;
+    height: auto; /* Responsive video */
+    border: 2px solid #333; /* Optional border for styling */
+    border-radius: 5px; /* Subtle rounding */
+}
+
+/* Next Steps Section */
+.skills ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.skills ul li {
+    margin-bottom: 0.5rem;
+}
+
+.skills ul li a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.skills ul li a:hover {
+    text-decoration: underline;
+    color: #ffffff; /* Subtle hover effect */
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    background-color: #181818; /* Footer background */
+    border-top: 1px solid #333; /* Top border for separation */
+    color: #ffffff;
+    font-size: 0.9rem;
+}
