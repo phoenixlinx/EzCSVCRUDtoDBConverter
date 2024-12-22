@@ -177,18 +177,20 @@ section.subsection {
 .github-link {
     display: inline-block;
     margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #3b82f6; /* Blue background */
+    padding: 12px 18px; /* Larger padding for better spacing */
+    background-color: #2563eb; /* Darker blue */
     color: #ffffff; /* White text */
     text-decoration: none;
     border-radius: 5px;
+    font-size: 1.2rem; /* Larger font */
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .github-link:hover {
-    background-color: #2563eb; /* Darker blue on hover */
+    background-color: #1e40af; /* Even darker blue for hover */
 }
+
 
 /* Footer */
 footer {
