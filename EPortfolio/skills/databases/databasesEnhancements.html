@@ -27,110 +27,25 @@
         </section>
 
    
+        <section>
+            <h4>Database Controller: Why Did You Enhance This Component?</h4>
+            <ul>
+                <li>In the absence of transactions, each insert operation is atomic. However, if a series of insert operations is interrupted (e.g., due to power failure, application crash, or system error), only some of the rows may be successfully written. This can leave the database in a partially updated state and therefore prone to data corruption or inconsistencies.</li>
+                <li>Without explicit transactions, SQLite defaults to auto-commit mode, which means each insert statement involves at least one disk write. This is unacceptable because the application is designed to process any valid CSV structure of any size..</li>
+            </code></pre>
+                           
+         
+            </ul>
+            </section>
+        <section>
+            <h4>Database Controller: How Was the Component Enhanced?</h4>
+            <ul>
+                <li> Ensure Data Integrity During Bulk Database Operations: Ensure data integrity during the bulk insertion of CSV data into SQLite tables by using transactions. Transactions guarantee that either all insert operations succeed, or none are applied.</li>
+                <li> Transactions improve performance by dramatically reducing the number of disk writes. With transactions, SQLite buffers database changes in memory. This makes overall process becomes much faster as the disk write happens only once at the end of the transaction.</li>
+    
+                <a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/SQLiteHandler.cpp#L216-290" class="github-link" target="_blank">View Enhanced Artifact on GitHub</a>
+        </section>
 
-<!-- Table 1: Professional Standards -->
-<h2>Professional Standards</h2>
-<table>
-    <caption>Computer Science Professional Standards</caption>
-    <thead>
-        <tr>
-            <th>Standard</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Standard I</td>
-            <td>Employ strategies for building collaborative environments that enable diverse audiences to support organizational decision-making in computer science.</td>
-        </tr>
-        <tr>
-            <td>Standard II</td>
-            <td>Design, develop, and deliver professional-quality oral, written, and visual communications that are coherent, technically sound, and appropriately adapted to specific audiences and contexts.</td>
-        </tr>
-        <tr>
-            <td>Standard III</td>
-            <td>Design and evaluate computing solutions that solve a given problem using algorithmic principles and computer science practices and standards appropriate to its solution, while managing the trade-offs involved in design choices.</td>
-        </tr>
-        <tr>
-            <td>Standard IV</td>
-            <td>Demonstrate an ability to use well-founded and innovative techniques, skills, and tools in computing practices for the purpose of implementing computer solutions that deliver value and accomplish industry-specific goals.</td>
-        </tr>
-        <tr>
-            <td>Standard V</td>
-            <td>Develop a security mindset that anticipates adversarial exploits in software architecture and designs to expose potential vulnerabilities, mitigate design flaws, and ensure privacy and enhanced security of data and resources.</td>
-        </tr>
-    </tbody>
-</table>
-
-
-<h2>Generic Self-Balancing Tree Enhancement</h2>
-<table>
-    <caption>Generic Self-Balancing Tree Overview</caption>
-    <thead>
-        <tr>
-            <th>Enchantment Name</th>
-            <th>Enchantment Description</th>
-            <th>Enchantment Code</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>SQLite3 Insertions with Transactions</td>
-            <td>In the absence of transactions, each INSERT is atomic. However, if a series of INSERT operations is interrupted (e.g., due to power failure, application crash, or system error), only some of the rows may be successfully written. This can leave the database in a partially updated state and therefore prone to data corruption or inconsistencies. By using transactions, SQLite ensures that either all the operations succeed or none of them do, maintaining data integrity. Additionally, without a transaction, SQLite locks and unlocks the database for every operation, which increases contention and risk. With a transaction, contention is reduced because  multiple changes are bundled and committed at once.</td>
-            <td><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/SQLiteHandler.cpp#216-290" target="_blank">GitHub Link</a></td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- Table 3: Mapping Generic Self-Balancing Tree to Standards -->
-<h2>Artifact Enhancements Mapped to Standards</h2>
-<table>
-    <caption>Mapping Generic Self-Balancing Tree Enhancements to Standards</caption>
-    <thead>
-        <tr>
-            <th>Artifact Enhancement</th>
-            <th>Skill Demonstrated</th>
-            <th>Standard I</th>
-            <th>Standard II</th>
-            <th>Standard III</th>
-            <th>Standard IV</th>
-            <th>Standard V</th>
-            <th>Why Skill Maps to Standard?</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Generic Programming</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>✔</td>
-            <td></td>
-            <td>The enhancement demonstrates generic programming by creating reusable and adaptable structures. Standard IV requires innovative techniques and tools to implement solutions that deliver value. Therefore, this skill aligns with Standard IV because it uses generic programming to provide flexibility and adaptability.</td>
-        </tr>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Algorithm Optimization</td>
-            <td></td>
-            <td></td>
-            <td>✔</td>
-            <td>✔</td>
-            <td></td>
-            <td>This enhancement uses self-balancing algorithms to ensure logarithmic performance. Standard III requires the application of algorithmic principles to solve problems, and Standard IV emphasizes techniques that enhance efficiency. Therefore, this enhancement supports both standards by improving performance and implementing innovative techniques.</td>
-        </tr>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Ability to design and implement scalable, reusable solutions that deliver measurable value</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>✔</td>
-            <td></td>
-            <td>For the application to deliver measurable value, it must support a highly adaptable data structure capable of handling any valid CSV format. The generic self-balancing tree is critical to the application's ability to achieve this adaptability. Therefore, this skill demonstrates support for Standard IV.</td>
-        </tr>
-    </tbody>
-</table>
 
 
    
