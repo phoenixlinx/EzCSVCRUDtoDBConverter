@@ -75,9 +75,9 @@
     </thead>
     <tbody>
         <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Enhanced the flexibility, adaptability, and performance of the artifact by creating a generic, self-balancing binary search tree that supports objects of type T and keys of type string, int, or double without requiring type-specific code for T objects.</td>
-            <td><a href="https://github.com/your-github-link" target="_blank">GitHub Link</a></td>
+            <td>SQLite3 Insertions with Transactions</td>
+            <td>In the absence of transactions, each INSERT is atomic. However, if a series of INSERT operations is interrupted (e.g., due to power failure, application crash, or system error), only some of the rows may be successfully written. This can leave the database in a partially updated state and therefore prone to data corruption or inconsistencies. By using transactions, SQLite ensures that either all the operations succeed or none of them do, maintaining data integrity. Additionally, without a transaction, SQLite locks and unlocks the database for every operation, which increases contention and risk. With a transaction, contention is reduced because  multiple changes are bundled and committed at once.</td>
+            <td><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/SQLiteHandler.cpp#216-290" target="_blank">GitHub Link</a></td>
         </tr>
     </tbody>
 </table>
