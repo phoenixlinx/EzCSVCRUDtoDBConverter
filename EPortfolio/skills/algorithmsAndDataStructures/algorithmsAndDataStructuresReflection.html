@@ -20,19 +20,12 @@
 
                 <h2>What challenges did you face as you were improving the artifact?</h2>
                 <ul>
-                    One significant challenge was modularizing the code without degrading performance. Another was understanding the original 
-                    code’s intent without adequate comments or documentation.
+                    A vector of vectors is an inappropriate data structure for storing objects that represent CSV rows. This is because the application must allow the deletion of rows, which can be problematic. When a row is deleted, all subsequent vectors (representing rows) must be shifted to maintain the structure's continuity. This operation has a time complexity of 𝑂(𝑛), where 𝑛 is the number of rows following the deleted one. Such shifting not only degrades performance, especially for large datasets, but also invalidates any existing references or iterators to rows.
                 </ul>
 
                 <h2>What lessons did you learn?</h2>
                 <ul>
-                    Enhancing this artifact taught me the importance of balancing modularity and performance. Debugging and refactoring my own legacy 
-                    code highlighted the value of proper documentation.
-                </ul>
-
-                <h2>Which computer science professional standards did your SED enhancements fully address?</h2>
-                <ul>
-                    SED improvements partially addressed CS standards III, IV, and V.
+                    Careful system design pays off. It is vital to thoroughly consider the requirements of a data structure before selecting it. Doing so can prevent costly code refactoring and ensure the system meets its performance and functionality goals. Components where the design and pseudocode were thoughtfully planned required the least refactoring and were faster to implement.
                 </ul>
 
             </div>
