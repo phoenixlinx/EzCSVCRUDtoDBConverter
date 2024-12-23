@@ -62,7 +62,23 @@
     </tbody>
 </table>
 
-<!-- Table 2: Generic Self-Balancing Tree Enhancement -->
+<section id="component-modular-ezcsv">
+    <h3>ADS Enhancements</h3>
+
+    
+    <section>
+        <h4>Binary Search Tree (BST): Why Did You Enhance This Component?</h4>
+        <ul>
+            <li>The binary search tree might as well be replaced with a more straightforward, memory-efficient doubly linked list since it effectively degrades into a double linked list when keys are inserted in sorted order. This insertion pattern results in a severely unbalanced tree structure that behaves like a linked list, causing CRUD operations to degrade to O(n) time complexity instead of the optimal O(log n).</li>
+        </code></pre>
+                       
+        <a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/5ecc61695b589a81bc8d5bc1a446e9d501ce3665/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L521-L550" class="github-link" target="_blank">View the Original Artifact Code on GitHub</a>
+     
+        </ul>
+    </section>
+
+
+
 <h2>Generic Self-Balancing Tree Enhancement</h2>
 <table>
     <caption>Generic Self-Balancing Tree Overview</caption>
