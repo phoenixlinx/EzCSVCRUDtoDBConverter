@@ -1,0 +1,13 @@
+Energy_Source,Initial_Cost_KW,Annual_Revenue_KW,Lifespan_Years,NPV_kW,Annual_Operating_Cost_KW,Discount_Rate_%,CO2_Emissions_tonnes_per_year,Capacity_Factor_%,Wh_per_L,Land_Use_Efficiency_MW_per_km2
+Nuclear (Fission),9000,700,40,3011.36,133,9.79,95,83,80,300
+Geothermal (Conventional),3500,400,30,2648.98,50,9.11,98,72.5,3,80
+Hydropower,4000,300,50,2000,100,5.5,5,50,5,20
+Hydropower,3501,300,50,1976.78,90,7.55,20,45.4,5,20
+Coal (Advanced),4500,402,30,1648.98,55,5.89,73,89.6,25,150
+Geothermal (EGS),5000,401,30,1148.98,105,7.77,86,67.9,3,70
+Natural Gas (Combined Cycle),1000,150,25,1114.09,142,8.23,13,36.9,55,200
+Wind (Onshore),1501,151,30,800,50,6.5,0,40,0.3,8
+Solar (PV),1201,100,25,500,30,7,0,25,0.2,10
+Offshore Wind,4001,300,25,228.18,66,9.87,13,80.2,,
+Solar PV (Utility),1200,101,25,209.39,79,7.26,94,52.1,,
+Onshore Wind,1500,120,25,191.27,137,9.79,24,75,,
