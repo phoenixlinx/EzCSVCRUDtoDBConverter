@@ -18,12 +18,12 @@
             <div class="accented-text">
 
 
-                <h2>What challenges did you face as you were improving the artifact?</h2>
+                <h2>What Challenges Did You Face as You Were Improving the Artifact?</h2>
                 <ul>
                     A vector of vectors is an inappropriate data structure for storing objects that represent CSV rows. This is because the application must allow the deletion of rows, which can be problematic. When a row is deleted, all subsequent vectors (representing rows) must be shifted to maintain the structure's continuity. This operation has a time complexity of 𝑂(𝑛), where 𝑛 is the number of rows following the deleted one. Such shifting not only degrades performance, especially for large datasets, but also invalidates any existing references or iterators to rows.
                 </ul>
 
-                <h2>What lessons did you learn?</h2>
+                <h2>What Lessons Did You Learn From These Challenges?</h2>
                 <ul>
                     Careful system design pays off. It is vital to thoroughly consider the requirements of a data structure before selecting it. Doing so can prevent costly code refactoring and ensure the system meets its performance and functionality goals. Components where the design and pseudocode were thoughtfully planned required the least refactoring and were faster to implement.
                 </ul>

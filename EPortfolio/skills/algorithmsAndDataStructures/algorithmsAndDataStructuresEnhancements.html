@@ -61,44 +61,41 @@
         </tr>
     </tbody>
 </table>
-
-<section id="component-modular-ezcsv">
+<section id="component-modular-ezcsv223">
     <h3>ADS Enhancements</h3>
 
-    
+    <!-- Enhancement Name Introduction -->
     <section>
-        <h4>Binary Search Tree (BST): Why Did You Enhance This Component?</h4>
+        <h4>Enhancement: Binary Search Tree (BST)</h4>
+        <p><strong>Why Did You Enhance This Component?</strong></p>
         <ul>
-            <li>The binary search tree might as well be replaced with a more straightforward, memory-efficient doubly linked list since it effectively degrades into a double linked list when keys are inserted in sorted order. This insertion pattern results in a severely unbalanced tree structure that behaves like a linked list, causing CRUD operations to degrade to O(n) time complexity instead of the optimal O(log n).</li>
-        </code></pre>
-                       
-        <a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/5ecc61695b589a81bc8d5bc1a446e9d501ce3665/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L521-L550" class="github-link" target="_blank">View the Original Artifact Code on GitHub</a>
-     
+            <li>
+                The binary search tree might as well be replaced with a more straightforward, memory-efficient doubly linked list since it effectively degrades into a double linked list when keys are inserted in sorted order. This insertion pattern results in a severely unbalanced tree structure that behaves like a linked list, causing CRUD operations to degrade to O(n) time complexity instead of the optimal O(log n).
+                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/5ecc61695b589a81bc8d5bc1a446e9d501ce3665/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L521-L550" class="github-link" target="_blank">View Original Component on GitHub</a></p>
+            </li>
         </ul>
+       
     </section>
 
+    <!-- How the Enhancement Was Made -->
+    <section>
+        <h4>Enhancement Implementation: Generic Recursion-Free Self-Balancing Tree</h4>
+        <p><strong>How Was the Component Enhanced?</strong></p>
+        <ul>
+            <li>
+                <p>Enhanced the flexibility, adaptability of the artifact by creating a generic, self-balancing binary search tree that supports objects of type T and keys of type string, int, or double without requiring type-specific code for T objects.</p>
+                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTree.tpp" class="github-link" target="_blank">View this Enhancement on GitHub</a></p>
+            </li>
+            <li>
+                <p>Improved performance and security by substituting recursive functions with iterative versions. Iterative version avoids function call overhead and therefore improves efficiency. Similarly, the lack of function calls during deep tree operations avoids stack frame creation, which reduces the risk of stack overflow and the exceptions that they cause.</p>
+
+                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTreeIterative.tpp" class="github-link" target="_blank">View this Enhancement on GitHub</a></p>
+            </li>
+        </ul>
+    </section>
+</section>
 
 
-<h2>Generic Self-Balancing Tree Enhancement</h2>
-<table>
-    <caption>Generic Self-Balancing Tree Overview</caption>
-    <thead>
-        <tr>
-            <th>Enchantment Name</th>
-            <th>Enchantment Description</th>
-            <th>Enchantment Code</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Enhanced the flexibility, adaptability, and performance of the artifact by creating a generic, self-balancing binary search tree that supports objects of type T and keys of type string, int, or double without requiring type-specific code for T objects.</td>
-            <td><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTree.tpp" target="_blank">GitHub Link</a></td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- Table 3: Mapping Generic Self-Balancing Tree to Standards -->
 <h2>Artifact Enhancements Mapped to Standards</h2>
 <table>
     <caption>Mapping Generic Self-Balancing Tree Enhancements to Standards</caption>

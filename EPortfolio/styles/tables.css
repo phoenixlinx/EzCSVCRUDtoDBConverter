@@ -1,59 +1,100 @@
+/* Scrollable Table Container */
+.table-container {
+    max-width: 100%; /* Ensure container stays within the screen */
+    max-height: 400px; /* Optional: Vertical scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    border: 1px solid var(--table-border); /* Optional: Add a border around the container */
+    margin: 20px 0; /* Add spacing around the table */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow for aesthetics */
+    background-color: var(--table-bg); /* Background for the container */
+}
+
 /* General Table Styles */
 table {
-    width: 100%;
+    width: 100%; /* Table takes full container width */
     border-collapse: collapse;
-    margin: 30px 0;
+    table-layout: auto; /* Adjusts column width to content */
+    max-width: 100%; /* Prevents table from exceeding container width */
     background-color: var(--table-bg);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* Table Header and Cell Styles */
 th, td {
     border: 1px solid var(--table-border);
     padding: 12px;
     text-align: left;
     vertical-align: top;
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Handles long text gracefully */
+    overflow: hidden; /* Prevents content overflow */
+    text-overflow: ellipsis; /* Truncates overflowing text */
 }
+
+/* Sticky Table Header */
 th {
+    position: sticky;
+    top: 0; /* Keep header fixed at the top */
     background-color: var(--header-bg);
     color: var(--header-color);
+    z-index: 2; /* Ensure headers are above table content */
+    min-width: 100px; /* Ensures headers are wide enough */
 }
+
+/* Table Caption */
 caption {
     font-size: 1.2em;
     font-weight: bold;
     margin-bottom: 10px;
     color: var(--caption-color);
 }
+
+/* Zebra Striping for Rows */
+tr:nth-child(even) {
+    background-color: var(--row-hover); /* Add zebra striping */
+}
+
 tr:hover {
-    background-color: var(--row-hover);
+    background-color: var(--row-hover-hover); /* Enhance row hover effect */
 }
 
 /* Light Mode Colors */
 :root {
-    --table-bg: #fff;
-    --table-border: #ddd;
-    --header-bg: #007BFF;
-    --header-color: white;
-    --caption-color: #000;
-    --row-hover: #f1f1f1;
+    --table-bg: #fff; /* White background */
+    --table-border: #ddd; /* Light gray border */
+    --header-bg: #007BFF; /* Blue header background */
+    --header-color: white; /* White header text */
+    --caption-color: #000; /* Black caption */
+    --row-hover: #f1f1f1; /* Light gray for zebra striping */
+    --row-hover-hover: #e1e1e1; /* Slightly darker gray for hover effect */
 }
 
 /* Dark Mode Colors */
 @media (prefers-color-scheme: dark) {
     :root {
-        --table-bg: #2d2d2d;
-        --table-border: #555;
-        --header-bg: #0056b3;
-        --header-color: white;
-        --caption-color: #ccc;
-        --row-hover: #444;
+        --table-bg: #2d2d2d; /* Dark background */
+        --table-border: #555; /* Dark gray border */
+        --header-bg: #0056b3; /* Darker blue header background */
+        --header-color: white; /* White header text */
+        --caption-color: #ccc; /* Light gray caption */
+        --row-hover: #444; /* Dark gray for zebra striping */
+        --row-hover-hover: #555; /* Slightly lighter gray for hover effect */
     }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .table-container {
+        max-height: 300px; /* Adjust for smaller screens */
+    }
     table {
         font-size: 0.9em;
     }
     th, td {
         padding: 8px;
+        white-space: normal; /* Allow text to wrap */
+    }
+    th {
+        min-width: auto; /* Adjust for responsive screens */
     }
 }
