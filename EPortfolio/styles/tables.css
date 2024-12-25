@@ -2,7 +2,7 @@
 .table-container {
     max-width: 100%; /* Ensure container stays within the screen */
     max-height: 400px; /* Optional: Vertical scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: hidden; /* Enable vertical scrolling */
     overflow-x: auto; /* Enable horizontal scrolling */
     border: 1px solid var(--table-border); /* Optional: Add a border around the container */
     margin: 20px 0; /* Add spacing around the table */
@@ -15,6 +15,7 @@ table {
     width: 100%; /* Table takes full container width */
     border-collapse: collapse;
     table-layout: auto; /* Adjusts column width to content */
+   
     max-width: 100%; /* Prevents table from exceeding container width */
     background-color: var(--table-bg);
 }
@@ -25,10 +26,11 @@ th, td {
     padding: 12px;
     text-align: left;
     vertical-align: top;
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Handles long text gracefully */
-    overflow: hidden; /* Prevents content overflow */
+   
     text-overflow: ellipsis; /* Truncates overflowing text */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden;    /* Ensure content stays within bounds */
+
 }
 
 /* Sticky Table Header */
@@ -92,7 +94,7 @@ tr:hover {
     }
     th, td {
         padding: 8px;
-        white-space: normal; /* Allow text to wrap */
+        white-space: nowrap; /* Allow text to wrap */
     }
     th {
         min-width: auto; /* Adjust for responsive screens */

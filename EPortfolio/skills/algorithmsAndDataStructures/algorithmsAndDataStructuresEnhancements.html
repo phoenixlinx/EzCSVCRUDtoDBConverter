@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +12,14 @@
     <link rel="stylesheet" href="../../styles/tables.css">
     <!-- Prism.js Core and Plugins -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.js" defer></script>
-    
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-highlight/prism-line-highlight.min.js"
+        defer></script>
+
     <script src="../../scripts/prismSyntax.js" defer></script> <!-- Custom Prism Functionality -->
 </head>
+
 <body>
     <header>
         <a href="algorithmsAndDataStructuresIndex.html" class="top-link">Back to Overview</a>
@@ -26,137 +30,182 @@
             <h1>Algorithms and Data Structures (ADS) Enhancements</h1>
         </section>
 
-   
 
-<!-- Table 1: Professional Standards -->
-<h2>Professional Standards</h2>
-<table>
-    <caption>Computer Science Professional Standards</caption>
-    <thead>
-        <tr>
-            <th>Standard</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Standard I</td>
-            <td>Employ strategies for building collaborative environments that enable diverse audiences to support organizational decision-making in computer science.</td>
-        </tr>
-        <tr>
-            <td>Standard II</td>
-            <td>Design, develop, and deliver professional-quality oral, written, and visual communications that are coherent, technically sound, and appropriately adapted to specific audiences and contexts.</td>
-        </tr>
-        <tr>
-            <td>Standard III</td>
-            <td>Design and evaluate computing solutions that solve a given problem using algorithmic principles and computer science practices and standards appropriate to its solution, while managing the trade-offs involved in design choices.</td>
-        </tr>
-        <tr>
-            <td>Standard IV</td>
-            <td>Demonstrate an ability to use well-founded and innovative techniques, skills, and tools in computing practices for the purpose of implementing computer solutions that deliver value and accomplish industry-specific goals.</td>
-        </tr>
-        <tr>
-            <td>Standard V</td>
-            <td>Develop a security mindset that anticipates adversarial exploits in software architecture and designs to expose potential vulnerabilities, mitigate design flaws, and ensure privacy and enhanced security of data and resources.</td>
-        </tr>
-    </tbody>
-</table>
-<section id="component-modular-ezcsv223">
-    <h3>ADS Enhancements</h3>
+        <section>
 
-    <!-- Enhancement Name Introduction -->
-    <section>
-        <h4>Enhancement: Binary Search Tree (BST)</h4>
-        <p><strong>Why Did You Enhance This Component?</strong></p>
-        <ul>
-            <li>
-                The binary search tree might as well be replaced with a more straightforward, memory-efficient doubly linked list since it effectively degrades into a double linked list when keys are inserted in sorted order. This insertion pattern results in a severely unbalanced tree structure that behaves like a linked list, causing CRUD operations to degrade to O(n) time complexity instead of the optimal O(log n).
-                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/5ecc61695b589a81bc8d5bc1a446e9d501ce3665/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L521-L550" class="github-link" target="_blank">View Original Component on GitHub</a></p>
-            </li>
-        </ul>
-       
-    </section>
+            <h2>Computer Science Professional Standards</h2>
+            <div class="indented-content">
+                <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Standard</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard I</td>
+                            <td>Employ strategies for building collaborative environments that enable diverse audiences
+                                to support organizational decision-making in computer science.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard II</td>
+                            <td>Design, develop, and deliver professional-quality oral, written, and visual
+                                communications that are coherent, technically sound, and appropriately adapted to
+                                specific audiences and contexts.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard III</td>
+                            <td>Design and evaluate computing solutions that solve a given problem using algorithmic
+                                principles and computer science practices and standards appropriate to its solution,
+                                while managing the trade-offs involved in design choices.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard IV</td>
+                            <td>Demonstrate an ability to use well-founded and innovative techniques, skills, and tools
+                                in computing practices for the purpose of implementing computer solutions that deliver
+                                value and accomplish industry-specific goals.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard V</td>
+                            <td>Develop a security mindset that anticipates adversarial exploits in software
+                                architecture and designs to expose potential vulnerabilities, mitigate design flaws, and
+                                ensure privacy and enhanced security of data and resources.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </section>
 
-    <!-- How the Enhancement Was Made -->
-    <section>
-        <h4>Enhancement Implementation: Generic Recursion-Free Self-Balancing Tree</h4>
-        <p><strong>How Was the Component Enhanced?</strong></p>
-        <ul>
-            <li>
-                <p>Enhanced the flexibility, adaptability of the artifact by creating a generic, self-balancing binary search tree that supports objects of type T and keys of type string, int, or double without requiring type-specific code for T objects.</p>
-                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTree.tpp" class="github-link" target="_blank">View this Enhancement on GitHub</a></p>
-            </li>
-            <li>
-                <p>Improved performance and security by substituting recursive functions with iterative versions. Iterative version avoids function call overhead and therefore improves efficiency. Similarly, the lack of function calls during deep tree operations avoids stack frame creation, which reduces the risk of stack overflow and the exceptions that they cause.</p>
-
-                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTreeIterative.tpp" class="github-link" target="_blank">View this Enhancement on GitHub</a></p>
-            </li>
-        </ul>
-    </section>
-</section>
+        <section>
+            <h2>ADS Enhancements</h2>
+            <div class="indented-content">
 
 
-<h2>Artifact Enhancements Mapped to Standards</h2>
-<table>
-    <caption>Mapping Generic Self-Balancing Tree Enhancements to Standards</caption>
-    <thead>
-        <tr>
-            <th>Artifact Enhancement</th>
-            <th>Skill Demonstrated</th>
-            <th>Standard I</th>
-            <th>Standard II</th>
-            <th>Standard III</th>
-            <th>Standard IV</th>
-            <th>Standard V</th>
-            <th>Why Skill Maps to Standard?</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Generic Programming</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>✔</td>
-            <td></td>
-            <td>The enhancement demonstrates generic programming by creating reusable and adaptable structures. Standard IV requires innovative techniques and tools to implement solutions that deliver value. Therefore, this skill aligns with Standard IV because it uses generic programming to provide flexibility and adaptability.</td>
-        </tr>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Algorithm Optimization</td>
-            <td></td>
-            <td></td>
-            <td>✔</td>
-            <td>✔</td>
-            <td></td>
-            <td>This enhancement uses self-balancing algorithms to ensure logarithmic performance. Standard III requires the application of algorithmic principles to solve problems, and Standard IV emphasizes techniques that enhance efficiency. Therefore, this enhancement supports both standards by improving performance and implementing innovative techniques.</td>
-        </tr>
-        <tr>
-            <td>Generic Self-Balancing Tree</td>
-            <td>Ability to design and implement scalable, reusable solutions that deliver measurable value</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>✔</td>
-            <td></td>
-            <td>For the application to deliver measurable value, it must support a highly adaptable data structure capable of handling any valid CSV format. The generic self-balancing tree is critical to the application's ability to achieve this adaptability. Therefore, this skill demonstrates support for Standard IV.</td>
-        </tr>
-    </tbody>
-</table>
+
+              
+                    <h4>Enhancement: Binary Search Tree (BST)</h4>
+                  
+                        <p><strong>Why Did You Enhance This Component?</strong></p>
+                        <ul>
+                            <li>
+                                The binary search tree might as well be replaced with a more straightforward,
+                                memory-efficient doubly linked list since it effectively degrades into a double linked
+                                list when keys are inserted in sorted order. 
+                                This insertion pattern results in a severely unbalanced tree structure that behaves like a linked list, causing CRUD
+                                operations to degrade to O(n) time complexity instead of the optimal O(log n).
+                                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/5ecc61695b589a81bc8d5bc1a446e9d501ce3665/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L521-L550"
+                                        class="github-link" target="_blank">View Original Component on GitHub</a></p>
+                            </li>
+                        </ul>
 
 
-   
+             
+
+                
+                    <h4>Enhancement Implementation: Generic Recursion-Free Self-Balancing BST</h4>
+                   
+                        <p><strong>How Was the Component Enhanced?</strong></p>
+                        <ul>
+                            <li>
+                                <p>Enhanced the flexibility, adaptability of the artifact by creating a generic,
+                                    self-balancing binary search tree that supports objects of type T and keys of type
+                                    string, int, or double without requiring type-specific code for T objects.</p>
+                                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTree.tpp"
+                                        class="github-link" target="_blank">View this Enhancement on GitHub</a></p>
+                            </li>
+                            <li>
+                                <p>Improved performance and security by substituting recursive functions with iterative
+                                    versions. Iterative version avoids function call overhead and therefore improves
+                                    efficiency. Similarly, the lack of function calls during deep tree operations avoids
+                                    stack frame creation, which reduces the risk of stack overflow and the exceptions
+                                    that they cause.</p>
+
+                                <p><a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/main/EzCSVCRUDtoDBConverter/src/BinarySearchTree.tpp#L322-L363"
+                                        class="github-link" target="_blank">View this Enhancement on GitHub</a></p>
+                            </li>
+                        </ul>
+
+                
+                <section>
+                    <h4>Skills Demonstrated by Enhancement: Generic Recursion-Free Self-Balancing BST</h4>
+                    <div class="indented-content">
+                        <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Skill Demonstrated</th>
+                                    <th>Standard I</th>
+                                    <th>Standard II</th>
+                                    <th>Standard III</th>
+                                    <th>Standard IV</th>
+                                    <th>Standard V</th>
+                                    <th>Why Skill Maps to Standard?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Generic Programming</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>✔</td>
+                                    <td></td>
+                                    <td>The enhancement demonstrates generic programming by creating reusable and
+                                        adaptable structures. Standard IV requires innovative techniques and tools to
+                                        implement solutions that deliver value. Therefore, this skill aligns with
+                                        Standard IV because it uses generic programming to provide flexibility and
+                                        adaptability.</td>
+                                </tr>
+                                <tr>
+                                    <td>Algorithm Optimization</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>✔</td>
+                                    <td>✔</td>
+                                    <td></td>
+                                    <td>This enhancement uses self-balancing algorithms to ensure logarithmic
+                                        performance. Standard III requires the application of algorithmic principles to
+                                        solve problems, and Standard IV emphasizes techniques that enhance efficiency.
+                                        Therefore, this enhancement supports both standards by improving performance and
+                                        implementing innovative techniques.</td>
+                                </tr>
+                                <tr>
+                                    <td>Ability to design and implement scalable, reusable solutions that deliver
+                                        measurable value</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>✔</td>
+                                    <td></td>
+                                    <td>For the application to deliver measurable value, it must support a highly
+                                        adaptable data structure capable of handling any valid CSV format. The generic
+                                        self-balancing tree is critical to the application's ability to achieve this
+                                        adaptability. Therefore, this skill demonstrates support for Standard IV.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            </div>
+        </section>
+
         <section id="reflection" class="skills">
             <h2>Next Steps</h2>
             <ul>
-            <p>For a detailed reflection on the ADS challenges faced, skills developed, and lessons learned, visit the reflection page.</p>
-            <li><a  href="algorithmsAndDataStructuresReflection.html" class="highlight-link">Read Reflection Page</a></li>
-        </ul>
+                <p>For a detailed reflection on the ADS challenges faced, skills developed, and lessons learned, visit
+                    the reflection page.</p>
+                <li><a href="algorithmsAndDataStructuresReflection.html" class="highlight-link">Read Reflection Page</a>
+                </li>
+            </ul>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 Alfredo Martinez</p>
     </footer>
 </body>
+
 </html>

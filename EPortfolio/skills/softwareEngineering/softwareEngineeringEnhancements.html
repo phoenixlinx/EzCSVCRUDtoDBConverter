@@ -27,46 +27,63 @@
             <h1>Software Engineering and Design (SED) Enhancements</h1>
         </section>
 
-        <h2>Professional Standards</h2>
-        <table>
-            <caption>Computer Science Professional Standards</caption>
-            <thead>
-                <tr>
-                    <th>Standard</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Standard I</td>
-                    <td>Employ strategies for building collaborative environments that enable diverse audiences to support organizational decision-making in computer science.</td>
-                </tr>
-                <tr>
-                    <td>Standard II</td>
-                    <td>Design, develop, and deliver professional-quality oral, written, and visual communications that are coherent, technically sound, and appropriately adapted to specific audiences and contexts.</td>
-                </tr>
-                <tr>
-                    <td>Standard III</td>
-                    <td>Design and evaluate computing solutions that solve a given problem using algorithmic principles and computer science practices and standards appropriate to its solution, while managing the trade-offs involved in design choices.</td>
-                </tr>
-                <tr>
-                    <td>Standard IV</td>
-                    <td>Demonstrate an ability to use well-founded and innovative techniques, skills, and tools in computing practices for the purpose of implementing computer solutions that deliver value and accomplish industry-specific goals.</td>
-                </tr>
-                <tr>
-                    <td>Standard V</td>
-                    <td>Develop a security mindset that anticipates adversarial exploits in software architecture and designs to expose potential vulnerabilities, mitigate design flaws, and ensure privacy and enhanced security of data and resources.</td>
-                </tr>
-            </tbody>
-        </table>
+        <section>
 
+            <h2>Computer Science Professional Standards</h2>
+            <div class="indented-content">
+                <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Standard</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard I</td>
+                            <td>Employ strategies for building collaborative environments that enable diverse audiences
+                                to support organizational decision-making in computer science.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard II</td>
+                            <td>Design, develop, and deliver professional-quality oral, written, and visual
+                                communications that are coherent, technically sound, and appropriately adapted to
+                                specific audiences and contexts.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard III</td>
+                            <td>Design and evaluate computing solutions that solve a given problem using algorithmic
+                                principles and computer science practices and standards appropriate to its solution,
+                                while managing the trade-offs involved in design choices.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard IV</td>
+                            <td>Demonstrate an ability to use well-founded and innovative techniques, skills, and tools
+                                in computing practices for the purpose of implementing computer solutions that deliver
+                                value and accomplish industry-specific goals.</td>
+                        </tr>
+                        <tr>
+                            <td>Standard V</td>
+                            <td>Develop a security mindset that anticipates adversarial exploits in software
+                                architecture and designs to expose potential vulnerabilities, mitigate design flaws, and
+                                ensure privacy and enhanced security of data and resources.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </section>
 
-<section id="component-modular-ezcsv">
-    <h3>SED Enhancements</h3>
+<section>
+    <h2>SED Enhancements</h2>
+    <div class="indented-content">
 
     
-    <section>
-        <h4>Structural Composition: Why Did You Enhance This Component?</h4>
+    
+        <h4>Enhancement: Structural Composition</h4>
+
+         <p><strong>Why Did You Enhance This Component?</strong></p>
         <ul>
             <li>EzCSVCRUDtoDBConverter.cpp fits the definition of the Blob anti-pattern. It handles most of the application’s many responsibilities. The system consists of just two files: EzCSVCRUDtoDBConverter.cpp and CSVparser.cpp. This design made it very challenging and impractical to make changes to the old system. Even a small change to one part of the system often profoundly affected many other parts. Additionally, reusing individual EzCSV functions in other projects required much effort because its functions were highly dependent on other EzCSV functions and variables. As a result, the complexity of EzCSV not only made maintenance difficult but also made the system prone to vulnerabilities, as its complexity obscured its flaws.</li>
         </code></pre>
@@ -74,9 +91,10 @@
         <a href="https://github.com/phoenixlinx/EzCSVCRUDtoDBConverter/blob/5ecc61695b589a81bc8d5bc1a446e9d501ce3665/EzCSVCRUDtoDBConverter/src/EzCSVCRUDtoDBConverter.cpp#L1-L1313" class="github-link" target="_blank">View Original Artifact on GitHub</a>
      
         </ul>
-        </section>
-    <section>
-        <h4>Structural Composition: How Was the Component Enhanced?</h4>
+       
+        <h4>Enhancement Implementation: Modular Structural Composition</h4>
+                   
+        <p><strong>How Was the Component Enhanced?</strong></p>
         <ul>
             <li>Enhanced maintainability, reusability, and security by breaking down complex files, classes, and functions into smaller, manageable units that follow the Single Responsibility Principle.</li>
 
@@ -128,7 +146,7 @@
                     </ul>
 
       
-    </section>
+
 
     
 
@@ -136,13 +154,13 @@
 
 
 
-
-<h4>Modular EzCSV: Skills Demonstrated</h4>
+<section>
+<h4>Skills Demonstrated by Enhancement: Modular Structural Composition</h4>
+<div class="indented-content">
+    <div class="table-container">
 <table>
-    <caption>Mapping EzCSV Skills to Standards</caption>
     <thead>
         <tr>
-            <th>Artifact Enhancement</th>
             <th>Skill Demonstrated</th>
             <th>Standard I</th>
             <th>Standard II</th>
@@ -154,7 +172,6 @@
     </thead>
     <tbody>
         <tr>
-            <td>Modular EzCSV</td>
             <td>Capacity to anticipate potential vulnerabilities</td>
             <td></td>
             <td></td>
@@ -164,7 +181,6 @@
             <td>Updates to the previously monolithic enhancement often introduced vulnerabilities because its complexity obscured flaws. In contrast, updating the current modular artifact is less likely to introduce vulnerabilities since its inherent simplicity makes flaws easier to identify.</td>
         </tr>
         <tr>
-            <td>Modular EzCSV</td>
             <td>Ability to create industry-standard software designs while managing trade off</td>
             <td></td>
             <td></td>
@@ -174,7 +190,6 @@
             <td>Designing and implementing the modular artifact demonstrates Standard III because it shows the ability to create industry-standard software while balancing trade-offs, such as trading increased development time and slightly reduced performance for significantly improved flexibility, maintainability, and security.</td>
         </tr>
         <tr>
-            <td>Modular EzCSV</td>
             <td>Communicate appropriately to specific audiences and contexts</td>
             <td></td>
             <td>✔</td>
@@ -185,9 +200,12 @@
         </tr>
     </tbody>
 </table>
+</div>
+</div>
+</section>
+</div>
+</section>
 
-
-   
         <section id="reflection" class="skills">
             <h2>Next Steps</h2>
             <ul>
