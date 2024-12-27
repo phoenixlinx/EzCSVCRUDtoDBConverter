@@ -20,11 +20,9 @@
 #include <PerformanceUtils.hpp>
 #include <MenuUtils.hpp>
 #include <CSVMetadata.hpp>
-#include <Bid.hpp>
 int main(int argc, char* argv[]) {
   
 
-    Bid bid;
 
 
 
@@ -40,7 +38,7 @@ int main(int argc, char* argv[]) {
         break;
     default:
        
-        csvRowIDColumn = "Annual_Revenue_KW";
+        csvRowIDColumn = "AuctionID";
     }
 
 
@@ -86,7 +84,7 @@ int main(int argc, char* argv[]) {
                         cout << "Size of tree: " << dynamicTypedValueTree.getBSTSize() << endl;
                         cout << "Deepest level: " << dynamicTypedValueTree.getDeepestLevel() << endl;
 
-                        handleCRUD(csvPath, dynamicTypedValueTree,csvRow);
+                        handleCRUD(csvPath, dynamicTypedValueTree,csvRow, csvRowIDColumn);
                         choice = projectConstants::EXIT_APPLICATION;
                     }
                     break;

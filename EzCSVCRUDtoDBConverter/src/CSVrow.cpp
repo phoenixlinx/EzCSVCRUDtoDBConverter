@@ -208,7 +208,7 @@ void CSVrow::printRow(const std::vector<DynamicTypedValue>& row) {
         std::cout << columnName << ": " << getValue(row, columnName) << "\n";
     }
 }
-
+//TODO: Do a better at handling none exiting columns
 size_t CSVrow::getColumnIndex(const std::string& columnName) {
     auto it = columnIndex.find(columnName);
     if (it == columnIndex.end()) {

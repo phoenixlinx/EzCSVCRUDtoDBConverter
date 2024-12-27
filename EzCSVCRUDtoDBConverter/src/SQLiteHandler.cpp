@@ -81,12 +81,13 @@ void SQLiteHandler::bindValues(sqlite3_stmt* stmt, const std::vector<DynamicType
         const ColumnMetadata& column = table.metadata[i]; // Access metadata by index
         const DynamicTypedValue& value = row[i];         // Access row value by index
         const auto* type = column.type;                 // Get the type from metadata
-
+/**
         // Print column name and type information for debugging
         std::cout << "Processing column: " << column.originalName
             << ", Quoted name: " << column.quotedName
             << ", Expected type: " << type->name()
             << ", Value type: " << value.getStoredTypeName() << std::endl;
+*/
 
         // Bind value based on its type
         if (*type == typeid(int)) {
@@ -270,6 +271,7 @@ bool SQLiteHandler::insertRows(const std::string& tableName,const std::unordered
             bindValues(stmt, row, table);
 
             if (sqlite3_step(stmt) != SQLITE_DONE) {
+                //TODO: Inform users that csv column contains a duplicate key. 
                 throw std::runtime_error("Failed to execute statement: " + std::string(sqlite3_errmsg(db)));
             }
 

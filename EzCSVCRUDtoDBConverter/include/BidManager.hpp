@@ -25,10 +25,6 @@ public:
     std::shared_ptr<std::vector<DynamicTypedValue>> getBid(BinarySearchTree& tree, CSVrow& csvRow);
 
 
-    // Loads bids from a CSV file into the BST
-    bool loadBids(string csvPath);
-
-    bool loadCSVrows(const std::string& csvPath);
 
   //TODO Implement backUpDeletedNode
 };

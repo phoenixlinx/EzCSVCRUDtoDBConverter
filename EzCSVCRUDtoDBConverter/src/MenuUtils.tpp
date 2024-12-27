@@ -3,17 +3,13 @@
 #include "../include/MenuUtils.hpp"
 
 template <typename BinarySearchTree>
-bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow) {
+bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow,string primaryKey) {
 
     BidManager<BinarySearchTree> bidManager(binarySearchTree);
     std::shared_ptr<std::vector<DynamicTypedValue>> row;
     vector<shared_ptr<vector<DynamicTypedValue>>> v;
-    shared_ptr<vector<DynamicTypedValue>> a;
-    DynamicTypedValue b;
-    DynamicTypedValue c;
     optional<int> choice;
     string userInput;
-   // csvRow.getOrderedColumnNames;
     SQLiteHandler dbHandler;
     while (!choice || choice.value() != projectConstants::EXIT_APPLICATION) {
         displayPrimaryMenu();
@@ -31,13 +27,14 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
                 case 2:
                     cout << "Enter Row Key: ";
                     getline(cin, userInput);
-                 //   measurePerformance("Finding Rows", [&]() {binarySearchTree.search(StringConverter::toInt(userInput).value()); });
-                  //  v = measurePerformance<vector<shared_ptr<vector<DynamicTypedValue>>>>("Finding Rows", [&]() {binarySearchTree.search(StringConverter::toInt(userInput).value()); });
-                    v = binarySearchTree.search(StringConverter::toInt(userInput).value());
-                  
-                 //    a = v.at(0);
-                   //  b = a->at(0);
-                  //   c = a->at(1);
+           
+                       //TODO: Dynamical determine the key type that the tree expects then ensure that  userInput is convertible to this type.
+                    v = measurePerformance<vector<shared_ptr<vector<DynamicTypedValue>>>>(
+                        "Finding Rows",
+                        [&]() -> vector<shared_ptr<vector<DynamicTypedValue>>> {
+                            return binarySearchTree.search(StringConverter::toInt(userInput).value());
+                        }
+                    );
                     
                     break;
                 case 3:
@@ -60,7 +57,8 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
 
                     // Create the table with a primary key
                     try {
-                        dbHandler.createTable("Bads", csvRow.getOrderedColumnNames(), csvRow.getCSVSchema(), "Initial_Cost_KW");
+                      
+                        dbHandler.createTable("Bads", csvRow.getOrderedColumnNames(), csvRow.getCSVSchema(), primaryKey);
                     }
                     catch (const std::exception& e) {
                         std::cerr << "Error creating table: " << e.what() << std::endl;

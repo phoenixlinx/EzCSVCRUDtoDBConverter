@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Bid.cpp" />
     <ClCompile Include="src\CsvColumnMetadata.cpp" />
     <ClCompile Include="src\CSVAnalyzer.cpp" />
     <ClCompile Include="src\CSVMetadata.cpp" />
@@ -31,13 +30,14 @@
     <ClCompile Include="src\PerformanceUtils.cpp" />
     <ClCompile Include="src\sqlite3.c">
       <ExcludedFromBuild Condition="'$(IntelliSenseMode)'=='true'">true</ExcludedFromBuild>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">TurnOffAllWarnings</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <ClCompile Include="src\SQLiteHandler.cpp" />
     <ClCompile Include="src\StringConverter.cpp" />
     <ClCompile Include="src\SystemMetadata.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Bid.hpp" />
     <ClInclude Include="include\BidManager.hpp" />
     <ClInclude Include="include\BinarySearchTree.hpp" />
     <ClInclude Include="include\CsvColumnMetadata.hpp" />

@@ -17,6 +17,6 @@ void displayPrimaryMenu();
 void displayFileSelectionMenu();
 string handleFileSelection();
 template <typename BinarySearchTree>
-bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow);
+bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow,string primaryKey);
 #include "../src/MenuUtils.tpp" 
 #endif

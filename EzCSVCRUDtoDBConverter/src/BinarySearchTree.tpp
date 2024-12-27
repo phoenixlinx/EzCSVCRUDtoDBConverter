@@ -157,7 +157,7 @@ template <typename InputKey>
                 // This will search for duplicate values
             }
             else {
-                return sameKeyObjects;
+                  return sameKeyObjects;
                 // This will end the search function if currNodePosition does not have a right child 
                 // or if the right child does not have a value matching the search key
             }
