@@ -22,7 +22,10 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
 
                 switch (choice.value()) {
                 case 1:
-                    measurePerformance("Displaying All Rows", [&]() {binarySearchTree.printInOrder(); });
+                    binarySearchTree.printLevelOrder();
+                 //   measurePerformance("Displaying All Rows", [&]() {binarySearchTree.printInOrder(); });
+                    cout << "Size of tree: " << binarySearchTree.getBSTSize() << endl;
+                    cout << "Deepest level: " << binarySearchTree.getDeepestLevel() << endl;
                     break;
                 case 2:
                     cout << "Enter Row Key: ";
@@ -36,7 +39,8 @@ bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csv
                         }
                     );
                     
-                    break;
+
+break;
                 case 3:
                     cout << "Enter Row Key: ";
                     getline(cin, userInput);

@@ -19,8 +19,9 @@ CSVrow::CSVrow(const std::string& csvPath, unsigned int rowPercentageToAnalyze)
     metadata->printMetadata();
     // Initialize column count and handlers
     columnCount = metadata->getColumnCount();
-    initializeHandlers();
     orderedColumnNames = metadata->getColumnNames();
+    setColumnIndex();
+    initializeHandlers();
     setRows(*parser); // Populate rows
 }
 
@@ -31,7 +32,9 @@ CSVrow::CSVrow(const std::string& csvPath, unsigned int rowPercentageToAnalyze)
 
 void CSVrow::setRows(csv::Parser& parsedFile)
 {
-    const auto& columnNames = metadata->getColumnNames();
+   
+   /// const auto& columnNames = metadata->getColumnNames();
+    
     size_t totalRows = parsedFile.rowCount();
     string value;
     size_t columnIndex = 0;
@@ -48,7 +51,7 @@ void CSVrow::setRows(csv::Parser& parsedFile)
 
 
     // Process each column individually
-    for (const auto& columnName : columnNames) {
+    for (const auto& columnName : orderedColumnNames) {
         auto handlerIt = columnHandlers.find(columnName);
         if (handlerIt == columnHandlers.end()) {
             throw std::runtime_error("Handler not found for column: " + columnName);
@@ -140,11 +143,7 @@ void CSVrow::initializeHandlers()
         }
     }
 
-    // Create a mapping between column names and their indices in the row data vector.
-    // This allows fast access to column data by name during runtime.
-    for (size_t i = 0; i < columnNames.size(); ++i) {
-        columnIndex[columnNames[i]] = i; // Map each column name to its index in rowData.
-    }
+   
 
 
 }
@@ -217,9 +216,14 @@ size_t CSVrow::getColumnIndex(const std::string& columnName) {
     return it->second;
 }
 
+std::optional<size_t>  CSVrow::getColumnIndexFromUserInput(const std::string& columnName) {
+    auto it = columnIndex.find(columnName);
+    if (it == columnIndex.end()) {
+        return std::nullopt; // Return empty optional if user provided column name does not match a column in columnIndex
+    }
+    return it->second;
 
-
-
+}
 const std::unordered_map<std::string, CsvColumnMetadata>& CSVrow::getCSVSchema() const {
     return metadata->getCSVSchema();
 }
@@ -235,6 +239,17 @@ std::shared_ptr<CSVMetadata> CSVrow::getMetadata()
 void CSVrow::reserveRowData(size_t rowCount) {
     size_t newCapacity = rowCount * 1.6;
     rowData.reserve(newCapacity);
+}
+
+void CSVrow::setColumnIndex()
+{
+
+    size_t orderedColumnNamesSize = orderedColumnNames.size();
+    // Create a mapping between column names and their indices in the row data vector.
+   // This allows fast access to column data by name during runtime.
+    for (size_t i = 0; i < orderedColumnNamesSize; ++i) {
+        columnIndex[orderedColumnNames[i]] = i; // Map each column name to its index in rowData.
+    }
 }
 
 std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& CSVrow::getRowData() {

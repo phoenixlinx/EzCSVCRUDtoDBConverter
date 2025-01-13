@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         break;
     default:
        
-        csvRowIDColumn = "AuctionID";
+        csvRowIDColumn = "Initial_Cost_KW";
     }
 
 
@@ -81,8 +81,7 @@ int main(int argc, char* argv[]) {
 
 
                         cout << "CSV rows successfully loaded into the BinarySearchTree." << endl;
-                        cout << "Size of tree: " << dynamicTypedValueTree.getBSTSize() << endl;
-                        cout << "Deepest level: " << dynamicTypedValueTree.getDeepestLevel() << endl;
+
 
                         handleCRUD(csvPath, dynamicTypedValueTree,csvRow, csvRowIDColumn);
                         choice = projectConstants::EXIT_APPLICATION;

@@ -31,7 +31,7 @@ private:
     std::vector<std::string> orderedColumnNames;
     std::shared_ptr<csv::Parser> parser;
     void reserveRowData(size_t rowCount);
-
+    inline void setColumnIndex();
     void initializeHandlers();
     void setRows(csv::Parser& parsedFile);
 public:
@@ -53,6 +53,7 @@ public:
     void printRow(const std::vector<DynamicTypedValue>& row);
     size_t getColumnIndex(const std::string& columnName);
     std::shared_ptr<CSVMetadata> getMetadata();
+    std::optional<size_t> getColumnIndexFromUserInput(const std::string& columnName);
     const std::unordered_map < std::string, ::CsvColumnMetadata > & getCSVSchema() const;
     std::unordered_map<size_t, std::shared_ptr<std::vector<DynamicTypedValue>>>& getRowData();
     const std::unordered_map<std::string, size_t>& getColumnIndexMap() const;
