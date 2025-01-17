@@ -6,31 +6,32 @@
 #define STRINGCONVERTER_TPP
 
 
+namespace EzCSCCRUDtoDBConverter {
 
-template <typename NumericType>
-bool StringConverter::validateStream(const std::string& inputString, const std::locale& locale) {
-    std::istringstream inputStream(inputString);
-    inputStream.imbue(locale);
-    NumericType value;
-    inputStream >> value;
+    template <typename NumericType>
+    bool StringConverter::validateStream(const std::string& inputString, const std::locale& locale) {
+        std::istringstream inputStream(inputString);
+        inputStream.imbue(locale);
+        NumericType value;
+        inputStream >> value;
 
-    if (inputStream.fail() || !inputStream.eof()) {
-        return false;
-    }
-
-    if constexpr (std::is_integral_v<NumericType>) {
-        if (value < (std::numeric_limits<NumericType>::min)() ||
-            value >(std::numeric_limits<NumericType>::max)()) {
+        if (inputStream.fail() || !inputStream.eof()) {
             return false;
         }
-    }
-    else if constexpr (std::is_floating_point_v<NumericType>) {
-        if (std::isinf(value) || std::isnan(value)) {
-            return false;
-        }
-    }
 
-    return true;
+        if constexpr (std::is_integral_v<NumericType>) {
+            if (value < (std::numeric_limits<NumericType>::min)() ||
+                value >(std::numeric_limits<NumericType>::max)()) {
+                return false;
+            }
+        }
+        else if constexpr (std::is_floating_point_v<NumericType>) {
+            if (std::isinf(value) || std::isnan(value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
-
 #endif

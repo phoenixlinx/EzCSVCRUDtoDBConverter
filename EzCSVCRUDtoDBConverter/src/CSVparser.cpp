@@ -76,8 +76,8 @@ namespace csv {
         for (; it != _originalFile.end(); it++)
         {
             bool quoted = false;
-            int tokenStart = 0;
-            unsigned int i = 0;
+            size_t tokenStart = 0;
+            size_t i = 0;
 
             Row* row = new Row(_header);
 
@@ -102,24 +102,24 @@ namespace csv {
         }
     }
 
-    Row& Parser::getRow(unsigned int rowPosition) const
+    Row& Parser::getRow(size_t rowPosition) const
     {
         if (rowPosition < _content.size())
             return *(_content[rowPosition]);
         throw Error("can't return this row (doesn't exist)");
     }
 
-    Row& Parser::operator[](unsigned int rowPosition) const
+    Row& Parser::operator[](size_t rowPosition) const
     {
         return Parser::getRow(rowPosition);
     }
 
-    unsigned int Parser::rowCount(void) const
+    size_t Parser::rowCount(void) const
     {
         return _content.size();
     }
 
-    unsigned int Parser::columnCount(void) const
+    size_t Parser::columnCount(void) const
     {
         return _header.size();
     }
@@ -129,14 +129,14 @@ namespace csv {
         return _header;
     }
 
-    const std::string Parser::getHeaderElement(unsigned int pos) const
+    const std::string Parser::getHeaderElement(size_t pos) const
     {
         if (pos >= _header.size())
             throw Error("can't return this header (doesn't exist)");
         return _header[pos];
     }
 
-    bool Parser::deleteRow(unsigned int pos)
+    bool Parser::deleteRow(size_t pos)
     {
         if (pos < _content.size())
         {
@@ -147,7 +147,7 @@ namespace csv {
         return false;
     }
 
-    bool Parser::addRow(unsigned int pos, const std::vector<std::string>& r)
+    bool Parser::addRow(size_t pos, const std::vector<std::string>& r)
     {
         Row* row = new Row(_header);
 
@@ -170,7 +170,7 @@ namespace csv {
             f.open(_file, std::ios::out | std::ios::trunc);
 
             // header
-            unsigned int i = 0;
+            size_t i = 0;
             for (auto it = _header.begin(); it != _header.end(); it++)
             {
                 f << *it;
@@ -202,7 +202,7 @@ namespace csv {
 
     Row::~Row(void) {}
 
-    unsigned int Row::size(void) const
+    size_t Row::size(void) const
     {
         return _values.size();
     }
@@ -215,7 +215,7 @@ namespace csv {
     bool Row::set(const std::string& key, const std::string& value)
     {
         std::vector<std::string>::const_iterator it;
-        int pos = 0;
+        size_t pos = 0;
 
         for (it = _header.begin(); it != _header.end(); it++)
         {
@@ -229,7 +229,7 @@ namespace csv {
         return false;
     }
 
-    const std::string Row::operator[](unsigned int valuePosition) const
+    const std::string Row::operator[](size_t valuePosition) const
     {
         if (valuePosition < _values.size())
             return _values[valuePosition];
@@ -239,7 +239,7 @@ namespace csv {
     const std::string Row::operator[](const std::string& key) const
     {
         std::vector<std::string>::const_iterator it;
-        int pos = 0;
+        size_t pos = 0;
 
         for (it = _header.begin(); it != _header.end(); it++)
         {
@@ -253,7 +253,7 @@ namespace csv {
 
     std::ostream& operator<<(std::ostream& os, const Row& row)
     {
-        for (unsigned int i = 0; i != row._values.size(); i++)
+        for (size_t i = 0; i != row._values.size(); i++)
             os << row._values[i] << " | ";
 
         return os;
@@ -261,7 +261,7 @@ namespace csv {
 
     std::ofstream& operator<<(std::ofstream& os, const Row& row)
     {
-        for (unsigned int i = 0; i != row._values.size(); i++)
+        for (size_t i = 0; i != row._values.size(); i++)
         {
             os << row._values[i];
             if (i < row._values.size() - 1)
@@ -271,6 +271,6 @@ namespace csv {
     }
 
     std::optional<std::filesystem::path> Parser::selectFile() {
-        return SystemMetadata::selectFile(); // Leverage SystemMetadata for file selection
+        return EzCSCCRUDtoDBConverter::SystemMetadata::selectFile(); // Leverage SystemMetadata for file selection
     }
 }

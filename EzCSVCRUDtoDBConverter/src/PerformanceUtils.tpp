@@ -4,17 +4,20 @@
 #define PERFORMANCEUTILS_TPP
 #include <PerformanceUtils.hpp>
 
-template <typename T>
-T measurePerformance(const std::string& callableName, const std::function<T()>& callable) {
-    using Clock = std::chrono::high_resolution_clock;
 
-    auto start = Clock::now();
-    T result = callable();  // This gets the return value from the function/callable
-    auto end = Clock::now();
+namespace EzCSCCRUDtoDBConverter {
+    template <typename T>
+    T measurePerformance(const std::string& callableName, const std::function<T()>& callable) {
+        using Clock = std::chrono::high_resolution_clock;
 
-    std::chrono::duration<double> elapsedSeconds = end - start;
-    std::cout << callableName << " - Time: " << elapsedSeconds.count() << " seconds" << std::endl << std::endl;
+        auto start = Clock::now();
+        T result = callable();  // This gets the return value from the function/callable
+        auto end = Clock::now();
+        std::chrono::duration<double> elapsedSeconds = end - start;
+        // The intent of fixed is to promote consistency of time output.
+        std::cout << callableName << std::fixed << " - Time: " << elapsedSeconds.count() << " seconds" << std::endl << std::endl;
 
-    return result;
+        return result;
+    }
 }
 #endif

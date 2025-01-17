@@ -2,8 +2,8 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
-#ifndef     _CSVPARSER_HPP_
-#define    _CSVPARSER_HPP_
+#ifndef    CSVPARSER_HPP_
+#define    CSVPARSER_HPP_
 
 #include <stdexcept>
 #include <string>
@@ -33,7 +33,7 @@ namespace csv
         ~Row(void);
 
     public:
-        unsigned int size(void) const;
+        size_t size(void) const;
         void push(const std::string&);
         bool set(const std::string&, const std::string&);
 
@@ -44,7 +44,7 @@ namespace csv
     public:
 
         template<typename T>
-        const T getValue(unsigned int pos) const
+        const T getValue(size_t pos) const
         {
             if (pos < _values.size())
             {
@@ -56,7 +56,7 @@ namespace csv
             }
             throw Error("can't return this value (doesn't exist)");
         }
-        const std::string operator[](unsigned int) const;
+        const std::string operator[](size_t) const;
         const std::string operator[](const std::string& valueName) const;
         friend std::ostream& operator<<(std::ostream& os, const Row& row);
         friend std::ofstream& operator<<(std::ofstream& os, const Row& row);
@@ -75,16 +75,16 @@ namespace csv
         ~Parser(void);
 
     public:
-        Row& getRow(unsigned int row) const;
-        unsigned int rowCount(void) const;
-        unsigned int columnCount(void) const;
+        Row& getRow(size_t row) const;
+        size_t rowCount(void) const;
+        size_t columnCount(void) const;
         std::vector<std::string> getHeader(void) const;
-        const std::string getHeaderElement(unsigned int pos) const;
+        const std::string getHeaderElement(size_t pos) const;
         const std::string& getFileName(void) const;
 
     public:
-        bool deleteRow(unsigned int row);
-        bool addRow(unsigned int pos, const std::vector<std::string>&);
+        bool deleteRow(size_t row);
+        bool addRow(size_t pos, const std::vector<std::string>&);
         void sync(void) const;
 
     protected:
@@ -100,7 +100,7 @@ namespace csv
         std::vector<Row*> _content;
 
     public:
-        Row& operator[](unsigned int row) const;
+        Row& operator[](size_t row) const;
         static std::optional<std::filesystem::path> selectFile();
     };
    

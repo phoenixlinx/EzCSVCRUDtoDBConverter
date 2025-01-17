@@ -6,14 +6,16 @@
 #include <iostream>
 #include <functional>
 #include <chrono>
+#include <iomanip>
 
-// Template declaration
-template <typename T>
-T measurePerformance(const std::string& operationName, const std::function<T()>& operation);
+namespace EzCSCCRUDtoDBConverter {
+	// Template declaration
+	template <typename T>
+	T measurePerformance(const std::string& operationName, const std::function<T()>& operation);
 
-// Overload for operations that do not return a value (void)
-void measurePerformance(const std::string& operationName, const std::function<void()>& operation);
-
+	// Overload for operations that do not return a value (void)
+	void measurePerformance(const std::string& operationName, const std::function<void()>& operation);
+}
 // This tells the compiler where to find the implementation of the template functions
 #include "../src/PerformanceUtils.tpp"
 

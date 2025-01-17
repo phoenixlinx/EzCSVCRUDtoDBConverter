@@ -12,11 +12,15 @@
 #include <CSVRow.hpp>
 #include <BidManager.hpp>
 #include <SQLiteHandler.hpp>
-void displayInitialMenu();
-void displayPrimaryMenu();
-void displayFileSelectionMenu();
-string handleFileSelection();
-template <typename BinarySearchTree>
-bool handleCRUD(string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow,string primaryKey);
+
+namespace EzCSCCRUDtoDBConverter {
+
+	void displayInitialMenu();
+	void displayPrimaryMenu();
+	void displayFileSelectionMenu();
+	std::optional<string> handleFileSelection();
+	template <typename BinarySearchTree>
+	bool handleCRUD(const string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow, const string& primaryKey);
+}
 #include "../src/MenuUtils.tpp" 
 #endif

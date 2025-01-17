@@ -8,63 +8,71 @@
 #include <string>
 #include <typeinfo>
 #include <variant>
-class DynamicTypedValue {
-private:
+#include <typeindex>
 
-    using ValueType = std::variant<int, double, std::string>;
-    // Abstract base class for type erasure
-    struct ValueBase {
-        virtual ~ValueBase() = default;
-        virtual std::string getTypeName() const = 0;
-        virtual void printValue(std::ostream& os) const = 0;
-        virtual std::shared_ptr<ValueBase> clone() const = 0;
-    };
+namespace EzCSCCRUDtoDBConverter {
+    class DynamicTypedValue {
+    private:
 
-    // Concrete implementation for specific types
-    template <typename T>
-    struct ValueModel;
+        using ValueType = std::variant<int, double, std::string>;
+        // Abstract base class for type erasure
+        struct ValueBase {
+            virtual ~ValueBase() = default;
+            virtual std::string getTypeName() const = 0;
+            virtual void printValue(std::ostream& os) const = 0;
+            virtual std::shared_ptr<ValueBase> clone() const = 0;
+        
+        };
 
-    std::shared_ptr<ValueBase> storedValuePtr; // Pointer to the polymorphic base
+        // Concrete implementation for specific types
+        template <typename T>
+        struct ValueModel;
 
-public:
+        std::shared_ptr<ValueBase> storedValuePtr; // Pointer to the polymorphic base
+        std::type_index typeIndex;
+       
+    public:
 
-    DynamicTypedValue();
-    
 
-    template <typename T>
-    explicit DynamicTypedValue(T value);
+        DynamicTypedValue();
 
-    DynamicTypedValue(const DynamicTypedValue& other);
+        template <typename T>
+        explicit DynamicTypedValue(T value);
 
-    DynamicTypedValue& operator=(const DynamicTypedValue& other);
+        DynamicTypedValue(const DynamicTypedValue& other);
 
-    // Overloaded stream operator for printing
-    friend std::ostream& operator<<(std::ostream& os, const DynamicTypedValue& value);
+        DynamicTypedValue& operator=(const DynamicTypedValue& other);
+
+        // Overloaded stream operator for printing
+        friend std::ostream& operator<<(std::ostream& os, const DynamicTypedValue& value);
+
+
+
+        template <typename T>
+        inline operator T() const;
+
    
- 
+   
 
-    template <typename T>
-    inline operator T() const;
+        template <typename T>
+        T getValue() const;
 
+        template<typename Op>
+        bool dispatchComparison(const DynamicTypedValue& other, Op operation) const;
 
-
-    template <typename T>
-    T getValue() const;
-
-    template<typename Op>
-    bool dispatchComparison(const DynamicTypedValue& other, Op operation) const;
+        std::type_index getTypeIndex() const;
 
 
-    std::string getStoredTypeName() const;
-    bool operator==(const DynamicTypedValue& other) const;
-    bool operator<(const DynamicTypedValue& other) const;
-    bool operator>(const DynamicTypedValue& other) const;
-    bool operator<=(const DynamicTypedValue& other) const;
-    bool operator>=(const DynamicTypedValue& other) const;
-    ValueType data;
+        std::string getStoredTypeName() const;
+        bool operator==(const DynamicTypedValue& other) const;
+        bool operator<(const DynamicTypedValue& other) const;
+        bool operator>(const DynamicTypedValue& other) const;
+        bool operator<=(const DynamicTypedValue& other) const;
+        bool operator>=(const DynamicTypedValue& other) const;
+        ValueType data;
 
-};
-
+    };
+}
 #include "../src/DynamicTypedValue.tpp"
 
 #endif 
