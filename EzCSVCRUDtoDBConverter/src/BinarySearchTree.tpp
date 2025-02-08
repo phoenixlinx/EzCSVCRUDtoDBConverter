@@ -3,7 +3,10 @@
 #include "../include/BinarySearchTree.hpp"
 #include "BinarySearchTree.hpp"
 
+
 namespace EzCSCCRUDtoDBConverter {
+
+ 
     // Node Constructor Definitions
     template <typename T, typename KeyExtractor>
     BinarySearchTree<T, KeyExtractor>::Node::Node() : parentNodePtr(nullptr), longestChildPath(1), leftNodePtr(nullptr), rightNodePtr(nullptr) {}
@@ -54,6 +57,11 @@ namespace EzCSCCRUDtoDBConverter {
             maxNodesInHight *= base;
         }
         return maxNodesInHight;
+    }
+ 
+    template<typename T, typename KeyExtractor>
+    typename BinarySearchTree<T, KeyExtractor>::Node*
+        BinarySearchTree<T, KeyExtractor>::getRoot(const T& value) const {
     }
 
     template<typename T, typename KeyExtractor>
@@ -163,6 +171,7 @@ namespace EzCSCCRUDtoDBConverter {
         }
     }
 
+
     template <typename T, typename KeyExtractor>
     void BinarySearchTree<T, KeyExtractor>::insert(std::shared_ptr<T> containedValueObject) {
 
@@ -170,9 +179,9 @@ namespace EzCSCCRUDtoDBConverter {
 
         Node** currentNode = &root; // Start traversal at the root of the tree
         Node* parent = nullptr; // Tracks the parent node during traversal
-        Node* nextParent = nullptr; // Tracks the parent node during traversal
+        Node* nextNode = nullptr; // Tracks the parent node during traversal
         size_t nodeInsertionHeight = 0; // Tracks height of the inserted node
-
+        Node* someNode = nullptr;
 
 
         Key key = keyExtractor(*containedValueObject); // Extract key for the object being inserted (only once)
@@ -198,56 +207,59 @@ namespace EzCSCCRUDtoDBConverter {
 
         *currentNode = new Node(containedValueObject); // Create a new node and insert it at the current position
 
-
+        nextNode = *currentNode;
 
         bstNodeCount++;
 
-
+    
 
         if (parent != nullptr) {
-            (*currentNode)->parentNodePtr = parent; // Set parent pointer
-
+            nextNode->parentNodePtr = parent; // Set parent pointer
+          
         }
         else {
-            (*currentNode)->parentNodePtr = nullptr; // Root case
+            nextNode->parentNodePtr = nullptr; // Root case
         }
 
-    //    std::cout << "AFTER INSERT!" << std::endl;
-    //    printNodeDetails(*currentNode);
-        //  printLevelOrder();
-    //    std::cout << "END AFTER INSERT!\n\n";
-        // Re balance the tree starting from the inserted node's parent
+      
+
+
+
         bool fixLeft = false;
         bool fixRight = false;
-        while (currentNode != nullptr) {
+        while (nextNode != nullptr) {
             // Fix left and right imbalance
-            fixLeft = fixLeftImbalance(*currentNode);
+            fixLeft = fixLeftImbalance(nextNode);
             if (!fixLeft) {
-                *currentNode = (*currentNode)->parentNodePtr;
-          //      printLevelOrder();
+
+                //  if (nextNode->parentNodePtr->parentNodePtr) {
+                //      nextNode = nextNode->parentNodePtr->parentNodePtr;
+                //  }
+                //  else {
+                nextNode = nextNode->parentNodePtr;
+                //    }
+
+
             }
-            fixRight = fixRightImbalance(*currentNode);
+            fixRight = fixRightImbalance(nextNode);
 
 
 
-            if (parent) {
-                currentNode = &parent;// Move to the parent node pointer up the tree
+           if (parent && !(fixLeft && fixRight)) {
+          //  if (parent ) {
+                nextNode = parent;// Move to the parent node pointer up the tree
                 //Get next parent before re-balance because re-balance may shuffle the sub root with one of its children.
                 parent = parent->parentNodePtr;
-            }else {
+            }
+            else {
                 currentParentLookUp = 0;
-              //  printLevelOrder();
-                break;
+                nextNode = nullptr;
             }
 
 
         }
 
-
-
-
     }
-
 
     template <typename T, typename KeyExtractor>
     template <typename InputKey>
@@ -255,7 +267,7 @@ namespace EzCSCCRUDtoDBConverter {
 
         std::vector <std::shared_ptr<T>> sameKeyObjects; // Result object to return
         Node* currNodePosition = tempRoot;
-        //TODO implement validation before casting. 
+        //TODO: implement validation before casting. 
         Key convertedKey = static_cast<Key>(searchKey);
         while (currNodePosition != nullptr) { // Traverse the tree until a match is found or the end is reached
 
@@ -313,31 +325,30 @@ namespace EzCSCCRUDtoDBConverter {
     //TODO: Allow deletion of all objects with the same key.
     template <typename T, typename KeyExtractor>
     template <typename InputKey>
-    void BinarySearchTree<T, KeyExtractor>::remove(const InputKey& searchKey, const std::string& csvPathDeletedNodes) {
-        // credit: http://www.cplusplus.com/forum/general/1551/
+    void BinarySearchTree<T, KeyExtractor>::remove(const InputKey& searchKey) {
         Key convertedKey = static_cast<Key>(searchKey);
         unsigned int deleteRowPosition = 0;
 
         Node* tmp3;
         Node* tmp2;
         Node* tmp1;
-        Node* currNodePosition;
-        Node* par = nullptr;
-        currNodePosition = root;
+        Node* currNode;
+        Node* parent = nullptr;
+        currNode = root;
         bool nodeExists = false;
-
-        while (currNodePosition != nullptr) {
-            if (keyExtractor(*currNodePosition->containedValueObject) == convertedKey) {
+        //Code in this while loop finds the node with the matching searchKey
+        while (currNode != nullptr) {
+            if (keyExtractor(*currNode->containedValueObject) == convertedKey) {
                 nodeExists = true;
                 break;
             }
             else {
-                par = currNodePosition;
-                if (convertedKey > keyExtractor(*currNodePosition->containedValueObject)) {
-                    currNodePosition = currNodePosition->rightNodePtr;
+                parent = currNode;
+                if (convertedKey > keyExtractor(*currNode->containedValueObject)) {
+                    currNode = currNode->rightNodePtr;
                 }
                 else {
-                    currNodePosition = currNodePosition->leftNodePtr;
+                    currNode = currNode->leftNodePtr;
                 }
             }
         }
@@ -347,95 +358,82 @@ namespace EzCSCCRUDtoDBConverter {
         }
 
         // Node with one child
-        if ((currNodePosition->leftNodePtr == nullptr && currNodePosition->rightNodePtr != nullptr) ||
-            (currNodePosition->leftNodePtr != nullptr && currNodePosition->rightNodePtr == nullptr)) {
-            if (currNodePosition->leftNodePtr == nullptr && currNodePosition->rightNodePtr != nullptr) {
-                if (par->leftNodePtr == currNodePosition) {
-                    par->leftNodePtr = currNodePosition->rightNodePtr;
+        if ((parent && parent->leftNodePtr && currNode->leftNodePtr == nullptr && currNode->rightNodePtr != nullptr) ||
+            (currNode->leftNodePtr != nullptr && currNode->rightNodePtr == nullptr)) {
+            if (currNode->leftNodePtr == nullptr && currNode->rightNodePtr != nullptr) {
+                if (parent->leftNodePtr == currNode) {
+                    parent->leftNodePtr = currNode->rightNodePtr;
 
-                    // Backup deleted node's data (if applicable)
-              //      this->backUpDeletedNode(currNodePosition, csvPathDeletedNodes);
-                    delete currNodePosition;
+          
+                    delete currNode;
                     bstNodeCount--;
                 }
                 else {
-                    par->rightNodePtr = currNodePosition->rightNodePtr;
-
-                    //   this->backUpDeletedNode(currNodePosition, csvPathDeletedNodes);
-                    delete currNodePosition;
+                    parent->rightNodePtr = currNode->rightNodePtr;
+                    delete currNode;
                     bstNodeCount--;
                 }
-            }
-            else {
-                if (par->leftNodePtr == currNodePosition) {
-                    par->leftNodePtr = currNodePosition->leftNodePtr;
-
-                    //   this->backUpDeletedNode(currNodePosition, csvPathDeletedNodes);
-                    delete currNodePosition;
+            }else {
+                if (parent && parent->leftNodePtr && parent->leftNodePtr == currNode) {
+                    parent->leftNodePtr = currNode->leftNodePtr;
                     bstNodeCount--;
                 }
                 else {
-                    par->rightNodePtr = currNodePosition->leftNodePtr;
-
-                    //    this->backUpDeletedNode(currNodePosition, csvPathDeletedNodes);
-                    delete currNodePosition;
-                    bstNodeCount--;
+                    if (parent && parent->rightNodePtr) {
+                        parent->rightNodePtr = currNode->leftNodePtr;
+                        delete currNode;
+                        bstNodeCount--;
+                    }
                 }
             }
 
             return;
         }
 
-        // Leaf Node
-        if (currNodePosition->leftNodePtr == nullptr && currNodePosition->rightNodePtr == nullptr) {
-            if (par->leftNodePtr == currNodePosition) {
-                par->leftNodePtr = nullptr; // Remove reference to leaf node
+        
+        if (parent && currNode->leftNodePtr == nullptr && currNode->rightNodePtr == nullptr) {
+            if (parent->leftNodePtr && parent->leftNodePtr == currNode) {
+                parent->leftNodePtr = nullptr; // Remove reference to leaf node
             }
             else {
-                par->rightNodePtr = nullptr;
+                parent->rightNodePtr = nullptr;
             }
-
-            // this->backUpDeletedNode(currNodePosition, csvPathDeletedNodes);
-            delete currNodePosition;
+            delete currNode;
             bstNodeCount--;
             return;
         }
 
         // Node with two children
-        if (currNodePosition->leftNodePtr != nullptr && currNodePosition->rightNodePtr != nullptr) {
-            tmp1 = currNodePosition->rightNodePtr;
+        if (currNode->leftNodePtr != nullptr && currNode->rightNodePtr != nullptr) {
+            tmp1 = currNode->rightNodePtr;
 
             if (tmp1->leftNodePtr == nullptr && tmp1->rightNodePtr == nullptr) {
                 // Case 1: Right child is a leaf
-                *currNodePosition->containedValueObject = *tmp1->containedValueObject;
-                //    this->backUpDeletedNode(tmp1, csvPathDeletedNodes);
+                *currNode->containedValueObject = *tmp1->containedValueObject;
                 delete tmp1;
                 bstNodeCount--;
-                currNodePosition->rightNodePtr = nullptr;
+                currNode->rightNodePtr = nullptr;
             }
             else {
-                if (currNodePosition->rightNodePtr->leftNodePtr != nullptr) {
+                if (currNode->rightNodePtr->leftNodePtr != nullptr) {
                     // Case 2: Find the leftmost child of the right subtree
-                    tmp2 = currNodePosition->rightNodePtr;
-                    tmp3 = currNodePosition->rightNodePtr->leftNodePtr;
+                    tmp2 = currNode->rightNodePtr;
+                    tmp3 = currNode->rightNodePtr->leftNodePtr;
 
                     while (tmp3->leftNodePtr != nullptr) {
                         tmp2 = tmp3;
                         tmp3 = tmp3->leftNodePtr;
                     }
-                    *currNodePosition->containedValueObject = *tmp3->containedValueObject;
-                    //    this->backUpDeletedNode(tmp3, csvPathDeletedNodes);
+                    *currNode->containedValueObject = *tmp3->containedValueObject;
                     delete tmp3;
                     bstNodeCount--;
                     tmp2->leftNodePtr = nullptr;
                 }
                 else {
                     // Case 3: Replace current node with its right child
-                    Node* tmp = currNodePosition->rightNodePtr;
-                    *currNodePosition->containedValueObject = *tmp->containedValueObject;
-                    currNodePosition->rightNodePtr = tmp->rightNodePtr;
-
-                    // this->backUpDeletedNode(tmp, csvPathDeletedNodes);
+                    Node* tmp = currNode->rightNodePtr;
+                    *currNode->containedValueObject = *tmp->containedValueObject;
+                    currNode->rightNodePtr = tmp->rightNodePtr;
                     delete tmp;
                     bstNodeCount--;
                 }
@@ -450,6 +448,9 @@ namespace EzCSCCRUDtoDBConverter {
         if (node == nullptr) {
             return;
         }
+       
+        Node* childrenParent;
+        childrenParent = node;
         std::cout << "-----------------" << std::endl;
 
 
@@ -458,49 +459,99 @@ namespace EzCSCCRUDtoDBConverter {
         // Node ID
         auto nodeID = keyExtractor(*node->containedValueObject);
 
-        // Print current node details
-        std::cout << "Node ID: " << nodeID
-            << ", Level: " << node->longestChildPath
-            << "\n";
+
 
 
         // Parent ID
         if (node->parentNodePtr != nullptr) {
             auto parentID = keyExtractor(*node->parentNodePtr->containedValueObject);
             std::cout << "Parent ID: " << parentID << ", " << "Level: " << node->parentNodePtr->longestChildPath << "\n";
+
+            if (node->parentNodePtr->leftNodePtr && node->parentNodePtr->leftNodePtr == node) {
+                std::cout << "node: " << nodeID << ", " << "is left child of node: " << parentID << "\n";
+            }
+            else if (node->parentNodePtr->rightNodePtr && node->parentNodePtr->rightNodePtr == node) {
+                std::cout << "node: " << nodeID << ", " << "is right child of node: " << parentID << "\n";
+            }
+            else {
+                std::cout << "ERROR node: " << nodeID << ", " << "is NOT child of node: " << parentID << "\n";
+            }
+
+
         }
         else {
             std::cout << "Parent ID: null \n";
         }
 
+
+
+        // Print current node details
+        std::cout << "  Node ID: " << nodeID
+            << ", Level: " << node->longestChildPath
+            << "\n";
+
+
+
+
         // Left Child ID
         if (node->leftNodePtr != nullptr) {
             auto leftChildID = keyExtractor(*node->leftNodePtr->containedValueObject);
-            std::cout << "Left Child ID: " << leftChildID << ", " << "Level: " << node->leftNodePtr->longestChildPath << "\n";
+            auto lParentID = keyExtractor(*node->leftNodePtr->parentNodePtr->containedValueObject);
+            std::cout << "      Left Child ID: " << leftChildID << ", " << "Level: " << node->leftNodePtr->longestChildPath << ", Parent ID: " << lParentID << "\n";
+            if (node->leftNodePtr != nullptr) {
+
+                if (node->leftNodePtr->leftNodePtr != nullptr) {
+                    auto leftLeftChildID = keyExtractor(*node->leftNodePtr->leftNodePtr->containedValueObject);
+                    auto lLParentID = keyExtractor(*node->leftNodePtr->leftNodePtr->parentNodePtr->containedValueObject);
+                    std::cout << "          Left left Child ID: " << leftLeftChildID << ", " << "Level: " << node->leftNodePtr->leftNodePtr->longestChildPath << ", Parent ID: " << lLParentID << "\n";
+
+                    if (node->leftNodePtr->rightNodePtr != nullptr) {
+                        auto leftRightChildID = keyExtractor(*node->leftNodePtr->rightNodePtr->containedValueObject);
+                        auto lRParentID = keyExtractor(*node->leftNodePtr->rightNodePtr->parentNodePtr->containedValueObject);
+                        std::cout << "          Left right Child ID: " << leftRightChildID << ", " << "Level: " << node->leftNodePtr->rightNodePtr->longestChildPath << ", Parent ID: " << lRParentID << "\n";
+                    }
+
+
+                }
+
+
+            }
+
+
+
         }
-        else {
-            std::cout << "Left Child ID: null \n";
-        }
+      
 
         // Right Child ID
         if (node->rightNodePtr != nullptr) {
             auto rightChildID = keyExtractor(*node->rightNodePtr->containedValueObject);
-            std::cout << "Right Child ID: " << rightChildID << ", " << "Level: " << node->rightNodePtr->longestChildPath << "\n";
+            auto rParentID = keyExtractor(*node->rightNodePtr->parentNodePtr->containedValueObject);
+            std::cout << "      Right Child ID: " << rightChildID << ", " << "Level: " << node->rightNodePtr->longestChildPath << ", Parent ID: " << rParentID << "\n";
+           
+            if (node->rightNodePtr != nullptr) {
 
-            if (node->rightNodePtr->rightNodePtr != nullptr) {
-                auto rightRightChildID = keyExtractor(*node->rightNodePtr->rightNodePtr->containedValueObject);
-                std::cout << "Right Right Child ID: " << rightRightChildID << ", " << "Level: " << node->rightNodePtr->rightNodePtr->longestChildPath << "\n";
-            }
-            else {
-                std::cout << "Right Right Child ID: null \n";
+                if (node->rightNodePtr->leftNodePtr != nullptr) {
+                    auto rightLeftChildID = keyExtractor(*node->rightNodePtr->leftNodePtr->containedValueObject);
+                    auto rLParentID = keyExtractor(*node->rightNodePtr->leftNodePtr->parentNodePtr->containedValueObject);
+                    std::cout << "          Right Left Child ID : " << rightLeftChildID << ", " << "Level : " << node->rightNodePtr->leftNodePtr->longestChildPath << ", Parent ID : " << rLParentID << "\n";
+                }
+
+
+
+
+                if (node->rightNodePtr->rightNodePtr != nullptr) {
+                    auto rightRightChildID = keyExtractor(*node->rightNodePtr->rightNodePtr->containedValueObject);
+                    auto rRParentID = keyExtractor(*node->rightNodePtr->rightNodePtr->parentNodePtr->containedValueObject);
+                    std::cout << "          Right Right Child ID: " << rightRightChildID << ", " << "Level: " << node->rightNodePtr->rightNodePtr->longestChildPath << ", Parent ID: " << rRParentID << "\n";
+
+
+
+
+                }
+
             }
         }
-        else {
-            std::cout << "Right Child ID: null \n";
-        }
-
-
-
+       
 
         std::cout << "-----------------" << std::endl;
     }
@@ -624,8 +675,7 @@ namespace EzCSCCRUDtoDBConverter {
 
         Node* subTreeRootNodeLeftChild = nullptr;
         bool isRoot = false;
-      //  std::cout << "Before fixLeft\n";
-      //  printNodeDetails(subTreeRootNode);
+
         if (subTreeRootNode == nullptr || subTreeRootNode->leftNodePtr == nullptr) {
 
 
@@ -645,9 +695,7 @@ namespace EzCSCCRUDtoDBConverter {
 
 
         if ((subTreeRootNode->leftNodePtr->longestChildPath >= subTreeRootNode->longestChildPath)) {
-
-            printLevelOrder();
-            // Step 1: 
+ 
             subTreeRootNodeLeftChild = subTreeRootNode->leftNodePtr;
             subTreeRootNodeLeftChild->parentNodePtr = subTreeRootNode->parentNodePtr;
 
@@ -660,31 +708,39 @@ namespace EzCSCCRUDtoDBConverter {
             subTreeRootNodeLeftChild->rightNodePtr = subTreeRootNode;
             subTreeRootNodeLeftChild->rightNodePtr->parentNodePtr = subTreeRootNodeLeftChild;
 
-        //    std::cout << "AFTER fixLeft\n";
 
             if (isRoot) {
                 
                 setRoot(subTreeRootNodeLeftChild);
-        //        printNodeDetails(subTreeRootNodeLeftChild);
+              
 
             }
+           
             else {
+                if (subTreeRootParent) {
+                    if (subTreeRootParent->leftNodePtr == subTreeRootNodeLeftChild->rightNodePtr) {
+ 
+                        subTreeRootParent->leftNodePtr = subTreeRootNodeLeftChild;
+                    } else {
 
-                if (subTreeRootParent->leftNodePtr == subTreeRootNodeLeftChild->rightNodePtr) {
+                        subTreeRootParent->rightNodePtr = subTreeRootNodeLeftChild;
+                    }
 
-                    subTreeRootParent->leftNodePtr = subTreeRootNodeLeftChild;
                 }
-                else {
-                    subTreeRootParent->rightNodePtr = subTreeRootNodeLeftChild;
-                }
+                
+               
 
-
-           //     printNodeDetails(subTreeRootNodeLeftChild);
-                //      subTreeRootNode = subTreeRootNodeLeftChild;
 
 
             }
-         //   printLevelOrder();
+           
+            if (subTreeRootNodeLeftChild->rightNodePtr && subTreeRootNodeLeftChild->rightNodePtr->leftNodePtr && subTreeRootNodeLeftChild == subTreeRootNodeLeftChild->rightNodePtr->leftNodePtr->parentNodePtr) {
+               
+    
+                subTreeRootNodeLeftChild->rightNodePtr->leftNodePtr->parentNodePtr = subTreeRootNodeLeftChild->rightNodePtr;
+
+            }
+
 
             return false;
         }
@@ -703,8 +759,7 @@ namespace EzCSCCRUDtoDBConverter {
     bool BinarySearchTree<T, KeyExtractor>::fixRightImbalance(Node* subTreeRootNode) {
 
 
-      //  std::cout << "Before fixRight\n\n";
-      //  printNodeDetails(subTreeRootNode);
+       
         Node* subTreeRootNodeRightChild = nullptr;
 
         bool isRoot = false;
@@ -724,17 +779,18 @@ namespace EzCSCCRUDtoDBConverter {
             else {
                 return true;
             }
+            return true;
+         }
 
-        }
 
 
-
-        Node* subTreeRootParent = subTreeRootNode->parentNodePtr;
+       
 
         // Check if the current node's longest child path equals the level of its right-right grandchild.
         if (subTreeRootNode->longestChildPath == subTreeRootNode->rightNodePtr->rightNodePtr->longestChildPath) {
-
-      //      printLevelOrder();
+         
+            Node* subTreeRootParent = subTreeRootNode->parentNodePtr;
+         
 
             subTreeRootNodeRightChild = subTreeRootNode->rightNodePtr;
 
@@ -767,39 +823,39 @@ namespace EzCSCCRUDtoDBConverter {
             subTreeRootNodeRightChild->parentNodePtr = subTreeRootParent;
 
 
-      //      std::cout << "After fixRight" << std::endl;
 
 
             if ((!isTreeEmpty()) && (isRoot)) {
                 setRoot(subTreeRootNodeRightChild);
-               // printNodeDetails(subTreeRootNodeRightChild);
+
 
             }
+            
             else {
 
+                if (subTreeRootParent) {
 
-                if (subTreeRootParent->leftNodePtr == subTreeRootNodeRightChild->leftNodePtr) {
+                    if (subTreeRootParent->leftNodePtr && subTreeRootParent->leftNodePtr == subTreeRootNodeRightChild->leftNodePtr) {
+                        subTreeRootParent->leftNodePtr = subTreeRootNodeRightChild;
+                    }
+                    else {
+                        subTreeRootParent->rightNodePtr = subTreeRootNodeRightChild;
+                    }
 
-                    subTreeRootParent->leftNodePtr = subTreeRootNodeRightChild;
                 }
-                else {
-                    subTreeRootParent->rightNodePtr = subTreeRootNodeRightChild;
-                }
-
-
-
-                printNodeDetails(subTreeRootNodeRightChild);
-
-                //       subTreeRootNode = subTreeRootNodeRightChild;
 
             }
-        //    printLevelOrder();
-
+            
             return false;
 
         }
-
-        // Return the node unchanged if no balancing needed.
-        return false;
+        if (currentParentLookUp < maxParentLookUp && subTreeRootNode->parentNodePtr != nullptr) {
+            currentParentLookUp++;
+            return false;
+        }
+        else {
+            return true;
+        }
+        
     }
 }

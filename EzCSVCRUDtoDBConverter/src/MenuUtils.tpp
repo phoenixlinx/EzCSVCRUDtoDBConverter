@@ -24,6 +24,7 @@ namespace EzCSCCRUDtoDBConverter {
 
                     switch (choice.value()) {
                     case 1:
+                        void clearConsole();
                         binarySearchTree.printLevelOrder();
                         //   measurePerformance("Displaying All Rows", [&]() {binarySearchTree.printInOrder(); });
                         cout << "Size of tree: " << binarySearchTree.getBSTSize() << endl;
@@ -34,7 +35,7 @@ namespace EzCSCCRUDtoDBConverter {
                         getline(cin, userInput);
                         key = StringConverter::toInt(userInput).value();
                         binarySearchTree.setTempRoot(key);
-                        //TODO: Dynamical determine the key type that the tree expects then ensure that  userInput is convertible to this type.
+                        //TODO: Dynamically determine the key type that the tree expects, then ensure that userInput is convertible to this type.
                         v = measurePerformance<vector<shared_ptr<vector<DynamicTypedValue>>>>(
                             "Finding Rows",
                             [&]() -> vector<shared_ptr<vector<DynamicTypedValue>>> {
@@ -64,10 +65,10 @@ namespace EzCSCCRUDtoDBConverter {
                     case 3:
                         cout << "Enter Row Key: ";
                         getline(cin, userInput);
-                        measurePerformance("Removing Row", [&]() {binarySearchTree.remove(StringConverter::toInt(userInput).value(), "data\\eOfferDeletedBids.csv"); });
+                        measurePerformance("Removing Row", [&]() {binarySearchTree.remove(StringConverter::toInt(userInput).value()); });
                         break;
                     case 4:
-                        row = bidManager.getBid(binarySearchTree, csvRow);
+                        row = bidManager.getBid(csvRow);
                         measurePerformance("Inserting Row", [&]() {binarySearchTree.insert(row); });
                         break;
                     case 5:

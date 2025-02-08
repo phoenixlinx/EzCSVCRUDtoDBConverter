@@ -7,7 +7,7 @@ namespace EzCSCCRUDtoDBConverter {
     BidManager<BinarySearchTree>::BidManager(BinarySearchTree& bst) : bst(bst) {}
 
     template <typename BinarySearchTree>
-    std::shared_ptr<std::vector<DynamicTypedValue>> BidManager<BinarySearchTree>::getBid(BinarySearchTree& tree, CSVrow& csvRow) {
+    std::shared_ptr<std::vector<DynamicTypedValue>> BidManager<BinarySearchTree>::getBid(CSVrow& csvRow) {
         // Create a new CSVrow object for user input
         std::string input;
         bool validInput = false;

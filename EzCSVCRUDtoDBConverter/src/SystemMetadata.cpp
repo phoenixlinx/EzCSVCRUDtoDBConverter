@@ -53,13 +53,12 @@ namespace EzCSCCRUDtoDBConverter {
         }
 
 #elif __linux__
-
-        //TODO: Fix file names with spaces bug. 
+        // TODO: Handle file names with spaces, special characters, excessive length, etc.
         const char* command = "zenity --file-selection --file-filter=\"CSV Files | *.csv\"";
         const size_t maxSize = 256;
         char buffer[maxSixe + 1];
         std::string result;
-        //Open file explorere Window and limit selection to files with a .csv extension.
+        //Open file explorer Window and limit selection to files with a .csv extension.
         std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command, "r"), pclose);
         if (!pipe) {
             throw std::runtime_error("Failed to execute Zenity command.");

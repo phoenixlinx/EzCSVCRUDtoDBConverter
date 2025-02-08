@@ -118,7 +118,6 @@ namespace EzCSCCRUDtoDBConverter {
         table.tableColumnCount = orderedColumnNames.size();
         table.initialTableColumnCount = table.tableColumnCount;
         bool primaryKeyAdded = false;
-        size_t metadataElementCount = 0;
         std::string actualPrimaryKey = primaryKey;
 
         // Validate column names and quote them
@@ -267,11 +266,11 @@ namespace EzCSCCRUDtoDBConverter {
                     throw std::runtime_error("Row size does not match table schema.");
                 }
 
-                // Use the existing `bindValues` function to bind values
+                // Use the existing bindValues function to bind values
                 bindValues(stmt, row, table);
 
                 if (sqlite3_step(stmt) != SQLITE_DONE) {
-                    //TODO: Inform users that csv column contains a duplicate key. 
+                    //TODO: Inform users that the csv column contains a duplicate key. 
                     throw std::runtime_error("Failed to execute statement: " + std::string(sqlite3_errmsg(db)));
                 }
 

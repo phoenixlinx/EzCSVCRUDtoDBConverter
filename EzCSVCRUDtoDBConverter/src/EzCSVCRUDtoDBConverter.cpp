@@ -156,12 +156,12 @@ namespace EzCSCCRUDtoDBConverter {
 
                     switch (*choice) {
                     case 1:
-                        if (csvPath->empty()) {
+                       
                             csvPath = EzCSCCRUDtoDBConverter::handleFileSelection();
                             if (csvPath) {
                                 EzCSCCRUDtoDBConverter::handle(*csvPath, csvRowIDColumn);
                             }
-                        }
+                        
 
                         choice = projectConstants::EXIT_APPLICATION;
 

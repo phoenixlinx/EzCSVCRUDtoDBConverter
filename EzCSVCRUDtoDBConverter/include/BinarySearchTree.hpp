@@ -19,17 +19,20 @@ namespace EzCSCCRUDtoDBConverter {
 
 	template <typename T, typename KeyExtractor>
 	class BinarySearchTree {
+		
 
 		using Key = decltype(std::declval<KeyExtractor>()(std::declval<T&>()));
 		struct Node;
-	private:
+	public:
+	//private:
+	
 		size_t maxParentLookUp;
 		size_t currentParentLookUp;
 		Node* tempRoot;
 		Node* leftTempRoot;   // Left midpoint root
 		Node* rightTempRoot;  // Right midpoint root
 		inline void setRoot(Node* newRoot);
-	protected:
+//	protected:
 		struct Node {
 
 
@@ -58,14 +61,15 @@ namespace EzCSCCRUDtoDBConverter {
 		void reSetDeepestLevel();
 		//Previous Nodes in height
 		inline size_t calculateMaxNodesInHight(size_t previousNodesInHeight);
-		
-
-	public:
+		//TODO: Temp function do not allow in production code.
+		typename BinarySearchTree<T, KeyExtractor>::Node* getRoot(const T& value) const;
+	
+//	public:
 		static constexpr  unsigned int initialNodeLevel = 1;
 		BinarySearchTree(KeyExtractor extractor);
 		virtual ~BinarySearchTree();
 		template <typename InputKey>
-		void remove(const InputKey& searchKey, const std::string& csvPathDeletedNodes);
+		void remove(const InputKey& searchKey);
 		void insert(std::shared_ptr<T> containedValueObject);
 		template<typename InputKey>
 		std::vector<std::shared_ptr<T>> search(const InputKey& searchKey);
@@ -78,8 +82,10 @@ namespace EzCSCCRUDtoDBConverter {
 		void setRightMidpoint();
 		template<typename InputKey>
 		inline void setTempRoot(const InputKey& searchKey);
-	};
 
+		friend class BinarySearchTreeTest;
+	};
+	
 }
 #include "../src/BinarySearchTree.tpp"
 

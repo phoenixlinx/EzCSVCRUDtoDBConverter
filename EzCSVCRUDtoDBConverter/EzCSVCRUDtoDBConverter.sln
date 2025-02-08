@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EzCSVCRUDtoDBConverter", "EzCSVCRUDtoDBConverter.vcxproj", "{B8703299-3002-4E2F-B13F-B74CF0AC6CB1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EzCSVCRUDtoDBConverterTests", "..\..\..\..\source\repos\EzCSVCRUDtoDBConverterTests\EzCSVCRUDtoDBConverterTests.vcxproj", "{887F981A-54EB-432F-9F70-C059E94E04A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{B8703299-3002-4E2F-B13F-B74CF0AC6CB1}.Release|x64.Build.0 = Release|x64
 		{B8703299-3002-4E2F-B13F-B74CF0AC6CB1}.Release|x86.ActiveCfg = Release|Win32
 		{B8703299-3002-4E2F-B13F-B74CF0AC6CB1}.Release|x86.Build.0 = Release|Win32
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Debug|x64.ActiveCfg = Debug|x64
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Debug|x64.Build.0 = Debug|x64
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Debug|x86.ActiveCfg = Debug|Win32
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Debug|x86.Build.0 = Debug|Win32
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Release|x64.ActiveCfg = Release|x64
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Release|x64.Build.0 = Release|x64
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Release|x86.ActiveCfg = Release|Win32
+		{887F981A-54EB-432F-9F70-C059E94E04A6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

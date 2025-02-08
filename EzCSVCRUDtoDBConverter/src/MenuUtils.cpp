@@ -31,7 +31,13 @@ namespace EzCSCCRUDtoDBConverter {
             "Enter choice: ";
     }
 
-
+    void clearConsole() {
+#ifdef _WIN32
+        system("cls"); // Windows
+#else
+        system("clear"); // Unix-like systems
+#endif
+    }
 
     std::optional<string> handleFileSelection() {
 

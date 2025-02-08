@@ -22,11 +22,11 @@ namespace EzCSCCRUDtoDBConverter {
         // Constructor: Initializes the BidManager with a reference to the BST
         explicit BidManager(BinarySearchTree& bst);
 
-        std::shared_ptr<std::vector<DynamicTypedValue>> getBid(BinarySearchTree& tree, CSVrow& csvRow);
+        std::shared_ptr<std::vector<DynamicTypedValue>> getBid(CSVrow& csvRow);
 
 
 
-        //TODO Implement backUpDeletedNode
+        //TODO: Implement backUpDeletedNode
     };
 }
 #include "../src/BidManager.tpp"

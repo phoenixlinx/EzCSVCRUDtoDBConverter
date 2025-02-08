@@ -18,84 +18,126 @@ namespace EzCSCCRUDtoDBConverter {
     }
 
 
-    inline bool SqliteValidator::isPrintableCodepoint(unsigned int codepoint) {
-        return codepoint == 0x09 || codepoint == 0x20 ||
-            (codepoint >= 0x21 && codepoint <= 0x7E) || // Printable ASCII range
-            (codepoint >= 0xA0 && codepoint <= 0xD7FF) || // General printable range
-            (codepoint >= 0xE000 && codepoint <= 0xFFFD) || // Exclude surrogate pairs
-            (codepoint >= 0x10000 && codepoint <= 0x10FFFF); // Supplementary planes
-
+    inline bool SqliteValidator::isPrintableCodepoint(unsigned int codepoint)
+    {
+        // This logic is exactly what you posted, but all numeric literals
+        // are replaced by named constants:
+        return
+            (codepoint == ASCII_TAB) ||
+            (codepoint == ASCII_SPACE) ||
+            (
+                (codepoint >= ASCII_EXCLAMATION_MARK) &&
+                (codepoint <= ASCII_TILDE)
+                ) ||
+            (
+                (codepoint >= UNICODE_NO_BREAK_SPACE) &&
+                (codepoint <= UNICODE_MAX_BEFORE_SURROGATES)
+                ) ||
+            (
+                (codepoint >= UNICODE_SURROGATE_START) &&
+                (codepoint <= UNICODE_SURROGATE_END)
+                ) ||
+            (
+                (codepoint >= UNICODE_SUPPLEMENTARY_START) &&
+                (codepoint <= UNICODE_SUPPLEMENTARY_END)
+                );
     }
+
 
 
     template <std::ranges::input_range Range>
-    inline bool SqliteValidator::isPrintableUtf8(const Range& keys)
+   inline   bool SqliteValidator::isPrintableUtf8(const Range& keys)
         requires std::is_same_v<std::ranges::range_value_t<Range>, std::string>
     {
-        // Additional runtime check for defense in depth
+        // Defensive check, typically covered by the requires-clause:
         if (!std::is_same_v<std::ranges::range_value_t<Range>, std::string>) {
-            std::cerr << "Error: Invalid type passed to isPrintableUtf8." << std::endl;
-            return false; // Fail gracefully
+            std::cerr << "Error: Invalid type passed to isPrintableUtf8.\n";
+            return false;
         }
 
-        unsigned char c;
-        unsigned int codepoint;
-        // Iterate through each key in the provided range
+        // Process each std::string in the Range
         for (const auto& key : keys) {
+
+            // 1) Check length constraints
             if (!validateLength(key)) {
                 return false;
-
             }
-            auto keyIterator = key.begin(); // Iterator to traverse through the current key
-            auto remainingDistance = std::distance(keyIterator, key.end()); // Cache the distance to avoid repeated calculations
 
-            // Process each character in the key
-            while (keyIterator != key.end()) {
-                c = *keyIterator; // Treat as unsigned byte
+            // 2) Convert the entire std::string -> const unsigned char* once
+            const unsigned char* dataPtr =
+                reinterpret_cast<const unsigned char*>(key.data());
 
+            const std::size_t totalSize = key.size();
+            std::size_t currentIndex = 0;
 
-                // Decode UTF-8 character and determine its codepoint
-                if (c <= 0x7F) { // Single-byte character (ASCII range: 0x00 to 0x7F)
-                    codepoint = c; // Directly assign ASCII value to codepoint
-                    ++keyIterator; // Move to the next byte
-                    --remainingDistance; // Update remaining distance
+            // 3) Iterate through all bytes in the string
+            while (currentIndex < totalSize) {
+
+                unsigned char firstByte = dataPtr[currentIndex];
+                unsigned int codepoint = 0;
+
+                // -- Single-byte (ASCII) range --
+                if (firstByte <= ASCII_7_BIT_MAX) {
+                    codepoint = firstByte;
+                    currentIndex += 1;
                 }
-                else if ((c & 0xE0) == 0xC0 && remainingDistance >= 2) {
-                    // Two-byte UTF-8 sequence: 110xxxxx 10xxxxxx
-                    codepoint = ((c & 0x1F) << 6) | (*(keyIterator + 1) & 0x3F);
-                    keyIterator += 2; // Advance iterator by 2 bytes
-                    remainingDistance -= 2; // Update remaining distance
+                // -- Two-byte UTF-8 sequence: 110xxxxx 10xxxxxx --
+                else if (((firstByte & UTF8_2_BYTE_MASK) == UTF8_2_BYTE_PATTERN) &&
+                    ((totalSize - currentIndex) >= MIN_2_BYTE_SEQUENCE))
+                {
+                    unsigned char secondByte = dataPtr[currentIndex + 1];
+                    codepoint =
+                        ((firstByte & LOWER_5_BITS_MASK) << SHIFT_6) |
+                        (secondByte & LOWER_6_BITS_MASK);
+
+                    currentIndex += 2;
                 }
-                else if ((c & 0xF0) == 0xE0 && remainingDistance >= 3) {
-                    // Three-byte UTF-8 sequence: 1110xxxx 10xxxxxx 10xxxxxx
-                    codepoint = ((c & 0x0F) << 12) |
-                        ((*(keyIterator + 1) & 0x3F) << 6) |
-                        (*(keyIterator + 2) & 0x3F);
-                    keyIterator += 3; // Advance iterator by 3 bytes
-                    remainingDistance -= 3; // Update remaining distance
+                // -- Three-byte UTF-8 sequence: 1110xxxx 10xxxxxx 10xxxxxx --
+                else if (((firstByte & UTF8_3_BYTE_MASK) == UTF8_3_BYTE_PATTERN) &&
+                    ((totalSize - currentIndex) >= MIN_3_BYTE_SEQUENCE))
+                {
+                    unsigned char secondByte = dataPtr[currentIndex + 1];
+                    unsigned char thirdByte = dataPtr[currentIndex + 2];
+
+                    codepoint =
+                        ((firstByte & LOWER_4_BITS_MASK) << SHIFT_12) |
+                        ((secondByte & LOWER_6_BITS_MASK) << SHIFT_6) |
+                        (thirdByte & LOWER_6_BITS_MASK);
+
+                    currentIndex += 3;
                 }
-                else if ((c & 0xF8) == 0xF0 && remainingDistance >= 4) {
-                    // Four-byte UTF-8 sequence: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-                    codepoint = ((c & 0x07) << 18) |
-                        ((*(keyIterator + 1) & 0x3F) << 12) |
-                        ((*(keyIterator + 2) & 0x3F) << 6) |
-                        (*(keyIterator + 3) & 0x3F);
-                    keyIterator += 4; // Advance iterator by 4 bytes
-                    remainingDistance -= 4; // Update remaining distance
+                // -- Four-byte UTF-8 sequence: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx --
+                else if (((firstByte & UTF8_4_BYTE_MASK) == UTF8_4_BYTE_PATTERN) &&
+                    ((totalSize - currentIndex) >= MIN_4_BYTE_SEQUENCE))
+                {
+                    unsigned char secondByte = dataPtr[currentIndex + 1];
+                    unsigned char thirdByte = dataPtr[currentIndex + 2];
+                    unsigned char fourthByte = dataPtr[currentIndex + 3];
+
+                    codepoint =
+                        ((firstByte & LOWER_3_BITS_MASK) << SHIFT_18) |
+                        ((secondByte & LOWER_6_BITS_MASK) << SHIFT_12) |
+                        ((thirdByte & LOWER_6_BITS_MASK) << SHIFT_6) |
+                        (fourthByte & LOWER_6_BITS_MASK);
+
+                    currentIndex += 4;
                 }
                 else {
-                    return false; // Reject invalid UTF-8 sequences
+                    // Invalid sequence or insufficient bytes remain
+                    return false;
                 }
 
-                // Validate if the character is printable or allowed (tab and space included)
+                // 4) Finally, check if the codepoint is printable
                 if (!isPrintableCodepoint(codepoint)) {
-                    return false; // Reject non-printable or disallowed characters
+                    return false;
                 }
-            }
-        }
-        return true; // All keys are valid UTF-8 and meet the printable criteria
+            } 
+        } 
+
+        return true; // All keys validated successfully
     }
 
+  
 
     inline bool SqliteValidator::isPrintableUtf8(const std::string& key) {
         // Wrap the single string in a range and call the range-based implementation
