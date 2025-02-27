@@ -8,7 +8,7 @@ namespace EzCSCCRUDtoDBConverter {
 
         BidManager<BinarySearchTree> bidManager(binarySearchTree);
         std::shared_ptr<std::vector<DynamicTypedValue>> row;
-        vector<std::shared_ptr<vector<DynamicTypedValue>>> v;
+        vector<std::shared_ptr<vector<DynamicTypedValue>>> dynamicTypedValueVector;
         optional<int> choice;
         string userInput;
         SQLiteHandler dbHandler;
@@ -36,7 +36,7 @@ namespace EzCSCCRUDtoDBConverter {
                         key = StringConverter::toInt(userInput).value();
                         binarySearchTree.setTempRoot(key);
                         //TODO: Dynamically determine the key type that the tree expects, then ensure that userInput is convertible to this type.
-                        v = measurePerformance<vector<shared_ptr<vector<DynamicTypedValue>>>>(
+                        dynamicTypedValueVector = measurePerformance<vector<shared_ptr<vector<DynamicTypedValue>>>>(
                             "Finding Rows",
                             [&]() -> vector<shared_ptr<vector<DynamicTypedValue>>> {
                                 return binarySearchTree.search(key);
@@ -45,8 +45,12 @@ namespace EzCSCCRUDtoDBConverter {
                       
 
                         );
+
+                        
                       
-                       for (const auto& innerVectorPtr : v) {
+
+                      
+                       for (const auto& innerVectorPtr : dynamicTypedValueVector) {
                             if (innerVectorPtr) { 
 
                                 for (const auto& dynamicValue : *innerVectorPtr) {

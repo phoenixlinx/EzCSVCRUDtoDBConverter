@@ -6,15 +6,52 @@
 
 namespace EzCSCCRUDtoDBConverter {
 
- 
-    // Node Constructor Definitions
+
+    // Node Definitions
     template <typename T, typename KeyExtractor>
-    BinarySearchTree<T, KeyExtractor>::Node::Node() : parentNodePtr(nullptr), longestChildPath(1), leftNodePtr(nullptr), rightNodePtr(nullptr) {}
+    BinarySearchTree<T, KeyExtractor>::Node::Node() : longestChildPath(initialNodeLevel), hasDuplicate(false), parentNodePtr(nullptr), leftNodePtr(nullptr), rightNodePtr(nullptr) {}
 
     template <typename T, typename KeyExtractor>
     BinarySearchTree<T, KeyExtractor>::Node::Node(std::shared_ptr<T> containedObject)
         : longestChildPath(initialNodeLevel), hasDuplicate(false), parentNodePtr(nullptr), leftNodePtr(nullptr), rightNodePtr(nullptr), containedValueObject(containedObject) {
     }
+
+
+    template <typename T, typename KeyExtractor>
+    void BinarySearchTree<T, KeyExtractor>::Node::setLevel(size_t newLevel){
+      
+        longestChildPath = newLevel;
+    }
+
+    template<typename T, typename KeyExtractor>
+    inline size_t BinarySearchTree<T, KeyExtractor>::Node::getLevel()
+    {
+        return this->longestChildPath;
+    }
+
+    template<typename T, typename KeyExtractor>
+    inline void BinarySearchTree<T, KeyExtractor>::Node::decrementLevel()
+    {
+
+        if (this->longestChildPath > initialNodeLevel) {
+            --longestChildPath;
+        }
+
+    }
+
+ 
+    template<typename T, typename KeyExtractor>
+    inline typename BinarySearchTree<T, KeyExtractor>::Node*
+        BinarySearchTree<T, KeyExtractor>::Node::getParent()
+    {
+
+        return this->parentNodePtr;
+    }
+
+
+
+
+    //BinarySearchTree Definitions
 
 
     template <typename T, typename KeyExtractor>
@@ -222,42 +259,9 @@ namespace EzCSCCRUDtoDBConverter {
         }
 
       
+        balanceTree(nextNode, parent);
 
 
-
-        bool fixLeft = false;
-        bool fixRight = false;
-        while (nextNode != nullptr) {
-            // Fix left and right imbalance
-            fixLeft = fixLeftImbalance(nextNode);
-            if (!fixLeft) {
-
-                //  if (nextNode->parentNodePtr->parentNodePtr) {
-                //      nextNode = nextNode->parentNodePtr->parentNodePtr;
-                //  }
-                //  else {
-                nextNode = nextNode->parentNodePtr;
-                //    }
-
-
-            }
-            fixRight = fixRightImbalance(nextNode);
-
-
-
-           if (parent && !(fixLeft && fixRight)) {
-          //  if (parent ) {
-                nextNode = parent;// Move to the parent node pointer up the tree
-                //Get next parent before re-balance because re-balance may shuffle the sub root with one of its children.
-                parent = parent->parentNodePtr;
-            }
-            else {
-                currentParentLookUp = 0;
-                nextNode = nullptr;
-            }
-
-
-        }
 
     }
 
@@ -327,16 +331,15 @@ namespace EzCSCCRUDtoDBConverter {
     template <typename InputKey>
     void BinarySearchTree<T, KeyExtractor>::remove(const InputKey& searchKey) {
         Key convertedKey = static_cast<Key>(searchKey);
-        unsigned int deleteRowPosition = 0;
-
-        Node* tmp3;
-        Node* tmp2;
-        Node* tmp1;
+        void (*selectedFunction)(Node*) = nullptr;
         Node* currNode;
         Node* parent = nullptr;
         currNode = root;
         bool nodeExists = false;
-        //Code in this while loop finds the node with the matching searchKey
+
+
+
+        //This finds the node with the matching searchKey
         while (currNode != nullptr) {
             if (keyExtractor(*currNode->containedValueObject) == convertedKey) {
                 nodeExists = true;
@@ -352,95 +355,95 @@ namespace EzCSCCRUDtoDBConverter {
                 }
             }
         }
+        //Exit function if the node with the specified key does not exist
+        if (nodeExists) {
 
-        if (!nodeExists) {
-            return; // Exit if the node with the specified key does not exist
-        }
 
-        // Node with one child
-        if ((parent && parent->leftNodePtr && currNode->leftNodePtr == nullptr && currNode->rightNodePtr != nullptr) ||
-            (currNode->leftNodePtr != nullptr && currNode->rightNodePtr == nullptr)) {
-            if (currNode->leftNodePtr == nullptr && currNode->rightNodePtr != nullptr) {
-                if (parent->leftNodePtr == currNode) {
-                    parent->leftNodePtr = currNode->rightNodePtr;
+            // Node with two children
+            if (currNode->leftNodePtr != nullptr && currNode->rightNodePtr != nullptr) {
+                Node* tmp1 = currNode->rightNodePtr;
 
-          
-                    delete currNode;
+                if (tmp1->leftNodePtr == nullptr && tmp1->rightNodePtr == nullptr) {
+                    // Case 1: Right child is a leaf
+                    *currNode->containedValueObject = *tmp1->containedValueObject;
+                    delete tmp1;
                     bstNodeCount--;
+                    currNode->rightNodePtr = nullptr;
                 }
                 else {
-                    parent->rightNodePtr = currNode->rightNodePtr;
-                    delete currNode;
-                    bstNodeCount--;
+                    if (currNode->rightNodePtr->leftNodePtr != nullptr) {
+                        // Case 2: Find the leftmost child of the right subtree
+                        Node* tmp = currNode->rightNodePtr;
+                        Node* tmp2 = currNode->rightNodePtr->leftNodePtr;
+
+                        while (tmp2->leftNodePtr != nullptr) {
+                            tmp = tmp2;
+                            tmp2 = tmp2->leftNodePtr;
+                        }
+                        *currNode->containedValueObject = *tmp2->containedValueObject;
+                        delete tmp2;
+                        bstNodeCount--;
+                        tmp->leftNodePtr = nullptr;
+                    }
+                    else {
+                        // Case 3: Replace current node with its right child
+                        Node* tmp = currNode->rightNodePtr;
+                        *currNode->containedValueObject = *tmp->containedValueObject;
+                        currNode->rightNodePtr = tmp->rightNodePtr;
+                        delete tmp;
+                        bstNodeCount--;
+                    }
                 }
-            }else {
-                if (parent && parent->leftNodePtr && parent->leftNodePtr == currNode) {
-                    parent->leftNodePtr = currNode->leftNodePtr;
-                    bstNodeCount--;
+
+
+                //Node with matching key is a leaf.
+            }
+            else if (parent && currNode->leftNodePtr == nullptr && currNode->rightNodePtr == nullptr) {
+                if (parent->leftNodePtr && parent->leftNodePtr == currNode) {
+                    parent->leftNodePtr = nullptr; // Remove reference to leaf node
                 }
                 else {
-                    if (parent && parent->rightNodePtr) {
-                        parent->rightNodePtr = currNode->leftNodePtr;
+                    parent->rightNodePtr = nullptr;
+                }
+                delete currNode;
+                bstNodeCount--;
+
+                //Node with matching key has one child.
+            }
+            else if ((parent && parent->leftNodePtr && currNode->leftNodePtr == nullptr && currNode->rightNodePtr != nullptr) || (currNode->leftNodePtr != nullptr && currNode->rightNodePtr == nullptr)) {
+                if (currNode->leftNodePtr == nullptr && currNode->rightNodePtr != nullptr) {
+                    if (parent->leftNodePtr == currNode) {
+                        parent->leftNodePtr = currNode->rightNodePtr;
+
+
+                        delete currNode;
+                        bstNodeCount--;
+                    }
+                    else {
+                        parent->rightNodePtr = currNode->rightNodePtr;
                         delete currNode;
                         bstNodeCount--;
                     }
                 }
-            }
-
-            return;
-        }
-
-        
-        if (parent && currNode->leftNodePtr == nullptr && currNode->rightNodePtr == nullptr) {
-            if (parent->leftNodePtr && parent->leftNodePtr == currNode) {
-                parent->leftNodePtr = nullptr; // Remove reference to leaf node
-            }
-            else {
-                parent->rightNodePtr = nullptr;
-            }
-            delete currNode;
-            bstNodeCount--;
-            return;
-        }
-
-        // Node with two children
-        if (currNode->leftNodePtr != nullptr && currNode->rightNodePtr != nullptr) {
-            tmp1 = currNode->rightNodePtr;
-
-            if (tmp1->leftNodePtr == nullptr && tmp1->rightNodePtr == nullptr) {
-                // Case 1: Right child is a leaf
-                *currNode->containedValueObject = *tmp1->containedValueObject;
-                delete tmp1;
-                bstNodeCount--;
-                currNode->rightNodePtr = nullptr;
-            }
-            else {
-                if (currNode->rightNodePtr->leftNodePtr != nullptr) {
-                    // Case 2: Find the leftmost child of the right subtree
-                    tmp2 = currNode->rightNodePtr;
-                    tmp3 = currNode->rightNodePtr->leftNodePtr;
-
-                    while (tmp3->leftNodePtr != nullptr) {
-                        tmp2 = tmp3;
-                        tmp3 = tmp3->leftNodePtr;
-                    }
-                    *currNode->containedValueObject = *tmp3->containedValueObject;
-                    delete tmp3;
-                    bstNodeCount--;
-                    tmp2->leftNodePtr = nullptr;
-                }
                 else {
-                    // Case 3: Replace current node with its right child
-                    Node* tmp = currNode->rightNodePtr;
-                    *currNode->containedValueObject = *tmp->containedValueObject;
-                    currNode->rightNodePtr = tmp->rightNodePtr;
-                    delete tmp;
-                    bstNodeCount--;
+                    if (parent && parent->leftNodePtr && parent->leftNodePtr == currNode) {
+                        parent->leftNodePtr = currNode->leftNodePtr;
+                        bstNodeCount--;
+                    }
+                    else {
+                        if (parent && parent->rightNodePtr) {
+                            parent->rightNodePtr = currNode->leftNodePtr;
+                            delete currNode;
+                            bstNodeCount--;
+                        }
+                    }
                 }
+
+
             }
 
-            return;
         }
+
     }
 
     template <typename T, typename KeyExtractor>
@@ -856,6 +859,74 @@ namespace EzCSCCRUDtoDBConverter {
         else {
             return true;
         }
+
+
         
+
+       
     }
+
+   
+    template <typename T, typename KeyExtractor>
+
+    void   BinarySearchTree<T, KeyExtractor>::functionC(Node* node) {
+       
+        
+        if (node && node->leftNodePtr && node->rightNodePtr) {
+            std::cout << "Current node has left and right child\n" << "\n";
+
+            if (node->leftNodePtr->longestChildPath == initialNodeLevel && node->rightNodePtr->longestChildPath == initialNodeLevel) {
+                std::cout << "Current node has left and right child same level\n" << "\n";
+            }
+
+
+        }
+        
+       
+    }
+
+    template <typename T, typename KeyExtractor>
+    void BinarySearchTree<T, KeyExtractor>::balanceTree(Node* node, Node* parent) {
+
+        bool fixLeft = false;
+        bool fixRight = false;
+        while (node != nullptr) {
+            // Fix left and right imbalance
+            fixLeft = fixLeftImbalance(node);
+            if (!fixLeft) {
+
+    
+                node = node->parentNodePtr;
+               
+
+
+            }
+            fixRight = fixRightImbalance(node);
+
+            
+            //Perform balance until it unnecessary 
+            if (parent && !(fixLeft && fixRight)) {
+                node = parent;// Move to the parent node pointer up the tree
+                //Get next parent before re-balance because re-balance may shuffle the sub root with one of its children.
+                parent = parent->parentNodePtr;
+            }
+            else {
+                currentParentLookUp = 0;
+                node = nullptr;
+            }
+
+
+        }
+
+    }
+    template<typename T, typename KeyExtractor>
+    inline bool BinarySearchTree<T, KeyExtractor>::isLeaf(Node* node) {
+
+        if ((node != nullptr) && (node->leftNodePtr == nullptr) && (node->rightNodePtr == nullptr)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

@@ -18,7 +18,6 @@ namespace EzCSCCRUDtoDBConverter {
 	void displayInitialMenu();
 	void displayPrimaryMenu();
 	void displayFileSelectionMenu();
-	void clearConsole();
 	std::optional<string> handleFileSelection();
 	template <typename BinarySearchTree>
 	bool handleCRUD(const string& csvPath, BinarySearchTree& binarySearchTree, CSVrow& csvRow, const string& primaryKey);

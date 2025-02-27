@@ -44,7 +44,10 @@ namespace EzCSCCRUDtoDBConverter {
 			std::shared_ptr<T> containedValueObject; // The object/value held within this tree node.
 			Node();
 			Node(std::shared_ptr<T> containedValueObject);
-
+			inline void setLevel(size_t newLevel);
+			inline size_t getLevel();
+			inline void decrementLevel();
+			inline Node* getParent();
 
 		};
 
@@ -63,7 +66,12 @@ namespace EzCSCCRUDtoDBConverter {
 		inline size_t calculateMaxNodesInHight(size_t previousNodesInHeight);
 		//TODO: Temp function do not allow in production code.
 		typename BinarySearchTree<T, KeyExtractor>::Node* getRoot(const T& value) const;
-	
+		void balanceTree(Node* node,Node* parent);
+		void functionA(Node* node);
+		void functionB(Node* node);
+		void functionC(Node* node);
+		//Determines if node has no children.
+		inline bool isLeaf(Node* node);
 //	public:
 		static constexpr  unsigned int initialNodeLevel = 1;
 		BinarySearchTree(KeyExtractor extractor);

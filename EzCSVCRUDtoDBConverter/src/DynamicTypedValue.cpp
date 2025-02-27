@@ -43,6 +43,7 @@ namespace EzCSCCRUDtoDBConverter {
         return storedValuePtr->getTypeName();
     }
 
+
     bool DynamicTypedValue::operator==(const DynamicTypedValue& other) const {
         return dispatchComparison(other, std::equal_to<>{});
     }
